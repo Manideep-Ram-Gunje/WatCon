@@ -1,0 +1,140 @@
+	 Amino Acid Conservation Scores
+	=======================================
+
+The layers for assigning grades are as follows.
+from -1.214 to -0.944 the grade is 9
+from -0.944 to -0.674 the grade is 8
+from -0.674 to -0.405 the grade is 7
+from -0.405 to -0.135 the grade is 6
+from -0.135 to  0.303 the grade is 5
+from  0.303 to  0.910 the grade is 4
+from  0.910 to  1.516 the grade is 3
+from  1.516 to  2.123 the grade is 2
+from  2.123 to  2.729 the grade is 1
+
+If the difference between the colors of the CONFIDENCE INTERVAL COLORS is more than 3 or the msa number (under the column titled MSA) is less than 6, there is insufficient data and an * appears in the COLOR column.
+
+- POS: The position of the acid in the sequence.
+- SEQ: The acid one letter.
+- ATOM: When there's a model, The ATOM derived sequence in three letter code, including the acid's positions as they appear in the PDB file and the chain identifier.
+- SCORE: The normalized conservation scores.
+- COLOR: The color scale representing the conservation scores (9 - conserved, 1 - variable).
+- CONFIDENCE INTERVAL: When using the bayesian method for calculating rates, a confidence interval is assigned to each of the inferred evolutionary conservation scores, next to it are the colors of the lower and upper bounds of the confidence interval
+- B/E: Burried (b) or Exposed (e) residue.
+- F/S: functional (f) or structural (s) residue (f - highly conserved and exposed, s - highly conserved and burried).
+- MSA DATA: The number of aligned sequences having an acid (non-gapped) from the overall number of sequences at each position.
+- RESIDUE VARIETY: The residues variety at each position of the multiple sequence alignment.
+
+POS	SEQ	     ATOM	 SCORE	COLOR	CONFIDENCE INTERVAL	B/E	F/S	MSA DATA	RESIDUE VARIETY
+
+  1	  A	 ALA:48:A	-0.416	   7*	-1.052, -0.113  9,5	  e	   	    2/50	A
+  2	  Q	 GLN:49:A	 0.446	   4*	-0.374,  0.839  6,4	  e	   	    4/50	Q 50%, S 25%, T 25%
+  3	  V	 VAL:50:A	 0.158	   5*	-0.515,  0.599  7,4	  e	   	    5/50	V 60%, A 20%, I 20%
+  4	  I	 ILE:51:A	-0.014	   5 	-0.638,  0.406  7,4	  b	   	    7/50	I 57%, L 42%
+  5	  N	 ASN:52:A	-0.173	   6 	-0.638,  0.112  7,5	  e	   	    9/50	T 55%, N 33%, Q 11%
+  6	  T	 THR:53:A	 0.988	   3 	 0.248,  1.660  5,2	  e	   	   15/50	T 40%, Q 13%, G 13%, S 13%, E  6%, D  6%, A  6%
+  7	  F	 PHE:54:A	 1.268	   3 	 0.406,  1.660  4,2	  b	   	   17/50	F 41%, V 17%, A 11%, K 11%, Q  5%, D  5%, E  5%
+  8	  D	 ASP:55:A	-0.207	   6 	-0.579, -0.008  7,5	  e	   	   25/50	D 48%, N 24%, E 20%, Q  8%
+  9	  G	 GLY:56:A	 0.520	   4 	-0.008,  0.839  5,4	  e	   	   34/50	E 44%, G  8%, D  8%, R  5%, K  5%, Q  5%, T  5%, N  5%, P  5%, V  2%
+ 10	  V	 VAL:57:A	-0.927	   8 	-1.089, -0.845  9,8	  b	   	   43/50	V 88%, L  6%, I  4%
+ 11	  A	 ALA:58:A	-0.671	   7 	-0.890, -0.515  8,7	  b	   	   44/50	A 52%, V 29%, I 15%, T  2%
+ 12	  D	 ASP:59:A	 2.048	   2 	 1.161,  2.975  3,1	  e	   	   44/50	D 27%, A 20%, E  9%, S  9%, L  9%, N  6%, P  4%, R  4%, K  2%, G  2%, Q  2%, H  2%
+ 13	  Y	 TYR:60:A	-0.773	   8 	-0.975, -0.638  9,7	  b	   	   45/50	Y 77%, S 17%, W  2%, H  2%
+ 14	  L	 LEU:61:A	-0.562	   7 	-0.797, -0.448  8,7	  b	   	   48/50	L 47%, I 37%, V 14%
+ 15	  Q	 GLN:62:A	 0.909	   4 	 0.406,  1.161  4,3	  e	   	   48/50	K 31%, R 16%, H 16%, Q 12%, L  4%, S  4%, G  4%, I  2%, D  2%, A  2%, T  2%, N  2%
+ 16	  T	 THR:63:A	 0.651	   4 	 0.248,  0.839  5,4	  e	   	   49/50	Q 30%, E 20%, T 18%, K 10%, A  6%, R  6%, S  4%, N  4%
+ 17	  Y	 TYR:64:A	 0.074	   5 	-0.295,  0.248  6,5	  e	   	   49/50	H 24%, Y 22%, N 18%, T 16%, F 10%, E  2%, A  2%, S  2%, D  2%
+ 18	  H	 HIS:65:A	 1.217	   3 	 0.599,  1.660  4,2	  e	   	   50/50	G 40%, H 32%, K 10%, Q 10%, D  4%, N  2%, A  2%
+ 19	  K	 LYS:66:A	 0.963	   3 	 0.406,  1.161  4,3	  e	   	   50/50	K 40%, R 28%, Q 10%, E  8%, T  4%, D  2%, Y  2%, H  2%, C  2%, A  2%
+ 20	  L	 LEU:67:A	-1.167	   9 	-1.268, -1.124  9,9	  b	  s	   50/50	L
+ 21	  P	 PRO:68:A	-1.032	   9 	-1.191, -0.933  9,8	  e	  f	   50/50	P 98%, L  2%
+ 22	  D	 ASP:69:A	 1.287	   3 	 0.599,  1.660  4,2	  e	   	   50/50	D 44%, S 18%, N  8%, G  6%, E  6%, P  4%, A  4%, K  4%, T  2%, H  2%, Q  2%
+ 23	  N	 ASN:70:A	-0.409	   7 	-0.638, -0.295  7,6	  e	   	   50/50	N 48%, Y 26%, F 12%, R  8%, H  4%, T  2%
+ 24	  Y	 TYR:71:A	-0.498	   7 	-0.747, -0.295  8,6	  b	   	   50/50	Y 76%, F 24%
+ 25	  I	 ILE:72:A	-0.454	   7 	-0.694, -0.295  8,6	  b	   	   50/50	I 66%, V 24%, L 10%
+ 26	  T	 THR:73:A	-0.201	   6 	-0.448, -0.008  7,5	  e	   	   50/50	T 72%, S 12%, K  6%, D  6%, R  4%
+ 27	  K	 LYS:74:A	-1.064	   9 	-1.191, -1.014  9,9	  e	  f	   50/50	K 96%, E  2%, Q  2%
+ 28	  S	 SER:75:A	 1.291	   3 	 0.599,  1.660  4,2	  e	   	   50/50	K 28%, N 14%, R 12%, S 10%, A 10%, G  8%, D  6%, T  6%, E  4%, Q  2%
+ 29	  E	 GLU:76:A	 0.026	   5 	-0.295,  0.248  6,5	  e	   	   50/50	E 57%, Q 24%, K  6%, A  4%, T  4%, L  2%, P  2%
+ 30	  A	 ALA:77:A	-1.200	   9 	-1.268, -1.191  9,9	  b	  s	   50/50	A
+ 31	  Q	 GLN:78:A	 0.772	   4 	 0.248,  1.161  5,3	  e	   	   50/50	R 42%, K 22%, Q 16%, I  6%, E  4%, A  4%, N  2%, M  2%, T  2%
+ 32	  A	 ALA:79:A	 2.255	   1 	 1.161,  2.975  3,1	  e	   	   50/50	K 24%, A 22%, E 12%, D 12%, R 10%, S  8%, Q  8%, N  2%, V  2%
+ 33	  L	 LEU:80:A	 0.596	   4 	 0.112,  0.839  5,4	  e	   	   50/50	L 44%, Q 18%, A 18%, N  6%, R  4%, S  4%, H  4%, K  2%
+ 34	  G	 GLY:81:A	-1.129	   9 	-1.253, -1.089  9,9	  e	  f	   50/50	G
+ 35	  W	 TRP:82:A	-0.976	   9 	-1.158, -0.890  9,8	  e	  f	   50/50	W 98%, Y  2%
+ 36	  V	 VAL:83:A	 2.699	   1 	 1.660,  2.975  2,1	  e	   	   50/50	D 20%, N 18%, V 12%, K 12%, E  8%, R  8%, T  6%, Q  6%, S  4%, I  2%, P  2%, H  2%
+ 37	  A	 ALA:84:A	 0.812	   4 	 0.248,  1.161  5,3	  e	   	   50/50	P 52%, A 20%, G 12%, S  8%, N  2%, K  2%, E  2%, D  2%
+ 38	  S	 SER:85:A	-0.074	   5 	-0.374,  0.112  6,5	  e	   	   44/50	S 40%, G 31%, R 11%, K  9%, A  6%
+ 39	  K	 LYS:86:A	 0.377	   4 	-0.008,  0.599  5,4	  e	   	   44/50	K 47%, E 18%, A  9%, Q  9%, R  6%, T  4%, D  2%, S  2%
+ 40	  G	 GLY:87:A	-0.133	   5 	-0.448,  0.112  7,5	  e	   	   49/50	G 69%, A 18%, P  4%, R  2%, N  2%, D  2%, S  2%
+ 41	  N	 ASN:88:A	-0.837	   8 	-1.014, -0.747  9,8	  e	  f	   37/50	N 78%, P 10%, S  5%, D  2%, Y  2%
+ 42	  L	 LEU:89:A	-0.858	   8 	-1.052, -0.747  9,8	  b	   	   50/50	L 94%, V  2%, I  2%, F  2%
+ 43	  A	 ALA:90:A	 1.940	   2 	 0.839,  2.975  4,1	  e	   	   50/50	C 34%, W 16%, N 12%, E  8%, K  8%, G  6%, A  4%, D  4%, H  4%, S  4%
+ 44	  D	 ASP:91:A	 0.581	   4 	 0.112,  0.839  5,4	  e	   	   50/50	E 28%, D 18%, N 18%, K 12%, Q 10%, S  8%, T  2%, R  2%, P  2%
+ 45	  V	 VAL:92:A	-0.033	   5 	-0.374,  0.112  6,5	  e	   	   50/50	V 56%, Y 22%, A  8%, I  4%, T  4%, S  2%, H  2%, K  2%
+ 46	  A	 ALA:93:A	 0.141	   5 	-0.208,  0.406  6,4	  b	   	   50/50	A 36%, L 36%, V 12%, T  6%, I  4%, C  2%, P  2%, M  2%
+ 47	  P	 PRO:94:A	 0.244	   5 	-0.208,  0.599  6,4	  e	   	   50/50	P 78%, K 10%, D  6%, E  2%, N  2%, S  2%
+ 48	  G	 GLY:95:A	 0.027	   5 	-0.374,  0.248  6,5	  e	   	   50/50	G 84%, N  8%, K  4%, R  2%, A  2%
+ 49	  K	 LYS:96:A	-0.085	   5 	-0.374,  0.112  6,5	  e	   	   50/50	K 62%, R 14%, G 12%, M  4%, A  4%, H  2%, S  2%
+ 50	  S	 SER:97:A	-0.813	   8 	-0.975, -0.694  9,8	  b	   	   50/50	S 42%, A 36%, Q 16%, V  2%, C  2%, R  2%
+ 51	  I	        -	-0.318	   6*	-1.052, -0.008  9,5	  b	   	    1/50	I
+ 52	  I	 ILE:98:A	-1.080	   9 	-1.191, -1.014  9,9	  b	  s	   50/50	I 96%, M  2%, L  2%
+ 53	  G	 GLY:99:A	-1.129	   9 	-1.253, -1.089  9,9	  b	  s	   50/50	G
+ 54	  G	GLY:100:A	-1.129	   9 	-1.253, -1.089  9,9	  b	  s	   50/50	G
+ 55	  D	ASP:101:A	-0.958	   9 	-1.124, -0.890  9,8	  e	  f	   50/50	D 94%, N  4%, G  2%
+ 56	  I	ILE:102:A	 0.749	   4 	 0.248,  1.161  5,3	  e	   	   50/50	R 32%, V 20%, I 18%, K  8%, H  8%, T  6%, Y  4%, P  2%, Q  2%
+ 57	  F	PHE:103:A	-0.962	   9 	-1.124, -0.890  9,8	  b	  s	   50/50	F 96%, Y  4%
+ 58	  S	SER:104:A	 0.947	   3 	 0.406,  1.161  4,3	  e	   	   50/50	S 26%, G 22%, E 10%, T 10%, Q  6%, Y  6%, M  6%, N  6%, R  2%, F  2%, K  2%, A  2%
+ 59	  N	ASN:105:A	-1.214	   9 	-1.268, -1.191  9,9	  e	  f	   50/50	N
+ 60	  R	ARG:106:A	-0.390	   6 	-0.638, -0.208  7,6	  e	   	   50/50	R 64%, S 12%, Y 10%, T  6%, F  4%, D  2%, K  2%
+ 61	  E	GLU:107:A	-0.721	   8 	-0.890, -0.579  8,7	  e	  f	   50/50	E 70%, T 10%, Q  8%, D  6%, N  4%, K  2%
+ 62	  G	GLY:108:A	 1.657	   2 	 0.839,  1.660  4,2	  e	   	   50/50	G 48%, K 26%, R  8%, N  6%, H  6%, Q  4%, S  2%
+ 63	  K	LYS:109:A	 1.613	   2 	 0.839,  1.660  4,2	  e	   	   50/50	L 20%, R 18%, Q 16%, V 12%, K 10%, I  8%, E  4%, N  2%, G  2%, C  2%, S  2%, T  2%, F  2%
+ 64	  L	LEU:110:A	-1.167	   9 	-1.268, -1.124  9,9	  b	  s	   50/50	L
+ 65	  P	PRO:111:A	-0.912	   8 	-1.089, -0.797  9,8	  e	  f	   50/50	P 96%, A  2%, L  2%
+ 66	  G	GLY:112:A	 2.430	   1 	 1.161,  2.975  3,1	  e	   	   50/50	E 20%, K 18%, D 16%, A  8%, T  8%, I  6%, S  6%, G  4%, Q  4%, M  2%, H  2%, P  2%, F  2%, R  2%
+ 67	  K	LYS:113:A	 1.277	   3 	 0.599,  1.660  4,2	  e	   	   42/50	A 28%, K 23%, S 19%, V 14%, E  4%, G  4%, R  2%, M  2%
+ 68	  S	SER:114:A	 2.729	   1 	 1.660,  2.975  2,1	  e	   	   38/50	P 26%, K 18%, S 15%, D 10%, N  7%, A  5%, E  5%, V  2%, R  2%, L  2%, Q  2%
+ 69	  G	GLY:115:A	 0.417	   4 	-0.113,  0.839  5,4	  e	   	   45/50	G 73%, S  8%, N  6%, D  6%, K  2%, E  2%
+ 70	  R	ARG:116:A	-0.693	   8 	-0.890, -0.579  8,7	  e	  f	   41/50	R 80%, E  9%, K  4%, V  2%, M  2%
+ 71	  T	THR:117:A	 0.942	   3 	 0.406,  1.161  4,3	  e	   	   50/50	Q 20%, K 16%, V 16%, T 12%, I 12%, R  6%, E  6%, N  4%, S  4%, H  2%, L  2%
+ 72	  W	TRP:118:A	-0.485	   7 	-0.747, -0.295  8,6	  b	   	   50/50	W 60%, Y 40%
+ 73	  R	ARG:119:A	 1.310	   3 	 0.599,  1.660  4,2	  e	   	   50/50	Y 34%, F 24%, R 22%, I  8%, H  4%, T  4%, K  2%, S  2%
+ 74	  E	GLU:120:A	-1.206	   9 	-1.268, -1.191  9,9	  e	  f	   50/50	E
+ 75	  A	ALA:121:A	-0.874	   8 	-1.052, -0.797  9,8	  b	   	   50/50	A 78%, C 22%
+ 76	  D	ASP:122:A	-1.192	   9 	-1.268, -1.158  9,9	  e	  f	   50/50	D
+ 77	  I	ILE:123:A	-0.286	   6 	-0.579, -0.113  7,5	  b	   	   50/50	I 44%, V 40%, L 16%
+ 78	  N	ASN:124:A	-0.734	   8 	-0.933, -0.638  8,7	  e	  f	   50/50	N 62%, D 18%, G 16%, H  2%, E  2%
+ 79	  Y	TYR:125:A	-0.425	   7 	-0.694, -0.208  8,6	  b	   	   50/50	Y 66%, L 14%, A  8%, T  4%, I  4%, G  2%, V  2%
+ 80	  T	THR:126:A	 1.367	   3 	 0.839,  1.660  4,2	  e	   	   50/50	N 28%, R 12%, Q 12%, D 10%, T  8%, V  8%, I  6%, H  6%, S  4%, K  4%, L  2%
+ 81	  S	SER:127:A	-0.250	   6 	-0.579, -0.008  7,5	  e	   	   50/50	G 42%, C 34%, N 12%, S  8%, A  2%, Y  2%
+ 82	  G	GLY:128:A	-0.349	   6 	-0.638, -0.113  7,5	  e	   	   50/50	G 70%, S 12%, A 10%, T  8%
+ 83	  F	PHE:129:A	 0.918	   3 	 0.406,  1.161  4,3	  e	   	   50/50	K 26%, H 18%, N 14%, F 10%, S 10%, Y  8%, R  8%, T  4%, V  2%
+ 84	  R	ARG:130:A	-1.048	   9 	-1.191, -0.975  9,9	  e	  f	   50/50	R 82%, Q 16%, N  2%
+ 85	  N	ASN:131:A	 0.485	   4 	-0.008,  0.839  5,4	  e	   	   50/50	G 54%, N 20%, P 12%, E  4%, A  4%, Q  2%, K  2%, T  2%
+ 86	  S	SER:132:A	 0.306	   4 	-0.113,  0.599  5,4	  b	   	   50/50	A 46%, S 18%, G 18%, P  8%, T  4%, K  2%, N  2%, Q  2%
+ 87	  D	ASP:133:A	-0.204	   6 	-0.515, -0.008  7,5	  e	   	   50/50	D 50%, K 16%, E 16%, T 14%, Y  4%
+ 88	  R	ARG:134:A	-1.191	   9 	-1.268, -1.158  9,9	  e	  f	   50/50	R
+ 89	  I	ILE:135:A	-0.198	   6 	-0.515, -0.008  7,5	  b	   	   50/50	L 54%, I 40%, M  4%, V  2%
+ 90	  L	LEU:136:A	 0.207	   5 	-0.208,  0.406  6,4	  b	   	   50/50	L 46%, V 36%, I 18%
+ 91	  Y	TYR:137:A	-0.205	   6 	-0.515, -0.008  7,5	  b	   	   50/50	Y 72%, F 28%
+ 92	  S	SER:138:A	-0.908	   8 	-1.052, -0.845  9,8	  b	   	   50/50	S 72%, T 16%, N  6%, E  4%, A  2%
+ 93	  S	SER:139:A	-0.013	   5 	-0.295,  0.112  6,5	  e	   	   50/50	N 34%, S 26%, D 14%, K 14%, G  6%, A  4%, P  2%
+ 94	  D	ASP:140:A	-0.567	   7 	-0.797, -0.448  8,7	  e	   	   50/50	D 74%, N 12%, S  8%, Q  4%, R  2%
+ 95	  W	TRP:141:A	-0.511	   7 	-0.797, -0.295  8,6	  b	   	   49/50	G 85%, Y  6%, W  4%, Q  2%, F  2%
+ 96	  L	LEU:142:A	-0.094	   5 	-0.448,  0.112  7,5	  e	   	   50/50	L 64%, D 12%, K  6%, R  6%, E  4%, M  2%, V  2%, S  2%, Q  2%
+ 97	  I	ILE:143:A	-0.236	   6 	-0.515, -0.008  7,5	  b	   	   50/50	I 46%, V 32%, L  8%, R  8%, A  2%, S  2%, M  2%
+ 98	  Y	TYR:144:A	-0.504	   7 	-0.747, -0.295  8,6	  b	   	   50/50	Y 82%, F 12%, W  6%
+ 99	  K	LYS:145:A	 0.085	   5 	-0.295,  0.248  6,5	  b	   	   50/50	V 32%, Y 22%, L 18%, K 12%, I 10%, G  4%, F  2%
+100	  T	THR:146:A	-1.138	   9 	-1.222, -1.089  9,9	  b	  s	   50/50	T 98%, A  2%
+101	  T	THR:147:A	 2.632	   1 	 1.660,  2.975  2,1	  e	   	   50/50	T 22%, K 12%, S  8%, V  8%, E  6%, R  6%, N  6%, G  6%, Y  4%, H  4%, A  4%, D  4%, I  4%, L  2%, P  2%, F  2%
+102	  D	ASP:148:A	-1.044	   9 	-1.158, -0.975  9,9	  e	  f	   50/50	D 90%, N 10%
+103	  H	HIS:149:A	-1.192	   9 	-1.268, -1.158  9,9	  e	  f	   50/50	H
+104	  Y	TYR:150:A	-1.168	   9 	-1.268, -1.124  9,9	  e	  f	   50/50	Y
+105	  Q	GLN:151:A	 0.383	   4 	-0.008,  0.599  5,4	  e	   	   50/50	K 42%, Q 20%, R 12%, E 10%, N  6%, A  4%, S  2%, T  2%, H  2%
+106	  T	THR:152:A	-0.198	   6 	-0.448, -0.008  7,5	  e	   	   50/50	T 57%, S 34%, N  4%, H  2%, Q  2%
+107	  F	PHE:153:A	-1.147	   9 	-1.253, -1.089  9,9	  e	  f	   41/50	F
+
+
+*Below the confidence cut-off - The calculations for this site were performed on less than 6 non-gaped homologue sequences,
+or the confidence interval for the estimated score is equal to- or larger than- 4 color grades.
