@@ -12,6 +12,8 @@ from joblib import Parallel, delayed
 from scipy.spatial import cKDTree
 
 import WatCon.sequence_processing as sequence_processing
+import WatCon.residue_index as residue_index_module
+import WatCon.evolutionary as evolutionary
 import WatCon.residue_analysis as residue_analysis
 import WatCon.visualize_structures as visualize_structures
 
@@ -100,6 +102,10 @@ class WaterMolecule:
         self.O = O
         self.resname = 'WAT'
         self.resid = residue_number
+        # Aggregated conservation of the residues this water contacts.  Filled
+        # in by WaterNetwork.annotate_water_conservation() once connections
+        # exist; None means no scored contact (NOT "not conserved").
+        self.evolutionary = None
 
 class OtherAtom:
     """
@@ -113,14 +119,29 @@ class OtherAtom:
         Coordinates of atom
     resname : str
         Name of residue.
-    msa_resid: int
-        Common residue index from MSA    
+    msa_resid: int or None
+        Common residue index from the MSA (an alignment COLUMN), or None when
+        this residue could not be mapped.  Never derived by arithmetic on
+        `resid` -- see WatCon.residue_index.
+    chain: str
+        Chain identifier.  Part of residue identity: residue numbers repeat
+        across chains.
+    icode: str or None
+        PDB insertion code, or None.
+    evolutionary: ResidueConservation or None
+        ConSurf conservation for this atom's RESIDUE, or None when ConSurf did
+        not score it.  Every atom of a residue shares one immutable instance.
+        None means "no data", never "not conserved".
     resid: int
-        Residue number of atom    
+        Residue number of atom.  MAY BE NEGATIVE OR ZERO (expression tags are
+        numbered backwards from the mature start), so it must never be used as
+        a list index.
     name: str
         Name of atom
     """
-    def __init__(self, index, atom_name, residue_name, x, y, z, residue_number, msa_residue_number, hbonding):
+    def __init__(self, index, atom_name, residue_name, x, y, z,
+                 residue_number, msa_residue_number, hbonding,
+                 chain='', icode=None, evolutionary=None):
         """
         Initialize the class
 
@@ -139,7 +160,14 @@ class OtherAtom:
         z: float
             z-coordinate of position
         residue_number: int
-            Residue number of atom
+            Residue number of atom.  May be negative or zero, so it must never
+            be used as a list index.
+        msa_residue_number: int or None
+            MSA alignment column for this residue, or None if unmapped.
+        chain: str
+            Chain identifier.
+        icode: str or None
+            PDB insertion code.
         """
         self.index = index
         self.coordinates = (x, y, z)
@@ -147,6 +175,14 @@ class OtherAtom:
         self.msa_resid = msa_residue_number
         self.resid = residue_number
         self.name = atom_name
+        # Chain and insertion code complete the residue identity.  Residue
+        # numbers repeat across chains, so `resid` alone is not a valid key.
+        self.chain = chain
+        self.icode = icode
+        # Evolutionary (ConSurf) conservation of this atom's residue.  Shared
+        # across the residue's atoms; None when unscored.  Kept strictly
+        # separate from WatCon's STRUCTURAL water conservation.
+        self.evolutionary = evolutionary
         #self.hbonding = hbonding  #Commenting out currently
   
 class WaterNetwork:  
@@ -178,7 +214,9 @@ class WaterNetwork:
         self.active_region = None
         self.graph = None
 
-    def add_atom(self, index, atom_name, residue_name, x, y, z, residue_number=None, msa_residue_number=None):
+    def add_atom(self, index, atom_name, residue_name, x, y, z,
+                 residue_number=None, msa_residue_number=None,
+                 chain='', icode=None, evolutionary=None):
         """
         Add atom (OtherAtom object)
 
@@ -198,8 +236,14 @@ class WaterNetwork:
             z-coordinate of atom
         residue_number: int
             Residue number of atom  
-        msa_residue_number: int
-            Common residue index from MSA    
+        msa_residue_number: int or None
+            MSA alignment column for this residue, or None if unmapped.
+        chain: str
+            Chain identifier; part of the residue identity.
+        icode: str or None
+            PDB insertion code.
+        evolutionary: ResidueConservation or None
+            ConSurf conservation for this residue, or None if unscored.
 
         Returns
         ----------
@@ -214,7 +258,10 @@ class WaterNetwork:
             else:
                 hbonding = False
 
-            mol = OtherAtom(index, atom_name, residue_name, x, y, z, residue_number, msa_residue_number, hbonding)
+            mol = OtherAtom(index, atom_name, residue_name, x, y, z,
+                            residue_number, msa_residue_number, hbonding,
+                            chain=chain, icode=icode,
+                            evolutionary=evolutionary)
             self.protein_atoms.append(mol)
 
     def add_water(self, index, o, residue_number, h1=None, h2=None):
@@ -697,22 +744,31 @@ class WaterNetwork:
         if active_region_reference is not None:
             self.active_region, protein_active, water_active = self.select_active_region(active_region_reference, active_region_radius=active_region_radius, active_region_COM=active_region_COM)
 
-        #Use MSA indexing
-        if msa_indexing is not None:
-            MSA_indices = msa_indexing
-        else:
-            MSA_indices = ['X'] * 10000 #Dummy list
+        # MSA columns were already resolved by identity when each OtherAtom was
+        # built (see extract_objects).  Read them off the atom rather than
+        # recomputing MSA_indices[molecule.resid - 1], which was both duplicated
+        # and wrong: it indexes a positional list by residue number.
 
         #Only active site atoms in networks
         if active_region_only==True:
             #Add nodes
             for molecule in water_active:
-                G.add_node(molecule.O.index, pos=molecule.O.coordinates, atom_category='WAT', MSA=None) #have nodes on all oxygens
+                G.add_node(molecule.O.index, pos=molecule.O.coordinates, atom_category='WAT', MSA=None,
+                           evo_min_score=(None if molecule.evolutionary is None
+                                          else molecule.evolutionary.min_score),
+                           evo_n_residues=(0 if molecule.evolutionary is None
+                                           else molecule.evolutionary.n_residues))
 
             if water_only == False:
                 for molecule in protein_active:              
-                    MSA_index = MSA_indices[molecule.resid-1]
-                    G.add_node(molecule.index, pos=molecule.coordinates, atom_category='PROTEIN', MSA=MSA_index)
+                    G.add_node(molecule.index, pos=molecule.coordinates,
+                               atom_category='PROTEIN', MSA=molecule.msa_resid,
+                               # evo_* keeps EVOLUTIONARY conservation distinct from
+                               # WatCon's STRUCTURAL water conservation.
+                               evo_score=(None if molecule.evolutionary is None
+                                          else molecule.evolutionary.score),
+                               evo_grade=(None if molecule.evolutionary is None
+                                          else molecule.evolutionary.grade))
 
             #Add edges
             self.connections = self.find_directed_connections(dist_cutoff=max_connection_distance, water_active=water_active, 
@@ -725,12 +781,23 @@ class WaterNetwork:
         else:
             #Add nodes
             for molecule in self.water_molecules:
-                G.add_node(molecule.O.index, pos=molecule.O.coordinates, atom_category='WAT', MSA=None) #have nodes on all oxygens
+                G.add_node(molecule.O.index, pos=molecule.O.coordinates, atom_category='WAT', MSA=None,
+                           evo_min_score=(None if molecule.evolutionary is None
+                                          else molecule.evolutionary.min_score),
+                           evo_n_residues=(0 if molecule.evolutionary is None
+                                           else molecule.evolutionary.n_residues))
 
             if water_only == False:
                 #for molecule in self.protein_subset:
                 for molecule in self.protein_atoms:
-                    G.add_node(molecule.index, pos=molecule.coordinates, atom_category='PROTEIN', MSA=MSA_index)
+                    G.add_node(molecule.index, pos=molecule.coordinates,
+                               atom_category='PROTEIN', MSA=molecule.msa_resid,
+                               # evo_* keeps EVOLUTIONARY conservation distinct from
+                               # WatCon's STRUCTURAL water conservation.
+                               evo_score=(None if molecule.evolutionary is None
+                                          else molecule.evolutionary.score),
+                               evo_grade=(None if molecule.evolutionary is None
+                                          else molecule.evolutionary.grade))
             
             #Add edges
             self.connections = self.find_directed_connections(dist_cutoff=2.5, water_active=None, protein_active=None, 
@@ -780,24 +847,33 @@ class WaterNetwork:
         if active_region_reference is not None:
             self.active_region, protein_active, water_active = self.select_active_region(active_region_reference, active_region_radius=active_region_radius, active_region_COM=active_region_COM)
 
-        #Use MSA indexing
-        if msa_indexing is not None:
-            MSA_indices = msa_indexing
-        else:
-            MSA_indices = ['X'] * 10000 #Dummy list
+        # MSA columns were already resolved by identity when each OtherAtom was
+        # built (see extract_objects).  Read them off the atom rather than
+        # recomputing MSA_indices[molecule.resid - 1], which was both duplicated
+        # and wrong: it indexes a positional list by residue number.
 
         #If desired, only include atoms in active site
         if active_region_only:
             for molecule in water_active:
-                G.add_node(molecule.O.index, pos=molecule.O.coordinates, atom_category='WAT', MSA=None) #have nodes on all oxygens
+                G.add_node(molecule.O.index, pos=molecule.O.coordinates, atom_category='WAT', MSA=None,
+                           evo_min_score=(None if molecule.evolutionary is None
+                                          else molecule.evolutionary.min_score),
+                           evo_n_residues=(0 if molecule.evolutionary is None
+                                           else molecule.evolutionary.n_residues))
 
             if water_only == False:
                 for molecule in protein_active:    
                     #print(len(MSA_indices))
                     #print(molecule.resid)
-                    MSA_index = MSA_indices[molecule.resid-1]
 
-                    G.add_node(molecule.index, pos=molecule.coordinates, atom_category='PROTEIN', MSA=MSA_index)
+                    G.add_node(molecule.index, pos=molecule.coordinates,
+                               atom_category='PROTEIN', MSA=molecule.msa_resid,
+                               # evo_* keeps EVOLUTIONARY conservation distinct from
+                               # WatCon's STRUCTURAL water conservation.
+                               evo_score=(None if molecule.evolutionary is None
+                                          else molecule.evolutionary.score),
+                               evo_grade=(None if molecule.evolutionary is None
+                                          else molecule.evolutionary.grade))
 
             self.connections = self.find_connections(dist_cutoff=max_connection_distance, water_active=water_active, 
                                                         protein_active=protein_active, active_region_only=active_region_only, 
@@ -808,13 +884,23 @@ class WaterNetwork:
         #Include all atoms
         else:
             for molecule in self.water_molecules:
-                G.add_node(molecule.O.index, pos=molecule.O.coordinates, atom_category='WAT', MSA=None) #have nodes on all oxygens
+                G.add_node(molecule.O.index, pos=molecule.O.coordinates, atom_category='WAT', MSA=None,
+                           evo_min_score=(None if molecule.evolutionary is None
+                                          else molecule.evolutionary.min_score),
+                           evo_n_residues=(0 if molecule.evolutionary is None
+                                           else molecule.evolutionary.n_residues))
 
             if water_only == False:
                 #for molecule in self.protein_subset:
                 for molecule in self.protein_atoms:
-                    MSA_index = MSA_indices[molecule.resid-1]
-                    G.add_node(molecule.index, pos=molecule.coordinates, atom_category='PROTEIN', MSA=MSA_index)
+                    G.add_node(molecule.index, pos=molecule.coordinates,
+                               atom_category='PROTEIN', MSA=molecule.msa_resid,
+                               # evo_* keeps EVOLUTIONARY conservation distinct from
+                               # WatCon's STRUCTURAL water conservation.
+                               evo_score=(None if molecule.evolutionary is None
+                                          else molecule.evolutionary.score),
+                               evo_grade=(None if molecule.evolutionary is None
+                                          else molecule.evolutionary.grade))
             
             self.connections = self.find_connections(dist_cutoff=max_connection_distance, water_active=None, protein_active=None, 
                                                         active_region_only=False, water_only=water_only, max_neighbors=max_neighbors)
@@ -826,6 +912,82 @@ class WaterNetwork:
         self.graph = G
 
         return self.graph
+
+    def annotate_water_conservation(self):
+        """Aggregate residue conservation onto each water it contacts.
+
+        Requires ``self.connections`` to exist.  For every water, the protein
+        atoms it is connected to are collapsed to DISTINCT residues -- a water
+        touching one residue through both its N and O atoms must count that
+        residue once, not twice, because OtherAtom is a per-atom object.
+
+        Residues with no ConSurf score are counted (``n_unscored``) rather than
+        dropped, so a water bridging one conserved and one unscored residue is
+        distinguishable from one bridging a single conserved residue.
+
+        Aggregation is unweighted: the connection tuples do not carry contact
+        distances, so distance weighting is not available here.
+
+        Returns
+        -------
+        int
+            Number of waters that received a non-None aggregate.
+        """
+        for water in self.water_molecules:
+            water.evolutionary = None
+
+        if not self.connections:
+            return 0
+
+        # Index protein atoms once; connections reference atoms by index.
+        atoms_by_index = {atom.index: atom for atom in self.protein_atoms}
+        water_by_oxygen = {w.O.index: w for w in self.water_molecules}
+
+        # water oxygen index -> {residue key: conservation or None}
+        contacts = {}
+
+        for connection in self.connections:
+            if connection[3] != 'WAT-PROT':
+                continue
+
+            # Either end may be the protein atom depending on which code path
+            # built the connection, so resolve by membership rather than order.
+            first, second = connection[0], connection[1]
+            if first in atoms_by_index and second in water_by_oxygen:
+                atom, water_index = atoms_by_index[first], second
+            elif second in atoms_by_index and first in water_by_oxygen:
+                atom, water_index = atoms_by_index[second], first
+            else:
+                continue
+
+            residue_key = (atom.chain, atom.resid, atom.icode)
+            contacts.setdefault(water_index, {})[residue_key] = atom.evolutionary
+
+        annotated = 0
+        for water_index, by_residue in contacts.items():
+            water = water_by_oxygen.get(water_index)
+            if water is None:
+                continue
+            water.evolutionary = evolutionary.aggregate_water(by_residue.values())
+            if water.evolutionary is not None:
+                annotated += 1
+
+        # Water nodes are added to the graph BEFORE connections are found, so
+        # their attributes were written when every aggregate was still None.
+        # Refresh them here to keep graph attributes and objects in step.
+        if self.graph is not None:
+            for water in self.water_molecules:
+                node = self.graph.nodes.get(water.O.index)
+                if node is None:
+                    continue
+                node['evo_min_score'] = (
+                    None if water.evolutionary is None else water.evolutionary.min_score
+                )
+                node['evo_n_residues'] = (
+                    0 if water.evolutionary is None else water.evolutionary.n_residues
+                )
+
+        return annotated
 
     def get_density(self, selection='all'):
         """
@@ -1115,9 +1277,54 @@ class WaterNetwork:
         return shortest_path
 
 
+def _build_residue_index(structure_path, msa_indices, fallback_to_resid=False):
+    """Wrap raw MSA indices in a validated identity -> MSA-column mapping.
+
+    ``msa_indices`` from :func:`WatCon.sequence_processing.generate_msa_alignment`
+    is a POSITIONAL list: element *k* is the alignment column of the *k*-th
+    residue of the sequence.  It carries no residue numbers, so it is only
+    meaningful alongside the residue ordering it was derived from.
+
+    :meth:`ResidueIndex.build` pairs the two and refuses to continue when their
+    lengths disagree -- precisely the case where the FASTA behind the alignment
+    does not describe this structure and every column would be silently shifted.
+
+    Parameters
+    ----------
+    structure_path : str
+        PDB used to establish the residue ordering.
+    msa_indices : list[int] or None
+        Alignment columns, in residue order.  None means no MSA.
+    fallback_to_resid : bool
+        When True and no MSA is available, map each residue to its own residue
+        number instead of to an alignment column.  This preserves the previous
+        "use residues as msa_indices" behaviour of the dynamic pipeline, but
+        does it correctly: the old code paired the protein atoms with
+        ``u.residues.resids``, which includes waters and so was neither an
+        alignment column nor a reliable residue number.
+
+    Returns
+    -------
+    ResidueIndex or None
+        None when there is nothing to map, which callers read as "no MSA
+        column for any residue".
+    """
+    if msa_indices is None and not fallback_to_resid:
+        return None
+
+    residues = residue_index_module.residues_from_pdb_file(structure_path)
+
+    if msa_indices is None:
+        # No alignment: a residue's "common index" is its own number.
+        msa_indices = [residue.resid for residue in residues]
+
+    return residue_index_module.ResidueIndex.build(
+        residues, msa_indices, source=str(structure_path)
+    )
+
 def extract_objects(pdb_file, network_type, custom_selection, active_region_reference, active_region_COM, active_region_radius,
                      water_name, msa_indexing, active_region_only=False, directed=False, angle_criteria=None, max_connection_distance=3.0,
-                     max_neighbors=10):
+                     max_neighbors=10, conservation_map=None):
     """
     Extract and compute a water network for each frame.
 
@@ -1200,11 +1407,32 @@ def extract_objects(pdb_file, network_type, custom_selection, active_region_refe
         water_only = False
         #Add protein atoms to network
         for i, atm in enumerate(ag_protein.atoms):
-            try:
-                msa_resid = msa_indexing[atm.resid-1] #CHECK THIS 
-            except:
+            # Residue identity is (chain, resid, icode) -- residue numbers are
+            # not unique across chains and may be negative or zero.
+            chain, icode = residue_index_module.atom_identity(atm)
+
+            # Look the MSA column up by identity.  The old code did
+            #     msa_indexing[atm.resid - 1]
+            # which treats a POSITIONAL list as if it were indexed by residue
+            # number.  That is only correct for dense, 1-origin, single-chain
+            # numbering; for anything else it returned a confidently wrong
+            # column, and for resid <= 0 Python silently wrapped to the end of
+            # the list.  msa_column() returns None rather than guessing.
+            if msa_indexing is None:
                 msa_resid = None
-            water_network.add_atom(atm.id, atm.name, atm.resname, *atm.position, atm.resid, msa_resid)
+            else:
+                msa_resid = msa_indexing.msa_column(chain, int(atm.resid), icode)
+
+            # Conservation is looked up by the SAME identity used for the MSA
+            # column.  None when ConSurf did not score this residue.
+            conservation = (
+                None if conservation_map is None
+                else conservation_map.for_residue(chain, int(atm.resid), icode)
+            )
+
+            water_network.add_atom(atm.id, atm.name, atm.resname, *atm.position,
+                                   atm.resid, msa_resid, chain=chain, icode=icode,
+                                   evolutionary=conservation)
     elif network_type == 'water-water':
         water_only = True
     else:
@@ -1233,6 +1461,11 @@ def extract_objects(pdb_file, network_type, custom_selection, active_region_refe
         water_network.generate_network(msa_indexing, active_region_residue, active_region_COM=active_region_COM, active_region_only=active_region_only,
                                        active_region_radius=active_region_radius, water_only=water_only, max_connection_distance=max_connection_distance,
                                        max_neighbors=max_neighbors)
+    # Connections now exist, so residue conservation can be rolled up onto the
+    # waters that contact those residues.  Safe to call unconditionally: with no
+    # conservation map every aggregate is None.
+    water_network.annotate_water_conservation()
+
     return water_network
 
 def get_clusters(list_of_networks, cluster, min_samples, coordinates=None, eps=0.0, n_jobs=1, filename_base='STATIC_CLUSTER'):
@@ -1277,7 +1510,8 @@ def initialize_network(structure_directory, topology_file=None, trajectory_file=
                        analysis_conditions='all', analysis_selection='all', project_networks=False, return_network=True,
                        cluster_coordinates=False, clustering_method='hdbscan', cluster_water_only=True, min_cluster_samples=15, eps=None, msa_indexing=True,
                        alignment_file='alignment.txt', combined_fasta='all_seqs.fa', fasta_directory='fasta', classify_water=True, classification_file_base='STATIC',
-                       MSA_reference_pdb=None, water_reference_resids=None, num_workers=4, shortest_path_nodes=None, max_neighbors=10):
+                       MSA_reference_pdb=None, water_reference_resids=None, num_workers=4, shortest_path_nodes=None, max_neighbors=10,
+                       consurf_directory=None, consurf_chain_map=None, consurf_strict=True):
                        
     """
     Initialize and compute all water networks for a directory of pdbs.
@@ -1353,6 +1587,19 @@ def initialize_network(structure_directory, topology_file=None, trajectory_file=
         List of tuples of nodes to perform shortest path analysis among. Default is None (shortest path among entire network will be returned)
     max_neighbhors: int, optional
             Maximum number of neighbors to calculate in KDTree
+    consurf_directory : str or None, optional
+        Directory containing ConSurf ``*_consurf_grades.txt`` files, one per
+        structure.  Files are matched to structures by the same naming
+        convention used for FASTA files.  Default None disables the feature and
+        every residue is left unscored.
+
+        WatCon does NOT contact the ConSurf server; supply results yourself.
+    consurf_chain_map : dict or None, optional
+        ``{consurf_chain: structure_chain}`` translation, for runs whose chain
+        labels differ from the structure. Default None means identity.
+    consurf_strict : bool, optional
+        If True (default), a missing or unparseable ConSurf file raises.
+        If False, WatCon warns and continues with no conservation data.
 
 
     Returns
@@ -1461,9 +1708,26 @@ def initialize_network(structure_directory, topology_file=None, trajectory_file=
         else:
             msa_active_region_ref = active_region_reference
 
+        # Pair the positional MSA indices with this structure's residue ordering.
+        # Raises if they disagree, rather than shifting every column silently.
+        residue_index = _build_residue_index(
+            os.path.join(pdb_dir, pdb_file), msa_indices
+        )
+
+        # ConSurf conservation for THIS structure, if the user supplied results.
+        # WatCon never contacts the ConSurf server; see
+        # WatCon.evolutionary.find_consurf_file for where an automatic
+        # submit-and-fetch step would attach in future.
+        conservation_map = evolutionary.load_conservation(
+            pdb_file, consurf_directory,
+            chain_map=consurf_chain_map, strict=consurf_strict,
+        )
+
+
         network = extract_objects(os.path.join(pdb_dir, pdb_file), network_type, custom_selection, active_region_reference=msa_active_region_ref, active_region_COM=active_region_COM,
-                                  active_region_radius=active_region_radius, water_name=water_name, msa_indexing=msa_indices, 
-                                  active_region_only=active_region_only, directed=include_hydrogens, angle_criteria=angle_criteria, max_connection_distance=max_distance, max_neighbors=max_neighbors)
+                                  active_region_radius=active_region_radius, water_name=water_name, msa_indexing=residue_index, 
+                                  active_region_only=active_region_only, directed=include_hydrogens, angle_criteria=angle_criteria, max_connection_distance=max_distance, max_neighbors=max_neighbors,
+                                  conservation_map=conservation_map)
 
         if classify_water: 
             if msa_indices is None:
@@ -1481,9 +1745,24 @@ def initialize_network(structure_directory, topology_file=None, trajectory_file=
             #Write classification dict into a csv file -- CHANGE THIS FOR TRAJECTORIES
             with open(f'msa_classification/{classification_file_base}.csv', 'a') as FILE:
                 for key, val in classification_dict.items():
-                    FILE.write(f"{pdb_file.split('.')[0]},{key},{val[0]},{val[1]}\n")
+                    FILE.write(f"{pdb_file.split('.')[0]},{key},{val[0]},{val[1]},{val[2]}\n")
         
         metrics = {}
+
+        # Record how much of this structure ConSurf actually covered.  Reported
+        # rather than enforced: a low fraction usually means the ConSurf run and
+        # the structure disagree about chain labelling.  Key is prefixed 'evo'
+        # to stay clear of WatCon's structural water-conservation metrics.
+        if conservation_map is not None:
+            coverage = conservation_map.coverage(network.protein_atoms)
+            metrics['evolutionary_coverage'] = {
+                'matched_atoms': coverage.matched,
+                'unscored_atoms': coverage.unscored,
+                'not_in_file_atoms': coverage.not_in_file,
+                'fraction': coverage.fraction,
+                'source': conservation_map.source,
+            }
+
         #Calculate metrics as per user input
         if analysis_conditions['density'] == 'on':
             metrics['density'] = network.get_density(selection=analysis_selection)
@@ -1578,7 +1857,7 @@ def initialize_network(structure_directory, topology_file=None, trajectory_file=
         
         os.makedirs('msa_classification', exist_ok=True)
         with open(f'msa_classification/{classification_file_base}.csv', 'w') as FILE:
-            FILE.write('PDB ID,Resid,MSA_Resid,Index_1,Index_2,Protein_Atom,Classification,Protein_Coords,Water_Coords,Angle_1,Angle_2\n')
+            FILE.write('PDB ID,Resid,MSA_Resid,Index_1,Index_2,Protein_Atom,Classification,Protein_Coords,Water_Coords,Angle_1,Angle_2,Evo_Score,Evo_Grade,Evo_LowConf\n')
 
     coords = []
 

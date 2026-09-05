@@ -75,17 +75,28 @@ def get_per_residue_interactions(network, selection='all', msa=False):
         if data['connection_type'] == 'WAT-PROT' and (selection == 'all' or data['active_region'] == selection)
     ]
 
+    # NOTE on `is not None` below.
+    #
+    # Residue numbers may legitimately be 0 or negative -- expression tags are
+    # numbered backwards from the mature start (7O7W has HIS:-5:A .. PRO:0:A).
+    # This code used `or` chains and a bare `if target_res:`, so residue 0 was
+    # FALSY and silently dropped from every per-residue count.  Identity checks
+    # against None are required throughout.
+    water_resids = {f.resid for f in network.water_molecules}
+
     for cn1, cn2, _ in edges:
-        cn1_res = get_resid_by_index(cn1, is_water=True) or get_resid_by_index(cn1, is_water=False)
-        cn2_res = get_resid_by_index(cn2, is_water=False) or get_resid_by_index(cn2, is_water=True)
-        cn1_wat = cn1_res in [f.resid for f in network.water_molecules]
+        cn1_water = get_resid_by_index(cn1, is_water=True)
+        cn1_res = cn1_water if cn1_water is not None else get_resid_by_index(cn1, is_water=False)
 
-        if cn1_wat:
-            target_res = cn2_res
-        else:
-            target_res = cn1_res
+        cn2_protein = get_resid_by_index(cn2, is_water=False)
+        cn2_res = cn2_protein if cn2_protein is not None else get_resid_by_index(cn2, is_water=True)
 
-        if target_res:
+        # Whichever end is NOT the water is the residue we are counting.
+        cn1_wat = cn1_res in water_resids
+
+        target_res = cn2_res if cn1_wat else cn1_res
+
+        if target_res is not None:
             residue_key = str(target_res)
             residue_dict[residue_key] = residue_dict.get(residue_key, 0) + 1
 
@@ -207,8 +218,21 @@ def classify_waters(network, ref1_coords, ref2_coords):
         if len(prot_coords) > 0:
             angle1 = get_angles(wat_coords, prot_coords, ref_coords=ref1_coords)
             angle2 = get_angles(wat_coords, prot_coords, ref_coords=ref2_coords)
+            # Evolutionary conservation of the contacting residue.  Appended to
+            # the END of the row: plot_interactions_from_angles and
+            # identify_clustered_angles read this CSV by column position, so
+            # existing columns must not move.  'NA' where ConSurf had no score.
+            def _evo(atom):
+                if atom.evolutionary is None:
+                    return "NA,NA,NA"
+                return (f"{atom.evolutionary.score},{atom.evolutionary.grade},"
+                        f"{int(atom.evolutionary.low_confidence)}")
+
             prot_name = [f"{f.resid},{f.msa_resid},{connection[0]},{connection[1]},{connection[2]},{connection[5]},{f.coordinates[0]} {f.coordinates[1]} {f.coordinates[2]},{wat_coords[0]} {wat_coords[1]} {wat_coords[2]}" for f in network.protein_atoms if (f.index == connection[0] or f.index == connection[1])][0]
-            classification_dict[prot_name] = [angle1, angle2] #Consider combining into one value
+            prot_name = f"{prot_name}"
+            evo = [f"{_evo(f)}" for f in network.protein_atoms
+                   if (f.index == connection[0] or f.index == connection[1])][0]
+            classification_dict[prot_name] = [angle1, angle2, evo]
         else:
             continue
 

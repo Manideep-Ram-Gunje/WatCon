@@ -116,6 +116,30 @@ def parse_inputs(filename):
     if 'MSA_reference_pdb' in kwargs.keys() and kwargs['MSA_reference_pdb'] == 'None':
         kwargs['MSA_reference_pdb'] = None
     
+    # --- ConSurf (evolutionary conservation) -----------------------------
+    # WatCon consumes ConSurf results supplied by the user; it does not submit
+    # structures to the ConSurf server.
+    if 'consurf_directory' in kwargs.keys() and kwargs['consurf_directory'] == 'None':
+        kwargs['consurf_directory'] = None
+
+    if 'consurf_strict' in kwargs.keys():
+        # parse_inputs turns on/off into booleans already; accept both spellings.
+        if isinstance(kwargs['consurf_strict'], str):
+            kwargs['consurf_strict'] = kwargs['consurf_strict'].lower() not in ('false', 'no', '0')
+
+    if 'consurf_chain_map' in kwargs.keys():
+        # Format: "A:A,B:C" mapping ConSurf chain -> structure chain.
+        raw = kwargs['consurf_chain_map']
+        if raw in (None, 'None', ''):
+            kwargs['consurf_chain_map'] = None
+        else:
+            mapping = {}
+            for pair in str(raw).split(','):
+                if ':' in pair:
+                    src, dst = pair.split(':', 1)
+                    mapping[src.strip()] = dst.strip()
+            kwargs['consurf_chain_map'] = mapping or None
+
     if 'max_neighbors' in kwargs.keys():
         if int(kwargs['max_neighbors']) < 2:
             print('ERROR: Please select a max_neighbors value greater than 1.')

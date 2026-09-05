@@ -60,6 +60,15 @@ water_reference_resids: 70,#153                 ; Residue positions to use as re
                                                 ;     (in relation to MSA_reference_pdb)
 classification_file_base: STATIC                ; Classification file basename
 
+; ConSurf evolutionary conservation (optional)
+;   WatCon reads ConSurf results you supply -- it does NOT submit structures to
+;   the ConSurf server.  Run ConSurf yourself and drop the
+;   *_consurf_grades.txt files into this directory, one per structure.
+consurf_directory: None                         ; Directory of ConSurf grades files ('None' disables)
+consurf_strict: on                              ; on  = missing/unparseable ConSurf file is an error
+                                                ; off = warn and continue with no conservation data
+consurf_chain_map: None                         ; Optional 'A:A,B:C' ConSurf-chain -> structure-chain map
+
 ; Miscellaneous
 num_workers: 1                                  ; Number of cores available for parallelization
 
