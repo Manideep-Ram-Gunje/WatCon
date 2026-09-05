@@ -11,7 +11,17 @@ from Bio import pairwise2
 from Bio.Seq import Seq
 import os
 
-from modeller import *
+import WatCon.residue_index as residue_index
+
+# NOTE: MODELLER is deliberately NOT imported at module scope.
+#
+# It is a licensed Salilab package that cannot be pip-installed, and a
+# module-level ``from modeller import *`` made this entire module -- and
+# therefore generate_static_networks and generate_dynamic_networks, which import
+# it -- unimportable without MODELLER present.  Only the two functions below
+# actually need it, so each imports it lazily.  Everything else here
+# (pdb_to_fastas, generate_msa_alignment, convert_msa_to_individual, ...) is
+# pure Python and now works without MODELLER installed.
 
 def msa_with_modeller(alignment_file, combined_fasta):
     """
@@ -32,6 +42,10 @@ def msa_with_modeller(alignment_file, combined_fasta):
     -------
     None
     """
+
+    # Imported here rather than at module scope: MODELLER is licensed and often
+    # absent, and only this function needs it.
+    from modeller import alignment, environ, log
 
     log.verbose()
 
@@ -73,6 +87,9 @@ def perform_structure_alignment(pdb_dir, same_chain='A',out_dir='aligned_pdbs', 
     dict
         Dictionary containing rotation and translation matrices for each PDB.
     """
+
+    # Imported here rather than at module scope (see the note near the top).
+    from modeller import Alignment, Environ, Model, model, selection
 
     os.makedirs(out_dir, exist_ok=True)
     #Initialize environment
@@ -270,9 +287,15 @@ def seq_similarity(seq1, seq2):
     return similarity   
 
 
-def pdb_to_fastas(pdb_file, fasta_out, name='STATE', custom_residues=None):
+def pdb_to_fastas(pdb_file, fasta_out, name='STATE', custom_residues=None, chain=None):
     """
     Convert a PDB file to FASTA format, including nonstandard residue names.
+
+    The residue walk is delegated to :func:`WatCon.residue_index.residues_from_pdb_file`
+    so that the FASTA written here and the residue ordering used later to
+    interpret the MSA come from **exactly one** implementation.  They used to be
+    two independent walks that nothing checked against each other; when they
+    disagreed, every MSA column silently shifted.
 
     Parameters
     ----------
@@ -282,43 +305,34 @@ def pdb_to_fastas(pdb_file, fasta_out, name='STATE', custom_residues=None):
         Output directory for the FASTA file.
     name : str
         Name of the output file (".fa" extension added automatically).
+    custom_residues : dict, optional
+        Extra three-letter to one-letter residue mappings.
+    chain : str, optional
+        Restrict the sequence to a single chain.  Default None keeps every
+        chain, in file order.
 
     Returns
     -------
     None
+
+    Note
+    ----
+    Output changed for multi-chain and modified-residue PDBs.  The previous
+    line filter was ``('ATOM' in line) and ('CA' in line)``, which matched
+    ``HETATM`` records by substring, matched a stray ``CA`` anywhere on the
+    line, applied no alternate-conformer filter, and merged every chain into one
+    sequence.  For well-formed single-chain input the output is unchanged.
     """
     os.makedirs(fasta_out, exist_ok=True)
 
-    amino_acid_dict = {'ALA': 'A', 'ARG': 'R', 'ASN': 'N', 'ASP': 'D',
-    'CYS': 'C', 'GLN': 'Q', 'GLU': 'E', 'GLY': 'G',
-    'HIS': 'H', 'ILE': 'I', 'LEU': 'L', 'LYS': 'K',
-    'MET': 'M', 'PHE': 'F', 'PRO': 'P', 'SER': 'S',
-    'THR': 'T', 'TRP': 'W', 'TYR': 'Y', 'VAL': 'V',
-    'HIP': 'H', 'HID': 'H', 'HIE': 'H', 'HISD': 'H',
-    'HISE': 'H', 'HISP': 'H', 'AS4': 'D','ASH': 'D',
-    'GL4': 'E', 'GLH': 'E', 'ARN': 'R', 'LYN': 'K',
-    'CYX': 'C', 'CYM': 'C', 'CSP': 'C', 'SEP': 'S', 'ASX': 'D',
-    'HSD': 'H', 'HSP': 'H', 'HSE': 'H', 'MSE': 'M'
-}
-    if custom_residues is not None:
-        for key, val in custom_residues.items():
-            amino_acid_dict[key] = val
-        
-    sequence = []
-    with open(pdb_file, 'r') as PDB:
-        pdb_lines = PDB.readlines()
+    residues = residue_index.residues_from_pdb_file(
+        pdb_file, chain=chain, custom_residues=custom_residues
+    )
+    sequence = residue_index.build_fasta_sequence(residues)
 
-    for line in pdb_lines:
-        if ('ATOM' in line) and ('CA' in line) and ('ANISOU' not in line):
-            #aa = line.split()[3]
-            aa = line[17:20]
-            sequence.append(amino_acid_dict[aa])
-        
-
-
-    with open(os.path.join(fasta_out,f"{name}.fa"), 'w') as FASTA:
-        FASTA.write(f'>{name}\n')
-        FASTA.write(''.join(sequence))
+    with open(os.path.join(fasta_out, f"{name}.fa"), "w") as FASTA:
+        FASTA.write(f">{name}\n")
+        FASTA.write(sequence)
 
 
 def parse_fasta(fasta):
@@ -399,47 +413,74 @@ def generate_msa_alignment(alignment_file, combined_fasta, fasta_individual):
 
 def convert_msa_to_individual(msa_indices, msa_indices_ref, resids, resid_sequence_ref, resid_individual_ref):
     """
-    Retrieve residue indices from MSA using a known reference.
+    Retrieve a residue index in one structure from a known reference residue.
+
+    Maps ``resid_individual_ref`` (a residue number in the REFERENCE structure)
+    through the alignment to the equivalent residue number in the structure of
+    interest.
 
     Parameters
     ----------
     msa_indices : list of int
-        List of MSA indices for the sequence of interest.
+        MSA alignment columns for the sequence of interest, in residue order.
     msa_indices_ref : list of int
-        List of MSA indices for the reference sequence.
+        MSA alignment columns for the reference sequence, in residue order.
     resids : list of int
-        List of residue indices for the sequence of interest.
+        Residue numbers for the sequence of interest, in the same order.
     resid_sequence_ref : list of int
-        List of residue indices for the reference sequence.
+        Residue numbers for the reference sequence, in the same order.
     resid_individual_ref : int
-        Reference residue index for a specific structure.
+        Reference residue number to translate.
 
     Returns
     -------
-    int
-        Desired residue index for the given structure.
+    int or None
+        The equivalent residue number, or None when the reference position is
+        a gap in this sequence (i.e. this structure has no residue there).
+
+    Note
+    ----
+    This used to pick the NEAREST alignment column via ``np.argmin(np.abs(...))``.
+    When the reference column was a gap in this sequence that silently returned
+    a neighbouring residue -- a plausible-looking but wrong answer.  The rule
+    here, as everywhere in this mapping code, is to return None rather than
+    guess a residue correspondence.
     """
+    reference_positions = np.where(
+        np.array([int(f) for f in resid_sequence_ref]) == int(resid_individual_ref)
+    )[0]
+    if len(reference_positions) == 0:
+        print(
+            f"Warning: reference residue {resid_individual_ref} is not present "
+            f"in the reference sequence; cannot map it."
+        )
+        return None
 
-    # Find the index in the reference MSA
-    reference_msa = msa_indices_ref[np.where(np.array([int(f) for f in resid_sequence_ref]) == int(resid_individual_ref))[0][0]]
+    # Alignment column occupied by the reference residue.
+    reference_msa = int(msa_indices_ref[reference_positions[0]])
 
-    # Find the corresponding index in the individual MSA
-    #TEMPORARY
-    # Find the closest index in msa_indices to reference_msa
-    closest_index = np.argmin(np.abs(msa_indices - np.array(reference_msa)))
+    # Exact match only: the sequence of interest must actually occupy that
+    # same alignment column.
+    matches = np.where(np.array([int(f) for f in msa_indices]) == reference_msa)[0]
+    if len(matches) == 0:
+        print(
+            f"Warning: alignment column {reference_msa} (reference residue "
+            f"{resid_individual_ref}) is a gap in this sequence; no equivalent "
+            f"residue exists."
+        )
+        return None
 
-    try:
-        # Use the closest index to find the desired residue ID
-        desired_resid = int(resids[closest_index])
-    except:
-        print('Closest index', closest_index)
-        print('Reference MSA', reference_msa)
-        print('Calculated MSA', msa_indices[closest_index])
-        print(len(resids), len(msa_indices))
-        desired_resid=None
-        print('Failed')
+    index = int(matches[0])
+    if index >= len(resids):
+        print(
+            f"Warning: alignment/residue length mismatch "
+            f"({len(msa_indices)} columns vs {len(resids)} residues); "
+            f"refusing to map reference residue {resid_individual_ref}."
+        )
+        return None
 
-    return desired_resid
+    return int(resids[index])
+
 
 def suggest_references(input_pdb, pymol_structure_file, num_options=1, min_res=50, max_res=40, dist_cutoff=20):
     """
