@@ -334,3 +334,51 @@ Template:
   reported but still not enforced. The 0.95 threshold is calibrated on one
   protein - a structure with many genuine mutations could trip it, which is why
   it is a parameter and the error lists the disagreeing residues.
+
+---
+
+## 2026-09-06 - Phase 5c: superposition without MODELLER
+
+- **What:** New `WatCon/superpose.py`. Kabsch rigid-body superposition in numpy,
+  producing exactly the `{'Rot': [...], 'Trans': [...]}` structure
+  `perform_structure_alignment` returns, so it drops straight into
+  `align_with_waters` - which already moves waters along with their protein.
+- **Why:** WatCon could only superpose through MODELLER, which is licensed and
+  cannot be pip-installed. The barnase study needs 21 structures in one frame.
+  Nothing downstream of the transforms needed changing; only their source did.
+- **Files:** `WatCon/superpose.py` (new), `WatCon/tests/test_superpose.py` (new,
+  18 tests). **No existing module was modified** - this adds an alternative
+  source of transforms rather than replacing the MODELLER path.
+- **Verified on real data:** the three crystallographically independent barnase
+  copies in 1BRS (chains A, B, C).
+
+  | copy | RMSD before | RMSD after | CA matched |
+  |---|---|---|---|
+  | B onto A | 39.15 A | **0.31 A** | 108 |
+  | C onto A | 35.67 A | **0.26 A** | 108 |
+
+- **Two bugs found by testing rather than reasoning:**
+  1. **The correspondence was keyed on the chain letter.** Copies A, B and C
+     therefore shared *zero* residues and looked un-superposable. A chain letter
+     is a label the depositor chose, not part of a residue's identity across
+     structures - the same protein is chain A in one entry and chain B in
+     another. Now keyed on `(resid, icode)`, with an explicit error if more than
+     one chain is in play. Confirmed the regression tests catch it: reverting
+     the fix fails 8 of 18.
+  2. **`align_with_waters` always treats the sorted-first file as the
+     reference**, indexing `rotation_matrices[i - 1]`. A different reference
+     would pair every structure with the wrong transform and still produce
+     something that looked like a superposition. `as_dict()` now refuses when
+     the reference does not sort first, and says what to do instead.
+- **Reflection correction is tested by name.** Without it the SVD returns an
+  improper rotation (determinant -1) for a mirrored target, superposing a
+  protein onto its own mirror image - not a rigid motion, and silently the wrong
+  handedness.
+- **Tests:** `python -m pytest WatCon/tests -q` -> **400 passed, 0 failed**
+  (was 382).
+- **Limits:** Correspondence is by **residue number**, so this handles one
+  protein - different crystal forms, mutants, ligand complexes. It is not a
+  sequence aligner and will not superpose homologues numbered differently; the
+  MSA path remains the right tool for those. Mutated positions still contribute
+  their CA, deliberately: a side-chain substitution barely moves the backbone,
+  and excluding them would bias the fit toward unmutated regions.
