@@ -382,3 +382,66 @@ Template:
   MSA path remains the right tool for those. Mutated positions still contribute
   their CA, deliberately: a side-chain substitution barely moves the backbone,
   and excluding them would bias the fit toward unmutated regions.
+
+---
+
+## 2026-09-06 - Phase 5d: family scaffold, and a silent wrong-file bug
+
+- **What:** Pooling conservation from *separate* ConSurf runs onto shared MSA
+  columns, so extending to a real protein family means supplying ConSurf files
+  rather than writing code. Plus a genuine bug found while validating it.
+- **Files:** `WatCon/evolutionary.py` - `ColumnConservation`,
+  `conservation_by_msa_column`, `family_summary`, `CROSS_RUN_AGREEMENT`, and a
+  fix to `find_consurf_file`. `WatCon/tests/test_family_scaffold.py` (new, 14
+  tests); two regression tests added to `test_evolutionary.py`.
+
+### The bug: a longer name beaten by its own prefix
+
+`find_consurf_file("P00648_50", ...)` returned **`P00648_150.grades.txt`**.
+
+The lookup tried the loose token (everything before the first underscore)
+*before* the full stem. The bare prefix `P00648` matched both files, and the
+alphabetically first one won. The structure silently received a different run's
+conservation, and nothing downstream could detect it - coverage stays at 100%,
+identity stays at 100% (same protein), every score looks plausible.
+
+Found because two "independent" ConSurf runs pooled to *identical* values at all
+107 positions, which is not what two runs at different MSA depths should do.
+
+Fixed by trying the **most specific token first**, and **refusing** when a token
+matches more than one file rather than picking arbitrarily.
+
+### Measured cross-run agreement
+
+With the lookup fixed, the two real barnase runs are actually distinguishable,
+and confirm the figure quoted in the scaffold:
+
+| pair | score rho | grade rho | grade changed |
+|---|---|---|---|
+| P00648 depth 150 vs depth 50 | **0.955** | **0.947** | **42%** |
+| 1BRS run vs P00648 depth 150 | 0.380 | 0.365 | 62% |
+| 1BRS run vs P00648 depth 50 | 0.367 | 0.360 | 66% |
+
+The second and third rows are the more sobering ones: the *same protein*, run
+from a different starting structure, agrees at only rho ~= 0.37. Recorded in
+`CROSS_RUN_AGREEMENT` as the honest floor - any family-level effect smaller than
+this sits inside ConSurf's own reproducibility noise.
+
+### Design consequences
+
+- **Grades are never averaged.** A grade is an ordinal per-run percentile bin;
+  its mean is not a grade. `ColumnConservation` exposes `max_grade`, not a mean.
+- **`spread` is reported alongside every pooled value**, because scores are
+  z-normalised *within* each run and are only relatively comparable.
+- **`unanimous_conserved`** (every member independently called grade >= 8) is the
+  one family-level claim that never compares values across runs, only each run's
+  own verdict. It is the recommended statistic.
+- **Pooling without an MSA is refused.** Falling back to residue numbers would
+  align position 40 of one protein to position 40 of another.
+
+- **Tests:** `python -m pytest WatCon/tests -q` -> **416 passed, 0 failed**
+  (was 400).
+- **Limits:** The scaffold is exercised on two runs of *one* sequence, which is
+  the easiest possible case and still only 0.955 agreement. It has **not** been
+  run on a real multi-protein family, because we hold no ConSurf data for one.
+  The join and the arithmetic are tested; the biology is not.

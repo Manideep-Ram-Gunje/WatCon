@@ -234,6 +234,26 @@ def test_find_consurf_file_returns_none_when_absent():
     assert find_consurf_file("1AKI.pdb", FIXTURES) is None
 
 
+def test_a_longer_name_is_not_beaten_by_its_own_prefix():
+    """Regression: ``P00648_50`` used to resolve to ``P00648_150.grades.txt``.
+
+    The lookup tried the loose token (everything before the first underscore)
+    BEFORE the full stem, so the bare prefix ``P00648`` matched both files and
+    the alphabetically first one won.  The structure silently received another
+    ConSurf run's conservation, with nothing downstream able to detect it.
+    """
+    assert find_consurf_file("P00648_50", FIXTURES).name == "P00648_50.grades.txt"
+    assert find_consurf_file("P00648_150", FIXTURES).name == "P00648_150.grades.txt"
+
+
+def test_a_genuinely_ambiguous_name_is_refused_not_guessed():
+    """Two files can match equally well; picking one arbitrarily is the bug."""
+    from WatCon.evolutionary import ConservationError
+
+    with pytest.raises(ConservationError, match="matches 2 ConSurf files"):
+        find_consurf_file("P00648", FIXTURES)
+
+
 def test_load_conservation_disabled_returns_none():
     assert load_conservation("anything.pdb", None) is None
 

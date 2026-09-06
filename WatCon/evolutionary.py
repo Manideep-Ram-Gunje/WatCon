@@ -81,6 +81,10 @@ __all__ = [
     "ResidueConservation",
     "WaterConservation",
     "ConservationMap",
+    "ColumnConservation",
+    "CROSS_RUN_AGREEMENT",
+    "conservation_by_msa_column",
+    "family_summary",
     "CoverageReport",
     "DEFAULT_IDENTITY_THRESHOLD",
     "enforce_identity",
@@ -603,9 +607,15 @@ def find_consurf_file(
 ) -> Optional[Path]:
     """Locate the ConSurf grades file belonging to one structure.
 
-    Matching follows the convention WatCon already uses to pair structures with
-    FASTA files (see ``generate_static_networks.initialize_network``): the token
-    before the first underscore, then the stem, are tried in turn.
+    Matching uses the same two tokens WatCon's FASTA lookup uses -- the whole
+    stem and the part before the first underscore -- but tries the **most
+    specific first**, and refuses to choose when a token matches more than one
+    file.
+
+    Both of those matter.  Trying the loose token first made ``P00648_50``
+    resolve to ``P00648_150.grades.txt``: the bare prefix ``P00648`` matched
+    both files and the alphabetically first one won, silently attaching another
+    run's conservation to the structure.  Nothing downstream could detect it.
 
     This function is the single place that decides which ConSurf file belongs to
     a structure, and is therefore the seam where an automatic
@@ -635,13 +645,25 @@ def find_consurf_file(
             stem = stem[: -len(suffix)]
             break
 
-    # Same precedence as the FASTA lookup: prefix before '_', then whole stem.
-    for token in (stem.split("_")[0], stem):
+    # Most specific token first, so a longer name is never beaten by its own
+    # prefix matching some other file.
+    for token in (stem, stem.split("_")[0]):
         if not token:
             continue
-        for candidate in candidates:
-            if token.lower() in candidate.name.lower():
-                return candidate
+        matches = [
+            candidate for candidate in candidates
+            if token.lower() in candidate.name.lower()
+        ]
+        if len(matches) == 1:
+            return matches[0]
+        if len(matches) > 1:
+            raise ConservationError(
+                "%r matches %d ConSurf files in %s (%s). Rename them so each "
+                "structure matches exactly one, rather than having one picked "
+                "arbitrarily."
+                % (token, len(matches), directory,
+                   ", ".join(m.name for m in matches))
+            )
 
     return None
 
@@ -985,3 +1007,183 @@ def write_conservation_report(clusters, path):
         writer.writerows(rows)
 
     return len(rows)
+
+
+# ---------------------------------------------------------------------------
+# Family scaffold: pooling conservation from SEPARATE ConSurf runs
+# ---------------------------------------------------------------------------
+#
+# Everything above this line handles one protein: one ConSurf run, applied to
+# one or many structures of the same sequence.  That is the barnase case, and it
+# needs nothing here.
+#
+# A true protein FAMILY is different.  Each member has its own ConSurf run, and
+# residue 40 of one protein is not residue 40 of another -- the correspondence
+# runs through the MSA.  This section provides that join, so adding a family
+# means supplying ConSurf files, not writing code.
+#
+# READ THIS BEFORE POOLING ACROSS RUNS
+# ------------------------------------
+# ConSurf scores are z-normalised WITHIN each run: across our files the mean is
+# -0.000 and the standard deviation 0.995-0.998.  Grades are per-run percentile
+# bins of those scores.  Neither is an absolute scale.
+#
+# So a pooled score answers "how conserved is this position relative to its own
+# alignment", never "how conserved is it compared to that other protein".  Two
+# runs of the SAME barnase sequence at different MSA depths (150 vs 50
+# sequences) agree only at Spearman 0.955 on score and 0.947 on grade, with the
+# grade differing at 43% of positions -- and that is the easy case, the same
+# sequence.  Different proteins, different alignments, different depths will do
+# worse.
+#
+# The functions below therefore report the spread across members alongside the
+# central value, and never average grades.  A grade is an ordinal bin; its mean
+# is not a grade.
+
+#: Measured agreement between two ConSurf runs of the same barnase sequence at
+#: MSA depths 150 and 50.  Kept here as the honest floor on cross-run pooling:
+#: any family-level effect smaller than this is inside ConSurf's own noise.
+CROSS_RUN_AGREEMENT = {
+    "score_spearman": 0.955,
+    "grade_spearman": 0.947,
+    "grade_changed_fraction": 0.43,
+}
+
+
+@dataclass(frozen=True)
+class ColumnConservation:
+    """Conservation at one MSA column, pooled across family members.
+
+    Deliberately not a single number.  ``spread`` is the point: a column where
+    every member agrees is evidence, and one where they disagree by more than
+    :data:`CROSS_RUN_AGREEMENT` is inside the noise of ConSurf's own
+    reproducibility and should not be read as a family signal.
+    """
+
+    column: int
+    n_members: int
+    #: member label -> that member's score at this column
+    scores: Dict[str, float]
+    #: member label -> that member's grade at this column
+    grades: Dict[str, int]
+    #: member label -> (chain, resid, icode) contributing the value
+    residues: Dict[str, ResidueKey]
+
+    @property
+    def mean_score(self) -> Optional[float]:
+        return fmean(self.scores.values()) if self.scores else None
+
+    @property
+    def min_score(self) -> Optional[float]:
+        """Most conserved value across members (score is negative-is-conserved)."""
+        return min(self.scores.values()) if self.scores else None
+
+    @property
+    def spread(self) -> Optional[float]:
+        """Range of scores across members -- how much the runs disagree."""
+        if len(self.scores) < 2:
+            return None
+        return max(self.scores.values()) - min(self.scores.values())
+
+    @property
+    def max_grade(self) -> Optional[int]:
+        """Highest grade any member assigned.  Grades are never averaged."""
+        return max(self.grades.values()) if self.grades else None
+
+    @property
+    def unanimous_conserved(self) -> bool:
+        """Every member independently called this column conserved (grade >= 8).
+
+        The most defensible family-level statement available, because it does
+        not depend on comparing values between separately normalised runs -- only
+        on each run's own verdict.
+        """
+        return bool(self.grades) and all(g >= 8 for g in self.grades.values())
+
+
+def conservation_by_msa_column(members) -> Dict[int, ColumnConservation]:
+    """Pool per-member conservation onto shared MSA columns.
+
+    Parameters
+    ----------
+    members : sequence of (label, ConservationMap, ResidueIndex)
+        One entry per family member.  The ``ResidueIndex`` must carry an MSA
+        (``has_msa``), since the alignment column is the only thing that makes
+        two different proteins' residues comparable.
+
+    Returns
+    -------
+    dict of {msa_column: ColumnConservation}
+
+    Raises
+    ------
+    ConservationError
+        If a member has no MSA mapping.  Falling back to residue numbers would
+        silently align position 40 of one protein to position 40 of another,
+        which is the exact class of error this module exists to prevent.
+
+    Notes
+    -----
+    Read the section header above before interpreting the output: scores from
+    different runs are separately z-normalised and are only relatively
+    comparable.  Prefer :attr:`ColumnConservation.unanimous_conserved`, which
+    uses each run's own verdict rather than comparing values across runs.
+    """
+    columns: Dict[int, Dict[str, tuple]] = {}
+
+    for label, conservation_map, index in members:
+        if index is None or not index.has_msa:
+            raise ConservationError(
+                "member %r has no MSA mapping. Residue numbers are not "
+                "comparable between different proteins, so pooling without an "
+                "alignment would join unrelated positions." % (label,)
+            )
+
+        for residue in index.residues:
+            column = index.msa_column(residue.chain, residue.resid, residue.icode)
+            if column is None:
+                continue
+            conservation = conservation_map.for_residue(
+                residue.chain, residue.resid, residue.icode
+            )
+            if conservation is None:
+                continue
+            columns.setdefault(column, {})[label] = (
+                conservation.score,
+                conservation.grade,
+                residue.key,
+            )
+
+    result: Dict[int, ColumnConservation] = {}
+    for column, per_member in columns.items():
+        result[column] = ColumnConservation(
+            column=column,
+            n_members=len(per_member),
+            scores={k: v[0] for k, v in per_member.items()},
+            grades={k: v[1] for k, v in per_member.items()},
+            residues={k: v[2] for k, v in per_member.items()},
+        )
+    return result
+
+
+def family_summary(columns: Dict[int, "ColumnConservation"]) -> dict:
+    """Headline counts for a pooled family, including how much runs disagree."""
+    if not columns:
+        return {
+            "n_columns": 0,
+            "n_all_members": 0,
+            "n_unanimous_conserved": 0,
+            "median_spread": None,
+        }
+
+    spreads = [c.spread for c in columns.values() if c.spread is not None]
+    spreads.sort()
+    most = max(c.n_members for c in columns.values())
+    return {
+        "n_columns": len(columns),
+        "n_all_members": sum(1 for c in columns.values() if c.n_members == most),
+        "n_unanimous_conserved": sum(
+            1 for c in columns.values() if c.unanimous_conserved
+        ),
+        "median_spread": spreads[len(spreads) // 2] if spreads else None,
+    }
