@@ -3,7 +3,11 @@
 Standing reference for `WatCon/consurf`. Edited in place as understanding changes.
 For *what changed and when*, see [CONSURF_CHANGELOG.md](CONSURF_CHANGELOG.md).
 
-**Status:** Phases 1-3 complete. ConSurf results supplied by the user are parsed,
+**Status:** Phases 1-4 complete. The evolutionary layer is now consumed end to
+end: conservation reaches WatCon's cross-structure conserved water sites, is
+projected for viewing, and is reported as a table.
+
+**Earlier status (kept for history):** Phases 1-3 complete. ConSurf results supplied by the user are parsed,
 joined to WatCon residues by `(chain, resid, icode)`, and aggregated onto waters.
 No combined score exists yet (Phase 5). WatCon does **not** contact the ConSurf
 server -- see section 11.
@@ -439,3 +443,80 @@ air-gapped behaviour.
   `selection != 'all'`), the directed `angle_criteria` branch (`water1`
   undefined), `get_all_water_distances` (arity mismatch), `test_inputs.py`
   (missing `import sys`), `test_general.py` (cwd-dependent relative path).
+
+---
+
+## 14. Phase 4 — the consumer end (done)
+
+### The gap this closed
+
+After Phase 3, conservation was attached to residues and waters but **nothing
+read it**: `find_conserved_networks.py` had 0 references, `visualize_structures.py`
+had 0. The plumbing existed with no faucet.
+
+### What was added
+
+| Symbol | Module | Purpose |
+|---|---|---|
+| `water_residue_contacts` | `evolutionary.py` | the single contact walk, shared by both builders and the cluster join |
+| `aggregate_site` | `evolutionary.py` | conservation of residues lining any water set (e.g. the active region) |
+| `ClusterConservation` | `evolutionary.py` | one conserved water site: structural occupancy **and** evolutionary conservation |
+| `conservation_of_clusters` | `evolutionary.py` | **the cross-structure join** |
+| `write_conservation_report` | `evolutionary.py` | one CSV row per conserved water site |
+| `project_clusters_by_conservation` | `visualize_structures.py` | cluster PDB, evolutionary conservation in B-factors |
+| `pymol_project_evolutionary` | `visualize_structures.py` | residues coloured on ConSurf's own 1-9 scale |
+| `conservation_report` | `WatCon.py` | post-analysis option wiring it together |
+
+### The join
+
+```
+cluster centre --(within dist_cutoff)--> waters, per structure
+                                              |
+                                        contacting residues
+                                              |
+                        de-duplicated ACROSS structures
+                                              |
+                                      ClusterConservation
+```
+
+A residue lining a site in five structures contributes **once**.
+
+### Deliberate design choices
+
+- **Never blended.** The report carries `occupancy` (structural) and `evo_*`
+  (evolutionary) as separate columns. Whether they correlate is the research
+  question; the tool supplies the inputs and stops.
+- **Two separate projection files**, never one combined B-factor. Load both and
+  compare.
+- **`None` means no data.** A site with no scored lining residue reports `NA`,
+  never 0 — 0 would read as "not conserved".
+- **Unweighted**, consistent with the measurement that distance weighting sits
+  below ConSurf's own reproducibility noise.
+
+### Bugs fixed in this phase
+
+1. **`get_density(selection != 'all')` raised `UnboundLocalError`** —
+   `generate_static_networks.py:1018` and `generate_dynamic_networks.py:1094`
+   read `S.edges` before `S` was assigned. One line each. This blocked every
+   region-restricted analysis. *(Correction to an earlier note: this affected one
+   method, not six — the five siblings were already correct.)*
+2. **B-factor written one column too far right** in `project_clusters`. The PDB
+   spec puts tempFactor at columns 61-66; WatCon emitted an extra space, so a
+   spec-compliant reader truncated `0.25` to `0.2`. Fixed in both the existing
+   and the new projection so the two agree.
+3. **numpy integers leaking into residue keys.** `atom.resid` from MDAnalysis is
+   `np.int64`; it hashes like a Python int so lookups worked, but keys serialised
+   as `np.int64(70)`. Now coerced.
+
+### Validated
+
+355 tests passing (up from 318): 24 new for the cluster join, 13 for the
+projections. Real structures used throughout — 7O7W (negative resids, omitted
+chromophore), 1BRS (six chains), 1AKI (no ConSurf data).
+
+### NOT validated — the biology
+
+**Mechanical correctness is verified; the scientific question is not answered.**
+Testing whether conserved water sites *are* lined by conserved residues needs a
+real protein family with ConSurf data for every member. We hold four ConSurf
+datasets covering two proteins. The machinery is ready; the data is not.

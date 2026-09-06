@@ -1016,29 +1016,12 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
         if not self.connections:
             return 0
 
-        # Index protein atoms once; connections reference atoms by index.
-        atoms_by_index = {atom.index: atom for atom in self.protein_atoms}
+        # One implementation of the contact walk, shared with the cluster-level
+        # join, so the two cannot drift apart.  It de-duplicates to residues:
+        # OtherAtom is per-atom, and a water touching one residue through two
+        # atoms must count that residue once.
+        contacts = evolutionary.water_residue_contacts(self)
         water_by_oxygen = {w.O.index: w for w in self.water_molecules}
-
-        # water oxygen index -> {residue key: conservation or None}
-        contacts = {}
-
-        for connection in self.connections:
-            if connection[3] != 'WAT-PROT':
-                continue
-
-            # Either end may be the protein atom depending on which code path
-            # built the connection, so resolve by membership rather than order.
-            first, second = connection[0], connection[1]
-            if first in atoms_by_index and second in water_by_oxygen:
-                atom, water_index = atoms_by_index[first], second
-            elif second in atoms_by_index and first in water_by_oxygen:
-                atom, water_index = atoms_by_index[second], first
-            else:
-                continue
-
-            residue_key = (atom.chain, atom.resid, atom.icode)
-            contacts.setdefault(water_index, {})[residue_key] = atom.evolutionary
 
         annotated = 0
         for water_index, by_residue in contacts.items():
@@ -1091,7 +1074,7 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
         if selection=='all':
             S = self.graph
         else:
-            S = self.graph.edge_subgraph([(edge1, edge2) for (edge1,edge2, data) in S.edges(data=True) if data['active_region']==selection])
+            S = self.graph.edge_subgraph([(edge1, edge2) for (edge1,edge2, data) in self.graph.edges(data=True) if data['active_region']==selection])
 
         #Calculate density for subgraph
         nedges = S.number_of_edges()

@@ -83,6 +83,13 @@ __all__ = [
     "ConservationMap",
     "CoverageReport",
     "aggregate_water",
+    "aggregate_site",
+    "water_residue_contacts",
+    "ClusterConservation",
+    "conservation_of_clusters",
+    "conservation_summary",
+    "write_conservation_report",
+    "REPORT_COLUMNS",
     "find_consurf_file",
     "load_conservation",
 ]
@@ -538,3 +545,272 @@ def load_conservation(
         return None
 
     return ConservationMap.build(result, chain_map=chain_map, source=str(path))
+
+
+# ---------------------------------------------------------------------------
+# Water -> residue contacts
+# ---------------------------------------------------------------------------
+
+def water_residue_contacts(network):
+    """Map each water to the DISTINCT residues it contacts.
+
+    Returns ``{water_oxygen_index: {residue_key: ResidueConservation or None}}``.
+
+    De-duplication to residues happens here.  ``OtherAtom`` is a per-atom object,
+    so a water touching one residue through both its N and its O would otherwise
+    count that residue twice.
+
+    This is the single implementation of the contact walk.  Both network classes'
+    ``annotate_water_conservation`` call it, so the two pipelines cannot drift
+    apart -- an earlier duplicated version was exactly the kind of thing that
+    silently diverges.
+    """
+    contacts = {}
+    connections = getattr(network, "connections", None)
+    if not connections:
+        return contacts
+
+    atoms_by_index = {atom.index: atom for atom in network.protein_atoms}
+    water_by_oxygen = {w.O.index: w for w in network.water_molecules}
+
+    for connection in connections:
+        if connection[3] != "WAT-PROT":
+            continue
+
+        # Either end may be the protein atom depending on which code path built
+        # the connection, so resolve by membership rather than by position.
+        first, second = connection[0], connection[1]
+        if first in atoms_by_index and second in water_by_oxygen:
+            atom, water_index = atoms_by_index[first], second
+        elif second in atoms_by_index and first in water_by_oxygen:
+            atom, water_index = atoms_by_index[second], first
+        else:
+            continue
+
+        # int() matters: MDAnalysis hands back numpy integers, which hash like
+        # Python ints (so lookups happen to work) but serialise as
+        # "np.int64(70)" and would leak numpy types into reports and pickles.
+        key = (atom.chain, int(atom.resid), atom.icode)
+        contacts.setdefault(water_index, {})[key] = atom.evolutionary
+
+    return contacts
+
+
+def aggregate_site(network, waters=None):
+    """Conservation of the residues lining an arbitrary set of waters.
+
+    Used for the active region, or any hand-picked water selection.  Aggregates
+    over DISTINCT residues across all the given waters, so a residue contacted
+    by three waters in the site counts once.
+
+    ``waters`` defaults to every water in the network.  Returns ``None`` when no
+    contacted residue has a ConSurf score -- "no data", never "not conserved".
+    """
+    if waters is None:
+        waters = network.water_molecules
+
+    contacts = water_residue_contacts(network)
+    by_residue = {}
+    for water in waters:
+        for key, conservation in contacts.get(water.O.index, {}).items():
+            # Keep a scored entry in preference to an unscored one for the same
+            # residue; they can differ only if the same residue appears twice.
+            if key not in by_residue or by_residue[key] is None:
+                by_residue[key] = conservation
+
+    return aggregate_water(by_residue.values())
+
+
+# ---------------------------------------------------------------------------
+# Cluster level -- the cross-structure join
+# ---------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class ClusterConservation:
+    """Evolutionary conservation of the residues lining one conserved water site.
+
+    A "cluster" here is a WatCon conserved water site: an XYZ position where
+    waters recur across a family, produced by
+    ``find_conserved_networks.cluster_coordinates_only``.
+
+    This is the object that makes the original scientific question answerable.
+    It carries the STRUCTURAL measure (``occupancy``, ``n_structures_occupied``)
+    alongside the EVOLUTIONARY one (``min_score`` and friends), side by side and
+    never combined -- deciding how they relate is the research question, not
+    something the tool should pre-empt.
+
+    Residues are de-duplicated ACROSS structures: if the same residue lines this
+    site in five structures, it contributes once.
+    """
+
+    cluster_id: int
+
+    # Structural conservation, from WatCon.
+    occupancy: int                 # waters at this site, summed over structures
+    n_structures_occupied: int     # structures with at least one water here
+    n_structures_total: int
+
+    # Evolutionary conservation, from ConSurf.  None when nothing is scored.
+    min_score: Optional[float]
+    mean_score: Optional[float]
+    max_grade: Optional[int]
+
+    n_residues: int                # distinct SCORED residues lining the site
+    n_low_confidence: int
+    n_unscored: int                # distinct lining residues with no ConSurf score
+
+    residue_keys: Tuple[ResidueKey, ...]
+
+    @property
+    def occupancy_fraction(self) -> float:
+        """Fraction of structures in which this site is occupied."""
+        if self.n_structures_total == 0:
+            return 0.0
+        return self.n_structures_occupied / self.n_structures_total
+
+    @property
+    def has_conservation(self) -> bool:
+        return self.min_score is not None
+
+    def to_row(self) -> dict:
+        """One flat record, ready for CSV."""
+        return {
+            "cluster_id": self.cluster_id,
+            "occupancy": self.occupancy,
+            "n_structures_occupied": self.n_structures_occupied,
+            "n_structures_total": self.n_structures_total,
+            "occupancy_fraction": round(self.occupancy_fraction, 4),
+            "evo_min_score": "NA" if self.min_score is None else round(self.min_score, 4),
+            "evo_mean_score": "NA" if self.mean_score is None else round(self.mean_score, 4),
+            "evo_max_grade": "NA" if self.max_grade is None else self.max_grade,
+            "evo_n_residues": self.n_residues,
+            "evo_n_low_confidence": self.n_low_confidence,
+            "evo_n_unscored": self.n_unscored,
+        }
+
+
+def _normalise_centers(centers):
+    """Accept the several shapes WatCon uses for cluster centres.
+
+    ``cluster_coordinates_only`` returns a ``{label: xyz}`` dict, while
+    ``get_coordinates_from_pdb`` returns an ``(N, 3)`` array.  Existing WatCon
+    code passes both around interchangeably, so normalise once here to
+    ``[(cluster_id, (x, y, z)), ...]`` rather than guessing at each call site.
+    """
+    if hasattr(centers, "items"):
+        return [(int(k), tuple(float(c) for c in v)) for k, v in centers.items()]
+    return [(i, tuple(float(c) for c in xyz)) for i, xyz in enumerate(centers)]
+
+
+def _distance_sq(a, b):
+    return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2
+
+
+def conservation_of_clusters(networks, centers, dist_cutoff=1.5):
+    """Join conserved water SITES to the conservation of the residues lining them.
+
+    For every cluster centre, finds the waters within ``dist_cutoff`` in each
+    structure, collects the residues those waters contact, de-duplicates them
+    across the whole family, and aggregates their ConSurf conservation.
+
+    Parameters
+    ----------
+    networks : sequence of WaterNetwork
+        One per structure.  Conservation must already be attached -- run
+        ``initialize_network`` with ``consurf_directory`` set.
+    centers : dict or array-like
+        Cluster centres from ``find_conserved_networks``.
+    dist_cutoff : float
+        A water occupies a site if within this distance of the centre, in
+        Angstrom.  Matches ``identify_conserved_water_clusters``.
+
+    Returns
+    -------
+    dict of {cluster_id: ClusterConservation}
+
+    Note
+    ----
+    A site with no ConSurf-scored lining residue still returns a record, with
+    ``min_score=None`` and its ``n_unscored`` count set.  Absence of data is
+    reported, never silently rendered as zero conservation.
+    """
+    centres = _normalise_centers(centers)
+    cutoff_sq = float(dist_cutoff) ** 2
+    networks = list(networks)
+
+    # Contact maps are expensive, so build one per structure, not per centre.
+    contact_maps = [water_residue_contacts(net) for net in networks]
+
+    results = {}
+    for cluster_id, centre in centres:
+        residues = {}
+        occupancy = 0
+        structures_occupied = 0
+
+        for net, contacts in zip(networks, contact_maps):
+            occupied_here = False
+            for water in net.water_molecules:
+                if _distance_sq(water.O.coordinates, centre) > cutoff_sq:
+                    continue
+                occupancy += 1
+                occupied_here = True
+                for key, conservation in contacts.get(water.O.index, {}).items():
+                    # Prefer a scored entry: the same residue may be unscored in
+                    # one structure and scored in another.
+                    if key not in residues or residues[key] is None:
+                        residues[key] = conservation
+            if occupied_here:
+                structures_occupied += 1
+
+        aggregate = aggregate_water(residues.values())
+        unscored = sum(1 for v in residues.values() if v is None)
+        results[cluster_id] = ClusterConservation(
+            cluster_id=cluster_id,
+            occupancy=occupancy,
+            n_structures_occupied=structures_occupied,
+            n_structures_total=len(networks),
+            min_score=None if aggregate is None else aggregate.min_score,
+            mean_score=None if aggregate is None else aggregate.mean_score,
+            max_grade=None if aggregate is None else aggregate.max_grade,
+            n_residues=0 if aggregate is None else aggregate.n_residues,
+            n_low_confidence=0 if aggregate is None else aggregate.n_low_confidence,
+            n_unscored=unscored,
+            residue_keys=tuple(sorted(residues, key=lambda k: (k[0], k[1], k[2] or ""))),
+        )
+
+    return results
+
+
+REPORT_COLUMNS = [
+    "cluster_id", "occupancy", "n_structures_occupied", "n_structures_total",
+    "occupancy_fraction", "evo_min_score", "evo_mean_score", "evo_max_grade",
+    "evo_n_residues", "evo_n_low_confidence", "evo_n_unscored",
+]
+
+
+def conservation_summary(clusters):
+    """Cluster records as flat rows, sorted by cluster id."""
+    return [clusters[k].to_row() for k in sorted(clusters)]
+
+
+def write_conservation_report(clusters, path):
+    """Write one row per conserved water site.
+
+    Structural conservation (``occupancy``) and evolutionary conservation
+    (``evo_*``) sit side by side in the same table, deliberately uncombined.
+    Correlating those columns is the scientific question; this file is the input
+    to that analysis, not an answer to it.
+    """
+    import csv
+
+    rows = conservation_summary(clusters)
+    directory = os.path.dirname(str(path))
+    if directory:
+        os.makedirs(directory, exist_ok=True)
+
+    with open(path, "w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=REPORT_COLUMNS)
+        writer.writeheader()
+        writer.writerows(rows)
+
+    return len(rows)

@@ -17,6 +17,51 @@ Template:
 
 ---
 
+## 2026-09-06 — Phase 4: the consumer end -- cluster join, projections, report
+
+- **Change:** Closed the gap that made the evolutionary layer a dead end. Before
+  this, `find_conserved_networks.py` and `visualize_structures.py` had ZERO
+  references to conservation -- it was attached per structure and never reached
+  WatCon's cross-structure conserved water sites, was never drawn, never
+  reported. Added `conservation_of_clusters` (the cross-structure join),
+  `ClusterConservation`, `aggregate_site`, `write_conservation_report`,
+  `project_clusters_by_conservation`, `pymol_project_evolutionary`, and a
+  `conservation_report` post-analysis option. Extracted `water_residue_contacts`
+  so the contact walk has one implementation instead of being duplicated in both
+  builders.
+- **Files:** `WatCon/evolutionary.py`, `WatCon/visualize_structures.py`,
+  `WatCon/WatCon.py`, `WatCon/analysis.txt`,
+  `WatCon/generate_{static,dynamic}_networks.py`;
+  `WatCon/tests/test_evolutionary_clusters.py` (new),
+  `WatCon/tests/test_visualisation_evo.py` (new); `docs/`.
+  `find_conserved_networks.py` deliberately untouched -- the join consumes its
+  output rather than modifying it, so structural conservation stays clean.
+- **Reason:** The integration was unusable for its actual scientific purpose.
+  Conservation existed on residues and waters but nothing joined it to the
+  conserved water SITES that WatCon computes across a family, which is the level
+  the original question is asked at.
+- **Tests:** `python -m pytest .` from `WatCon/tests/` -> **355 passed, 1 failed**
+  (up from 318; the failure is the pre-existing `test_inputs.py` missing
+  `import sys`). New: 24 cluster-join, 13 projection. Verified on real
+  structures: 7O7W self-consistency (every water used as its own centre is found
+  there), residue keys are plain ints, far-away centres report empty.
+- **Limits:** **The biology is not validated.** Whether conserved water sites are
+  lined by conserved residues needs a real protein family with ConSurf for every
+  member; we hold four datasets covering two proteins. Aggregation stays
+  unweighted (distance weighting measured below ConSurf noise). No combined
+  score. Static directed networks still blocked by the `max_neigbhbors` typo.
+- **Decision:** Structural and evolutionary conservation are reported side by
+  side and **never blended** -- separate CSV columns, separate projection files.
+  Correlating them is the research question, and a tool that pre-computes one
+  number would be answering it on the user's behalf. Rejected: a single
+  "combined conservation" column, which was the obvious convenience and would
+  have destroyed the ability to ask the question.
+  Also fixed three bugs found on the way: `get_density` raised
+  `UnboundLocalError` for any non-'all' selection (one line in each builder, not
+  six methods as earlier notes said); `project_clusters` wrote the B-factor one
+  column right of the PDB spec, so 0.25 read back as 0.2; and MDAnalysis numpy
+  integers were leaking into residue keys.
+
 ## 2026-09-03 — Phase 3: ConSurf conservation attached to residues and waters
 
 - **Change:** New `WatCon/evolutionary.py` joining parsed ConSurf results to

@@ -140,6 +140,12 @@ def parse_inputs(filename):
                     mapping[src.strip()] = dst.strip()
             kwargs['consurf_chain_map'] = mapping or None
 
+    if 'conservation_report' in kwargs.keys() and isinstance(kwargs['conservation_report'], str):
+        kwargs['conservation_report'] = kwargs['conservation_report'].lower() not in ('off', 'false', 'no', '0')
+
+    if 'conservation_dist_cutoff' in kwargs.keys():
+        kwargs['conservation_dist_cutoff'] = float(kwargs['conservation_dist_cutoff'])
+
     if 'max_neighbors' in kwargs.keys():
         if int(kwargs['max_neighbors']) < 2:
             print('ERROR: Please select a max_neighbors value greater than 1.')
@@ -192,6 +198,23 @@ def parse_analysis(filename):
                     kw_value = False
 
                 kwargs[kw] = kw_value
+
+    # Numeric analysis options arrive as strings; coerce the ones that are used
+    # in arithmetic so callers do not have to.
+    for numeric in ('conservation_dist_cutoff', 'interaction_cutoff', 'eps'):
+        if numeric in kwargs and isinstance(kwargs[numeric], str):
+            try:
+                kwargs[numeric] = float(kwargs[numeric])
+            except ValueError:
+                print(f"Warning: could not read {numeric}={kwargs[numeric]!r} as a number.")
+
+    for integer in ('min_samples', 'n_jobs'):
+        if integer in kwargs and isinstance(kwargs[integer], str):
+            try:
+                kwargs[integer] = int(kwargs[integer])
+            except ValueError:
+                print(f"Warning: could not read {integer}={kwargs[integer]!r} as an integer.")
+
     return (kwargs)
 
 def run_watcon(structure_type, kwargs):
@@ -223,7 +246,8 @@ def run_watcon_postanalysis(concatenate=None, input_directory='watcon_output', h
                         traj_directory=None, active_region_definition=None, image_output_dir='images',
                         custom_selection=None, water_name=None, cluster_concatenated=False, cluster_method='hdbscan', eps=0.0,
                         n_jobs=1, min_samples=100, cluster_filebase='CLUSTER', calculate_commonality=None, color_by_conservation=None, 
-                        classify_waters=False, csv_dir='msa_classification'):
+                        classify_waters=False, csv_dir='msa_classification',
+                        conservation_report=False, conservation_dist_cutoff=1.5):
     """
     Run WatCon analysis from input file
 
@@ -274,6 +298,14 @@ def run_watcon_postanalysis(concatenate=None, input_directory='watcon_output', h
         Indicate whether to plot distributions of 2-angle calculations. Default is False.
     csv_dir: str
         Directory containing csvs (for classify_waters)
+    conservation_report : bool
+        Write one row per conserved water site giving its structural occupancy
+        alongside the EVOLUTIONARY conservation of the residues lining it.
+        Requires networks built with consurf_directory set, and an existing
+        cluster PDB. Default False.
+    conservation_dist_cutoff : float
+        A water occupies a cluster site if within this distance of its centre,
+        in Angstrom. Default 1.5.
 
     Returns
     ----------
@@ -358,6 +390,59 @@ def run_watcon_postanalysis(concatenate=None, input_directory='watcon_output', h
                 identify_conserved_water_clusters(networks, centers, dist_cutoff=1.0, filename_base=f'{cluster_filebase}_{name}_conservation')
             if color_by_conservation == 'all' or color_by_conservation == 'connections':
                 identify_conserved_water_interactions_clustering(networks, centers, max_connection_distance=3.0, dist_cutoff=1.0, filename_base=f'{cluster_filebase}_{name}_conservation')
+
+    if conservation_report:
+        # Join WatCon's conserved water SITES to the evolutionary conservation of
+        # the residues lining them.  This is the output that answers the original
+        # question -- are structurally conserved waters lined by evolutionarily
+        # conserved residues?  Structural and evolutionary conservation appear as
+        # separate columns; correlating them is the user's analysis, not ours.
+        import WatCon.evolutionary as evolutionary
+        from WatCon.find_conserved_networks import get_coordinates_from_pdb
+
+        cluster_pdb = f"cluster_pdbs/{cluster_filebase}.pdb"
+        if not os.path.exists(cluster_pdb):
+            print(f"Cannot write a conservation report: {cluster_pdb} does not exist. "
+                  f"Run clustering first (cluster_concatenated) to produce it.")
+        else:
+            centers = get_coordinates_from_pdb(cluster_pdb)
+
+            networks = []
+            for file in sorted(os.listdir(input_directory)):
+                if not file.endswith('.pkl'):
+                    continue
+                with open(os.path.join(input_directory, file), 'rb') as FILE:
+                    e = pickle.load(FILE)
+                # Static runs return 4 items, dynamic 3; networks are second in both.
+                if len(e) >= 2 and e[1]:
+                    networks.extend([n for n in e[1] if n is not None])
+
+            if not networks:
+                print("Cannot write a conservation report: no networks were found in "
+                      f"{input_directory}. Re-run with return_network on.")
+            else:
+                scored = sum(
+                    1 for n in networks for a in n.protein_atoms
+                    if getattr(a, 'evolutionary', None) is not None
+                )
+                if scored == 0:
+                    print("Warning: no residue in any network carries ConSurf data. "
+                          "The report will be written, but every site will read NA. "
+                          "Did you set consurf_directory when building the networks?")
+
+                clusters = evolutionary.conservation_of_clusters(
+                    networks, centers, dist_cutoff=conservation_dist_cutoff
+                )
+                out = os.path.join(image_output_dir, f"{cluster_filebase}_conservation.csv")
+                n = evolutionary.write_conservation_report(clusters, out)
+                print(f"Wrote {n} conserved water sites to {out}")
+
+                from WatCon.visualize_structures import project_clusters_by_conservation
+                projected = project_clusters_by_conservation(
+                    clusters, centers,
+                    filename_base=f"{cluster_filebase}_evolutionary",
+                )
+                print(f"Wrote evolutionary conservation projection to {projected}")
 
     if classify_waters:
         csvs = [f for f in os.listdir(csv_dir) if f.endswith('.csv')]

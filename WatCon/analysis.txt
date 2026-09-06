@@ -26,3 +26,10 @@ color_by_conservation: all                    ; Produce .pml file coloring eithe
 ; Residue-water classification
 classify_waters: on                           ; Use outputted .csv files from 2-angle classification to generate scatter/density plots
 
+
+; Evolutionary conservation report (ConSurf)
+;   Writes one row per conserved water site: its structural occupancy alongside
+;   the evolutionary conservation of the residues lining it.  Requires networks
+;   built with consurf_directory set, and an existing cluster PDB.
+conservation_report: off                      ; Join conserved water sites to ConSurf conservation
+conservation_dist_cutoff: 1.5                 ; A water occupies a site within this distance (Angstrom)
