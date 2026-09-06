@@ -520,3 +520,124 @@ chromophore), 1BRS (six chains), 1AKI (no ConSurf data).
 Testing whether conserved water sites *are* lined by conserved residues needs a
 real protein family with ConSurf data for every member. We hold four ConSurf
 datasets covering two proteins. The machinery is ready; the data is not.
+
+---
+
+## 15. Phase 5 — identity, superposition, family scaffold, and the study (done)
+
+The integration was complete but had never been run on more than two structures,
+and the question it exists to answer was unanswered. This phase closed both.
+
+### 15.1 Identity verification — the last correctness gap
+
+`ConservationMap` matched residues on `(chain, resid, icode)` only. Nothing in
+that key says *which amino acid* a score belongs to, so a ConSurf run numbered
+differently from the structure attaches a score to every residue, reports 100%
+coverage, and is wrong everywhere. `ResidueConservation` was already parsing the
+amino acid from both the SEQ and ATOM columns and discarding it.
+
+Now kept as `amino_acid` / `residue_name` and compared in `coverage()`.
+
+It is a **rate, not a pass/fail**, because a point mutant *should* disagree at
+the mutated position. Measured on real barnase:
+
+| case | identity rate |
+|---|---|
+| correct numbering | 100% (108/108) |
+| one point mutation | 99.1% (107/108) |
+| numbering shifted by one residue | **2.8%** (3/107) |
+
+`DEFAULT_IDENTITY_THRESHOLD = 0.95` sits in that gap. `enforce_identity()`
+raises under `consurf_strict`, warns otherwise, and names the disagreeing
+residues. Objects with no residue name report "not checked", never
+"all mismatched"; counting is per residue, not per atom.
+
+**It fired on real data.** In the barnase study a mis-numbered structure (2F56,
+offset +2) reached the builder and was stopped with *"only 2 of 106 compared
+residues agree (1.9%)"*.
+
+### 15.2 `WatCon/superpose.py` — alignment without MODELLER
+
+`align_with_waters` already applies transforms to every atom including waters;
+it only needed a source of matrices that is not MODELLER. `kabsch()` supplies
+them in numpy, in exactly the `{'Rot': [...], 'Trans': [...]}` shape
+`perform_structure_alignment` returns, so the two are interchangeable. No
+existing module changed.
+
+Correspondence is by **residue number**, so this covers one protein — different
+crystal forms, mutants, complexes. It is not a sequence aligner.
+
+Two traps, both with named tests: the reflection correction (without it the SVD
+returns an improper rotation and superposes onto a mirror image), and keying the
+correspondence on the chain letter (which made the three barnase copies in 1BRS
+share zero residues).
+
+### 15.3 Family scaffold — and a silent wrong-file bug
+
+`conservation_by_msa_column` pools conservation from *separate* ConSurf runs at
+shared MSA columns, so a real family needs ConSurf files, not code.
+
+Validating it exposed a genuine bug: `find_consurf_file("P00648_50", ...)`
+returned **`P00648_150.grades.txt`**. The lookup tried the loose token (before
+the first underscore) *before* the full stem, so the prefix `P00648` matched both
+and the alphabetically first won. Now the most specific token is tried first, and
+an ambiguous match is refused rather than resolved arbitrarily.
+
+**Measured cross-run agreement**, the honest floor for any family claim:
+
+| pair | score ρ | grade ρ | grade changed |
+|---|---|---|---|
+| P00648 depth 150 vs depth 50 | 0.955 | 0.947 | 42% |
+| 1BRS run vs P00648 depth 150 | **0.380** | 0.365 | 62% |
+| 1BRS run vs P00648 depth 50 | **0.367** | 0.360 | 66% |
+
+The same protein, run from a different starting structure, agrees at only
+ρ ≈ 0.37. Recorded in `CROSS_RUN_AGREEMENT`. Grades are never averaged (ordinal
+per-run bins); `spread` accompanies every pooled value; the recommended statistic
+is `unanimous_conserved`, which uses each run's own verdict rather than comparing
+separately normalised scores.
+
+### 15.4 The study — `experiments/barnase_waters/`
+
+22 barnase structures at ≤2.0 Å, one ConSurf run, 2753 waters, 594 sites, 462
+with conservation.
+
+> **Spearman ρ = −0.375**, p = 6.6×10⁻¹⁷, against a permutation null centred on
+> +0.033 (z = −4.47). Stable at ≤1.8 Å (−0.332) and wild-type-only (−0.338).
+
+The pre-registered statistic (`evo_min_score`) had to be corrected **by its own
+control**: its shuffled null centres on −0.226, because occupancy correlates with
+the *number* of lining residues (+0.555) and the minimum of a larger set is
+mechanically lower (−0.553). The mean over lining residues has no such
+dependence. Both are reported.
+
+**The declared confound is unresolved**: buried residues are both more conserved
+(median −0.694 vs +0.180) and more likely to hold ordered water. No causal claim
+is made.
+
+See `experiments/barnase_waters/FINDINGS.md` and `PREREGISTRATION.md`.
+
+### 15.5 Defect backlog cleared
+
+| defect | effect |
+|---|---|
+| `max_neigbhbors` typo | static **directed** networks had never executed in any released version |
+| `norm(water1)` at static:617 | cosine normalised by an undefined vector (`:655`/`:702` were correct) |
+| `test_inputs.py` missing `import sys` | its only test raised `NameError` |
+| `test_general.py` cwd-dependent path | passed only when pytest ran from `WatCon/tests/` |
+
+Two reported defects were **dropped after checking**: `sequence_processing.py`
+does *not* define functions twice (lines 563–656 are inside a `'''...'''` block
+that `grep '^def '` matched), and `get_all_water_distances` is genuinely broken
+but dead and written against an API that no longer exists, so repairing it would
+mean inventing a specification.
+
+### 15.6 What remains unverified
+
+- The family scaffold is exercised on two runs of **one** sequence. No real
+  multi-protein family has been run — the join is tested, the biology is not.
+- The study is **one protein**, correlational, with burial unresolved.
+- The directed static path now executes and produces a directed graph, but its
+  hydrogen-bond geometry is still covered by no test.
+- `2F56`/`2F5M` were excluded rather than renumbered; the renumbered sensitivity
+  check has not been run.

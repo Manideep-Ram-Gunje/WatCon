@@ -445,3 +445,51 @@ this sits inside ConSurf's own reproducibility noise.
   the easiest possible case and still only 0.955 agreement. It has **not** been
   run on a real multi-protein family, because we hold no ConSurf data for one.
   The join and the arithmetic are tested; the biology is not.
+
+---
+
+## 2026-09-06 - Phase 5e: the study, and what it validated
+
+- **What:** Ran the documented workflow at scale for the first time -- 22
+  barnase crystal structures, one ConSurf run - and answered the question the
+  integration was built for. Full protocol, results and limits in
+  `experiments/barnase_waters/` (PREREGISTRATION.md written and committed before
+  the analysis existed; FINDINGS.md for the write-up).
+- **Result:** water sites recurring across many structures are lined by more
+  evolutionarily conserved residues. **Spearman rho = -0.375**, p = 6.6e-17,
+  n = 462 sites, against a permutation null centred on +0.033 (z = -4.47).
+  Stable at <=1.8 A (-0.332) and wild-type-only (-0.338).
+- **The pre-registered statistic was corrected by its own control.**
+  `evo_min_score` gives a more emphatic -0.501, but its shuffled null centres on
+  **-0.226**, not zero: occupancy correlates with the *number* of lining
+  residues (+0.555), and the minimum of a larger set is mechanically lower
+  (-0.553). Much of -0.50 was the statistic measuring its own set size. The mean
+  over lining residues has no such dependence and its null does centre on zero.
+  Both are reported - the pre-registered number is shown, and shown to be
+  inflated, not quietly swapped out.
+- **Declared confound unresolved:** buried residues are both more conserved
+  (median -0.694 vs +0.180) and more likely to hold ordered water. No causal
+  claim is made.
+
+### What the integration caught, on real data rather than in tests
+
+1. **2F56 and 2F5M number the residue everyone else calls 3 as 1.** A positional
+   sequence comparison scored them a perfect 1.00 and admitted them; they
+   superposed at **6.05 A**. Comparing by residue number - the way the ConSurf
+   join compares - rejected them with *"matches at 1.00 if renumbered by +2"*.
+2. **The same two, caught a second time independently.** A stale `2F56.pdb`
+   survived into the study run from an earlier pass, and `enforce_identity`
+   stopped it: *"only 2 of 106 compared residues agree (1.9%)"*. Two mechanisms
+   built for different reasons agreed on the same structure.
+3. **Three good structures nearly lost.** 1BSA, 1B2S and 1RNB begin at residues
+   4, 1 and 2 against the reference's 3. Positionally they scored 0.03-0.05 and
+   were rejected; by residue number they agree at 0.98-0.99.
+
+- **Files:** `docs/CONSURF_INTEGRATION.md` section 15.
+  `experiments/barnase_waters/` lives in the separate experiments repository
+  (as the pKa experiment does); structures and prepared files are gitignored and
+  rebuilt by `scripts/fetch_structures.py` and `scripts/prepare.py`.
+- **Tests:** `python -m pytest WatCon/tests -q` -> **416 passed, 0 failed**.
+- **Limits:** one protein, correlational, burial not disentangled. The family
+  scaffold is still exercised only on two runs of one sequence. 2F56/2F5M were
+  excluded rather than renumbered, and that sensitivity check has not been run.
