@@ -733,6 +733,19 @@ def conservation_of_clusters(networks, centers, dist_cutoff=1.5):
     A site with no ConSurf-scored lining residue still returns a record, with
     ``min_score=None`` and its ``n_unscored`` count set.  Absence of data is
     reported, never silently rendered as zero conservation.
+
+    Choosing ``dist_cutoff``
+    ------------------------
+    Cluster centres are the MEAN of their member coordinates, so a loose cluster
+    can have a centroid that sits in a gap, further from every water than the
+    cutoff.  Observed on real data: clustering one structure's 56 waters gave 15
+    centres, 9 of which were more than 1.5 A from any water and so reported
+    ``occupancy == 0``.
+
+    That is correct behaviour, not a failure -- but if most sites come back
+    unoccupied, the cutoff and the clustering are mismatched rather than the
+    protein being interesting.  Cross-family clustering, the intended use,
+    produces much tighter sites than clustering a single structure.
     """
     centres = _normalise_centers(centers)
     cutoff_sq = float(dist_cutoff) ** 2
@@ -764,6 +777,7 @@ def conservation_of_clusters(networks, centers, dist_cutoff=1.5):
 
         aggregate = aggregate_water(residues.values())
         unscored = sum(1 for v in residues.values() if v is None)
+
         results[cluster_id] = ClusterConservation(
             cluster_id=cluster_id,
             occupancy=occupancy,

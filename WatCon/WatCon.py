@@ -433,6 +433,17 @@ def run_watcon_postanalysis(concatenate=None, input_directory='watcon_output', h
                 clusters = evolutionary.conservation_of_clusters(
                     networks, centers, dist_cutoff=conservation_dist_cutoff
                 )
+                # Cluster centres are the MEAN of their members, so a loose
+                # cluster's centroid can sit further from every water than the
+                # cutoff.  Correct, but if most sites come back empty the cutoff
+                # and the clustering are mismatched -- say so rather than let the
+                # user read a table of NAs and assume the data is bad.
+                empty = sum(1 for c in clusters.values() if c.occupancy == 0)
+                if clusters and empty > len(clusters) / 2:
+                    print(f"Warning: {empty} of {len(clusters)} cluster sites had no "
+                          f"water within {conservation_dist_cutoff} A. Consider a larger "
+                          f"conservation_dist_cutoff, or tighter clustering.")
+
                 out = os.path.join(image_output_dir, f"{cluster_filebase}_conservation.csv")
                 n = evolutionary.write_conservation_report(clusters, out)
                 print(f"Wrote {n} conserved water sites to {out}")
