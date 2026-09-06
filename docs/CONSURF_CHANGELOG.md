@@ -236,3 +236,50 @@ Template:
   Also decided an unparseable ATOM field is a hard error rather than a warning,
   because leaving it as `None` made it indistinguishable from a legitimately
   unmapped residue — silent corruption of the join key.
+
+---
+
+## 2026-09-06 — Phase 5a: clear the defect backlog
+
+- **What:** Fixed three real defects carried since the audit, and made one test
+  cwd-independent. The suite is now fully green for the first time.
+- **Files:**
+  - `WatCon/generate_static_networks.py:1442` — `max_neighbors=max_neigbhbors`
+    -> `max_neighbors=max_neighbors`. `max_neigbhbors` was never defined, so
+    `extract_objects(directed=True)` raised `NameError` on every call. Static
+    **directed** networks had therefore never executed in any released version.
+  - `WatCon/generate_static_networks.py:617` — `np.linalg.norm(water1)` ->
+    `np.linalg.norm(prot_prot)`. In that branch the numerator is
+    `dot(prot_water, prot_prot)` and `water1` is undefined; the cosine was being
+    normalised by the wrong (nonexistent) vector. **:655 and :702 use `water1`
+    correctly** — it is assigned two lines above each — and were left alone.
+  - `WatCon/tests/test_inputs.py` — added the missing `import sys`, which made
+    the module's single test raise `NameError`.
+  - `WatCon/tests/test_general.py` — `initialize_network('water_dir', ...)`
+    resolved the path against the cwd, so the test passed only when pytest ran
+    from `WatCon/tests/`. Now resolved relative to `__file__`.
+- **Verified:** The directed static path was *executed*, not just compiled:
+  `initialize_network('WatCon/tests/water_dir', network_type='water-water',
+  include_hydrogens=True)` builds a directed graph (8 nodes, 6 edges,
+  `is_directed() == True`), against 8 nodes / 6 edges undirected.
+- **Tests:** `python -m pytest WatCon/tests -q` -> **368 passed, 0 failed**
+  (was 367 passed / 1 failed). Confirmed the `test_general` failure predated
+  these edits by re-running it on a stashed tree.
+- **Corrections to the plan, found while checking rather than assuming:**
+  - `sequence_processing.py` was reported to define `perform_structure_alignment`
+    and `msa_with_modeller` **twice**. It does not. Lines 563-656 sit inside a
+    `'''...'''` block — commented-out old code that `grep '^def '` matched as if
+    it were live. `ast.parse` confirms each function is defined exactly once, and
+    the live `perform_structure_alignment` is the good one that returns the
+    rotation/translation matrices `align_with_waters` consumes. **No change made.**
+  - `residue_analysis.get_all_water_distances` really is broken: at line 124 it
+    unpacks two values from `get_per_residue_interactions`, which returns one
+    (`residue_dict`), and then indexes `interaction_data[selection]['Water-Protein'][1]`
+    — a structure that function has never produced. It is written against an API
+    that no longer exists and is called from nowhere. Repairing it would mean
+    inventing a specification, so it is **left untouched and recorded here** as
+    known-dead rather than silently "fixed" into something untested.
+- **Limits:** The directed path is now reachable and produces a directed graph on
+  a small water-only box. That is one execution, not validation of its
+  hydrogen-bond geometry; the angle criteria in that path remain unexercised by
+  any test.

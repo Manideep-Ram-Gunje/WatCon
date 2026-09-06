@@ -2,10 +2,13 @@ import os, sys
 import pytest
 from WatCon import generate_static_networks
 
+#: Resolve inputs relative to this file, so the suite passes from any cwd.
+WATER_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'water_dir')
+
 
 def test_waters_uneven():
   """Test simple box of waters"""
-  metrics, networks, _, _ = generate_static_networks.initialize_network('water_dir',
+  metrics, networks, _, _ = generate_static_networks.initialize_network(WATER_DIR,
                             network_type='water-water',
                             include_hydrogens=False,
                             custom_selection=None,
@@ -41,7 +44,7 @@ def test_waters_uneven():
   assert len(networks[0].connections) == 6 
 
 
-  metrics, networks, _, _ = generate_static_networks.initialize_network('water_dir',
+  metrics, networks, _, _ = generate_static_networks.initialize_network(WATER_DIR,
                             network_type='water-water',
                             include_hydrogens=False,
                             custom_selection=None,

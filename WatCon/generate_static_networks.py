@@ -614,7 +614,7 @@ class WaterNetwork:
                             prot_water = protein_hydrogen_coords - water_oxygen_coords
                             prot_prot = prot_heavy_coordinates - protein_hydrogen_coords
 
-                            cosine_angle = np.dot(prot_water, prot_prot) / (np.linalg.norm(prot_water) * np.linalg.norm(water1))
+                            cosine_angle = np.dot(prot_water, prot_prot) / (np.linalg.norm(prot_water) * np.linalg.norm(prot_prot))
                             angle1 = np.degrees(np.arccos(cosine_angle))
 
                             if angle1 >= angle_criteria:
@@ -1439,7 +1439,7 @@ def extract_objects(pdb_file, network_type, custom_selection, active_region_refe
     
     if directed:
         water_network.generate_directed_network(msa_indexing, active_region_residue, active_region_COM=active_region_COM, active_region_only=active_region_only, active_region_radius=active_region_radius, 
-                                                water_only=water_only, angle_criteria=angle_criteria, max_connection_distance=max_connection_distance, max_neighbors=max_neigbhbors)
+                                                water_only=water_only, angle_criteria=angle_criteria, max_connection_distance=max_connection_distance, max_neighbors=max_neighbors)
     else:
         water_network.generate_network(msa_indexing, active_region_residue, active_region_COM=active_region_COM, active_region_only=active_region_only,
                                        active_region_radius=active_region_radius, water_only=water_only, max_connection_distance=max_connection_distance,

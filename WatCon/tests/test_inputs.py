@@ -1,3 +1,5 @@
+import sys
+
 import WatCon
 
 def test_WatCon_imported():
