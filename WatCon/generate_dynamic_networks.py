@@ -1900,17 +1900,32 @@ def initialize_network(topology_file, trajectory_file, structure_directory='.', 
 
         metrics = {}
 
-        # Record how much of this structure ConSurf actually covered.  Reported
-        # rather than enforced: a low fraction usually means the ConSurf run and
-        # the structure disagree about chain labelling.  Key is prefixed 'evo'
-        # to stay clear of WatCon's structural water-conservation metrics.
+        # Record how much of this structure ConSurf actually covered, and
+        # verify the residues it covered really are this structure's residues.
+        # A low coverage fraction usually means the run and the structure
+        # disagree about chain labelling; it is reported, not enforced.  A low
+        # IDENTITY rate means they disagree about residue numbering, which is
+        # enforced below because nothing downstream could detect it.  Keys are
+        # prefixed 'evo' to stay clear of WatCon's structural water metrics.
         if conservation_map is not None:
             coverage = conservation_map.coverage(network.protein_atoms)
+
+            # Coverage says how MUCH was matched; identity says whether what was
+            # matched is the same protein, numbered the same way.  A numbering
+            # offset leaves coverage at 100% while making every attached score
+            # wrong, so it is checked here -- nothing downstream can see it.
+            evolutionary.enforce_identity(
+                coverage, label=str(topology_file), strict=consurf_strict
+            )
+
             metrics['evolutionary_coverage'] = {
                 'matched_atoms': coverage.matched,
                 'unscored_atoms': coverage.unscored,
                 'not_in_file_atoms': coverage.not_in_file,
                 'fraction': coverage.fraction,
+                'identity_matched': coverage.identity_matched,
+                'identity_mismatched': coverage.identity_mismatched,
+                'identity_rate': coverage.identity_rate,
                 'source': conservation_map.source,
             }
 

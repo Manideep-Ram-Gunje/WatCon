@@ -283,3 +283,54 @@ Template:
   a small water-only box. That is one execution, not validation of its
   hydrogen-bond geometry; the angle criteria in that path remain unexercised by
   any test.
+
+---
+
+## 2026-09-06 - Phase 5b: verify the ConSurf file describes the structure
+
+- **What:** The join key is `(chain, resid, icode)`. It encodes nothing about
+  *which amino acid* a score belongs to, so a ConSurf run numbered differently
+  from the structure attaches a score to every residue, reports 100% coverage,
+  and is wrong everywhere. Nothing downstream can see that. This adds the only
+  check that can: compare the residue ConSurf recorded against the residue the
+  structure actually contains.
+- **Why now:** With two hand-checked structures it did not matter. The barnase
+  study applies **one** ConSurf run to **21 depositions** by different groups,
+  where numbering conventions vary. The check is what makes that trustworthy.
+- **Files:**
+  - `WatCon/evolutionary.py` - `ResidueConservation` gains `amino_acid` (SEQ,
+    one-letter) and `residue_name` (ATOM, three-letter). `from_record` was
+    dropping both; the data was parsed and discarded. `CoverageReport` gains
+    `identity_matched`, `identity_mismatched`, `mismatches`, `identity_rate`,
+    `describe_identity()`. `ConservationMap._compare_identity` and the check in
+    `coverage()`. New `enforce_identity()` and `DEFAULT_IDENTITY_THRESHOLD`.
+  - `WatCon/generate_static_networks.py`, `WatCon/generate_dynamic_networks.py`
+    - call `enforce_identity` before the metric is recorded, and report
+    `identity_matched` / `identity_mismatched` / `identity_rate`.
+  - `WatCon/tests/test_identity_check.py` - new, 14 tests.
+- **A rate, not a boolean.** Two different things cause mismatches. A point
+  mutant genuinely differs from the sequence ConSurf aligned - correct data
+  about a real difference. A numbering offset differs almost everywhere. The
+  threshold (0.95) was chosen from measurement on real barnase, not taste:
+
+  | case | identity rate |
+  |---|---|
+  | correct numbering | 100% (108/108) |
+  | one point mutation | 99.1% (107/108) |
+  | numbering shifted by one residue | **2.8%** (3/107) |
+
+  0.95 sits in a wide empty gap between those regimes.
+- **Degrades rather than lies.** Objects carrying no residue name (bare
+  coordinates) report `identity_rate is None` and "not checked" - never "all
+  mismatched". Identity is counted **per residue**, not per atom, so a large
+  residue cannot outvote a small one.
+- **Tests:** `python -m pytest WatCon/tests -q` -> **382 passed, 0 failed**
+  (was 368). Verified on the real pipeline: 1BRS reads 18.9% coverage with 100%
+  identity - ConSurf covered one of six chains, and was correct about that one.
+  Coverage and identity are orthogonal and are now reported separately.
+- **Limits:** The check compares only residues ConSurf **matched**. It cannot
+  detect a run that covers the wrong region entirely while agreeing on the
+  residues it does touch; low coverage remains the signal for that, and is
+  reported but still not enforced. The 0.95 threshold is calibrated on one
+  protein - a structure with many genuine mutations could trip it, which is why
+  it is a parameter and the error lists the disagreeing residues.

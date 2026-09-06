@@ -82,6 +82,8 @@ __all__ = [
     "WaterConservation",
     "ConservationMap",
     "CoverageReport",
+    "DEFAULT_IDENTITY_THRESHOLD",
+    "enforce_identity",
     "aggregate_water",
     "aggregate_site",
     "water_residue_contacts",
@@ -93,6 +95,15 @@ __all__ = [
     "find_consurf_file",
     "load_conservation",
 ]
+
+
+#: Fraction of compared residues that must agree before a ConSurf file is
+#: accepted for a structure.  Set from measurement, not taste: a correctly
+#: numbered structure agrees at 100%, a single point mutant at 99.1% (107/108
+#: on barnase), and a one-residue numbering offset collapses to 2.8%.  0.95
+#: therefore sits in a wide empty gap -- it tolerates a handful of real
+#: mutations while catching any systematic misalignment.
+DEFAULT_IDENTITY_THRESHOLD = 0.95
 
 
 class ConservationError(ValueError):
@@ -134,8 +145,16 @@ class ResidueConservation:
     #: ConSurf's own POS for this residue.  NOT a dense sequence index --
     #: ConSurf omits non-standard residues, so gaps in POS are expected.
     consurf_position: int
+
+    #: The amino acid ConSurf recorded here, one-letter (its SEQ column).
+    #: Used to verify that a structure's residue really is the one this score
+    #: describes -- the join key alone cannot detect a numbering offset.
+    amino_acid: str = ""
+    #: Three-letter name from ConSurf's ATOM column, i.e. what ConSurf actually
+    #: read out of *its* PDB.  None for a run with no model attached.
+    residue_name: Optional[str] = None
     #: Where the data came from, for provenance.
-    source: str
+    source: str = ""
 
     @property
     def msa_fraction(self) -> float:
@@ -167,6 +186,8 @@ class ResidueConservation:
             buried_exposed=record.buried_exposed,
             functional_structural=record.functional_structural,
             consurf_position=record.position,
+            amino_acid=record.sequence_residue,
+            residue_name=None if record.pdb_residue is None else record.pdb_residue.name3,
             source=source,
         )
 
@@ -178,6 +199,7 @@ class ResidueConservation:
             "evo_msa_present": self.msa_present,
             "evo_msa_total": self.msa_total,
             "evo_consurf_position": self.consurf_position,
+            "evo_amino_acid": self.amino_acid,
         }
 
 
@@ -270,16 +292,61 @@ def aggregate_water(
 
 @dataclass
 class CoverageReport:
-    """How much of a structure a ConSurf run actually covers."""
+    """How much of a structure a ConSurf run actually covers, and whether the
+    residues it covers are the ones the structure actually contains.
+
+    Coverage and identity answer different questions.  Coverage asks *how many*
+    residues the run reached; identity asks whether the residue sitting at each
+    matched position is the amino acid ConSurf scored there.  A run can cover
+    100% of a structure and still be describing a different protein, or the same
+    protein numbered differently -- the join key ``(chain, resid, icode)`` cannot
+    tell the difference on its own.
+    """
 
     matched: int = 0
     unscored: int = 0
     not_in_file: int = 0
     per_chain: Dict[str, Tuple[int, int]] = None  # chain -> (matched, missing)
 
+    #: Residues (not atoms) whose amino acid was compared and agreed.
+    identity_matched: int = 0
+    #: Residues whose amino acid disagreed with ConSurf's.
+    identity_mismatched: int = 0
+    #: (key, structure residue, consurf residue) for each disagreement.
+    mismatches: List[Tuple[ResidueKey, str, str]] = None
+
     def __post_init__(self) -> None:
         if self.per_chain is None:
             self.per_chain = {}
+        if self.mismatches is None:
+            self.mismatches = []
+
+    @property
+    def identity_checked(self) -> int:
+        """Residues for which a comparison was actually possible."""
+        return self.identity_matched + self.identity_mismatched
+
+    @property
+    def identity_rate(self) -> Optional[float]:
+        """Fraction of compared residues that agreed, or None if none could be.
+
+        Read this as a rate, not a pass/fail.  A point mutant *should* disagree
+        at the mutated position: that is correct data about a real difference
+        between the structure and the sequence ConSurf aligned.  A numbering
+        offset disagrees almost everywhere.  The two are told apart by where the
+        rate falls, which is why this is a number and not a boolean.
+        """
+        checked = self.identity_checked
+        return self.identity_matched / checked if checked else None
+
+    def describe_identity(self) -> str:
+        rate = self.identity_rate
+        if rate is None:
+            return "identity not checked (no residue names available)"
+        return (
+            f"identity {self.identity_matched}/{self.identity_checked} "
+            f"({rate:.1%}) agree"
+        )
 
     @property
     def total(self) -> int:
@@ -412,6 +479,10 @@ class ConservationMap:
         """
         report = CoverageReport()
         counts: Dict[str, List[int]] = {}
+        # Identity is a property of a residue, but this may be handed one entry
+        # per ATOM.  Check each residue once, or a large residue would outvote a
+        # small one and the rate would measure atom counts instead of agreement.
+        identity_seen: set = set()
 
         for residue in residues:
             chain = getattr(residue, "chain", "")
@@ -422,6 +493,18 @@ class ConservationMap:
             if status is LookupStatus.SCORED:
                 report.matched += 1
                 bucket[0] += 1
+
+                key = (chain, int(residue.resid), icode)
+                if key not in identity_seen:
+                    verdict = self._compare_identity(key, residue)
+                    if verdict is not None:
+                        identity_seen.add(key)
+                        observed, expected = verdict
+                        if observed == expected:
+                            report.identity_matched += 1
+                        else:
+                            report.identity_mismatched += 1
+                            report.mismatches.append((key, observed, expected))
             else:
                 bucket[1] += 1
                 if status is LookupStatus.NO_SCORE_IN_FILE:
@@ -431,6 +514,80 @@ class ConservationMap:
 
         report.per_chain = {c: (m, miss) for c, (m, miss) in counts.items()}
         return report
+
+    def _compare_identity(self, key: ResidueKey, residue) -> Optional[Tuple[str, str]]:
+        """(structure residue, ConSurf residue), or None if no comparison is possible.
+
+        Prefers the three-letter name, which is what ConSurf read out of its own
+        PDB, and falls back to the one-letter SEQ code for a run with no model
+        attached.  Returns None -- rather than guessing or raising -- when the
+        object carries no residue name at all, so callers that pass bare
+        coordinates degrade to "not checked" instead of "everything mismatched".
+        """
+        conservation = self._by_residue.get(key)
+        if conservation is None:
+            return None
+
+        resname = getattr(residue, "resname", None)
+        if resname and conservation.residue_name:
+            return resname.strip().upper(), conservation.residue_name.strip().upper()
+
+        one_letter = getattr(residue, "one_letter", None)
+        if one_letter and conservation.amino_acid:
+            return one_letter.strip().upper(), conservation.amino_acid.strip().upper()
+
+        return None
+
+
+# ---------------------------------------------------------------------------
+# Identity enforcement
+# ---------------------------------------------------------------------------
+
+def enforce_identity(
+    coverage: CoverageReport,
+    label: str = "structure",
+    strict: bool = True,
+    threshold: float = DEFAULT_IDENTITY_THRESHOLD,
+) -> Optional[float]:
+    """Refuse a ConSurf file whose residues are not the structure's residues.
+
+    The join key ``(chain, resid, icode)`` will happily attach a score to the
+    wrong residue if the ConSurf run and the structure disagree about numbering.
+    Nothing downstream can detect that: the coverage fraction stays at 100% and
+    every water gets a plausible-looking score.  This is the only place the
+    mismatch is visible, so it is checked here rather than trusted.
+
+    Returns the identity rate, or None when no comparison was possible (no
+    residue names available).  Raises :class:`ConservationError` under ``strict``
+    when the rate falls below ``threshold``; warns otherwise.
+
+    A few disagreements are expected and fine -- point mutants genuinely differ
+    from the sequence ConSurf aligned.  A systematic offset is not.  See
+    :data:`DEFAULT_IDENTITY_THRESHOLD` for why the line sits where it does.
+    """
+    import warnings
+
+    rate = coverage.identity_rate
+    if rate is None or rate >= threshold:
+        return rate
+
+    examples = ", ".join(
+        "%s%s%s: structure has %s, ConSurf has %s"
+        % (key[0], key[1], key[2] or "", observed, expected)
+        for key, observed, expected in coverage.mismatches[:5]
+    )
+    message = (
+        "ConSurf data does not describe %s: only %d of %d compared residues "
+        "agree (%.1f%%, threshold %.0f%%). This usually means the run and the "
+        "structure disagree about residue numbering, in which case every score "
+        "attached would be wrong. First disagreements: %s"
+        % (label, coverage.identity_matched, coverage.identity_checked,
+           rate * 100, threshold * 100, examples or "none recorded")
+    )
+    if strict:
+        raise ConservationError(message)
+    warnings.warn(message, RuntimeWarning, stacklevel=2)
+    return rate
 
 
 # ---------------------------------------------------------------------------
