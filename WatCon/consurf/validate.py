@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import List, Optional
 
 from .crosscheck import check_against_annotated_pdb
+from .errors import ConSurfParseError
 from .parser import parse_consurf
 
 
@@ -114,13 +115,41 @@ def main(argv: Optional[List[str]] = None) -> int:
         print("No grades files found.", file=sys.stderr)
         return 1
 
-    summaries = [summarise(path, strict=not args.tolerant) for path in paths]
+    # A file that cannot be parsed is the normal reason to run this command, so
+    # report it as a finding rather than letting the exception escape.  A user
+    # holding a bad ConSurf download needs a diagnosis, not a traceback.
+    summaries, failures = [], []
+    for path in paths:
+        try:
+            summaries.append(summarise(path, strict=not args.tolerant))
+        except ConSurfParseError as error:
+            failures.append({"file": path.name, "error": str(error)})
+
+    if failures and not args.json:
+        for failure in failures:
+            print("FAILED  %s" % failure["file"])
+            print("        %s" % failure["error"])
+            print("        Is this really a ConSurf *_consurf_grades.txt file? "
+                  "The grades file is the one with a POS/SEQ/SCORE table; the "
+                  "server also returns several others that will not parse.")
+            print("        Re-run with --tolerant to see how far it gets.")
+            print()
+
+    if args.json:
+        if failures:
+            print(json.dumps({"parsed": summaries, "failed": failures}, indent=2))
+            return 1
+    elif not summaries:
+        return 1
 
     if args.json:
         print(json.dumps(summaries, indent=2))
     else:
         for summary in summaries:
             _print_report(summary)
+
+    if failures:
+        return 1
 
     if args.pdb is not None:
         if len(paths) != 1:

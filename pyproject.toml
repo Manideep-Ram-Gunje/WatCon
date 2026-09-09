@@ -5,12 +5,15 @@ build-backend = "setuptools.build_meta"
 # Self-descriptive entries which should always be present
 # https://packaging.python.org/en/latest/specifications/declaring-project-metadata/
 [project]
-name = "WatCon"
-description = "Water network analysis tool for crystal structure and MD simulation data"
+# Distribution name marks this as a derivative of WatCon (Brownless & Kamerlin,
+# JACS Au 2025, GPL-3.0). The IMPORT package is still `WatCon`, so existing code,
+# scripts and the upstream documentation keep working unchanged.
+name = "watcon-consurf"
+description = "WatCon extended with ConSurf evolutionary conservation: conserved water networks joined to per-residue conservation"
 dynamic = ["version"]
 readme = "README.md"
 authors = [
-    { name = "Alfie-Louise Brownless", email = "abrownless3@gatech.edu" }
+    { name = "Alfie-Louise Brownless", email = "abrownless3@gatech.edu" },
 ]
 license = { text = "GPL-3.0-only" }
 # See https://pypi.org/classifiers/
@@ -19,20 +22,44 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 requires-python = ">=3.8"
-# Declare any run-time dependencies that should be installed with the package.
-#dependencies = [
-#    "importlib-resources;python_version<'3.10'",
-#]
+# Every third-party module actually imported by the package. These were
+# previously commented out, so `pip install` produced a distribution that raised
+# ImportError on first use.
+dependencies = [
+    "numpy",
+    "scipy",
+    "pandas",
+    "networkx",
+    "scikit-learn",
+    "MDAnalysis",
+    "biopython",
+    "joblib",
+    "matplotlib",
+    "GridDataFormats",          # imported directly by find_conserved_networks
+]
 
-# Update the urls once the hosting is set up.
-#[project.urls]
-#"Source" = "https://github.com/<username>/WatCon/"
-#"Documentation" = "https://WatCon.readthedocs.io/"
+[project.urls]
+"Source" = "https://github.com/kamerlinlab/WatCon"
+"Upstream paper" = "https://pubs.acs.org/doi/10.1021/jacsau.5c00447"
+"Documentation" = "https://watcon.readthedocs.io/"
 
 [project.optional-dependencies]
 test = [
   "pytest>=6.1.2",
 ]
+docs = [
+  "sphinx",
+  "pydata-sphinx-theme",
+  "sphinx-design",
+  "sphinx-copybutton",
+]
+# NOTE: MODELLER is deliberately absent. It is licensed, conda-only, and cannot
+# be pip-installed. It is needed ONLY for cross-family MSA-based structural
+# alignment; `WatCon.superpose` covers superposition of one protein without it.
+# See docs/installation.rst.
+
+[project.scripts]
+watcon = "WatCon.cli:main"
 
 [tool.setuptools]
 # This subkey is a beta stage development and keys may change in the future, see https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html for more details
@@ -54,15 +81,28 @@ zip-safe = false
 # (instead of using 'find'). With 'find', the 'tests' subpackage is discovered
 # recursively because of its __init__.py file, but the data subdirectory is excluded
 # with include-package-data = false and namespaces = false.
-include-package-data = false
+include-package-data = true
 [tool.setuptools.packages.find]
 namespaces = false
 where = ["."]
 
 # Ref https://setuptools.pypa.io/en/latest/userguide/datafiles.html#package-data
+# Without these the ConSurf fixtures, the example dataset and the input-file
+# templates are absent from an installed copy, so `watcon demo` and
+# `watcon validate` have nothing to read.
 [tool.setuptools.package-data]
 WatCon = [
-    "py.typed"
+    "py.typed",
+    "*.txt",                            # input_static / input_dynamic / analysis templates
+    "data/consurf/fixtures/*",
+    "data/examples/**/*",
+]
+
+# data/consurf/exploratory/ holds 5.2 MB of raw ConSurf result bundles kept for
+# provenance. They are research data, not something an installed package needs.
+[tool.setuptools.exclude-package-data]
+WatCon = [
+    "data/consurf/exploratory/*",
 ]
 
 [tool.versioningit]

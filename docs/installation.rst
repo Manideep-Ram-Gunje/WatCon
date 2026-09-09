@@ -1,8 +1,35 @@
 Installation Guide
 ==================
 
-Instructions to install WatCon are as follows:
+Quick install (recommended)
+---------------------------
 
+.. code-block:: bash
+
+   pip install git+https://github.com/kamerlinlab/WatCon.git
+
+Then check it:
+
+.. code-block:: bash
+
+   watcon --version
+   watcon demo          # full pipeline on bundled example data, offline
+
+Every runtime dependency is installed automatically. Python >= 3.8.
+
+.. note::
+
+   **MODELLER is optional.** It is needed only for MSA-based structural
+   alignment across a protein *family*. For many structures of one protein --
+   crystal forms, mutants, complexes -- ``watcon prepare`` superposes them with
+   :mod:`WatCon.superpose`, which is plain numpy and needs no licence.
+
+   Install MODELLER only if you need family-level alignment. It is licensed,
+   conda-only, and cannot be pip-installed; follow the conda instructions below.
+
+
+Conda install (for MODELLER, or a fully pinned environment)
+-----------------------------------------------------------
 
 1. Clone the WatCon Repository
 ------------------------------

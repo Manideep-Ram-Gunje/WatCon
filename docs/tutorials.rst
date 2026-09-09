@@ -11,3 +11,4 @@ We provide a series of tutorials for conducting WatCon analysis. Tutorials are b
    tutorials/trajectory_analysis
    tutorials/static_vs_dynamic
    tutorials/family_analysis
+   tutorials/consurf_conservation

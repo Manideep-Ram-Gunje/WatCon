@@ -1,4 +1,4 @@
-from test_WatCon import create_water_universe
+from test_static import create_water_universe
 
 
 u = create_water_universe(10)

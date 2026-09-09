@@ -143,7 +143,7 @@ def cluster_nodes(combined_graph, cluster='hdbscan', min_samples=10):
             cluster_center = np.mean(np.array([positions[i] for i in cluster_indices]), axis=0)
     
             cluster_centers[label] = cluster_center
-    print(len(cluster_centers))
+    print('  %d cluster centers' % len(cluster_centers))
     return(cluster_labels, cluster_centers)
 
 
@@ -183,7 +183,8 @@ def cluster_coordinates_only(coordinate_list, cluster='hdbscan', min_samples=10,
         clustering = DBSCAN(min_samples=min_samples, eps=eps, n_jobs=n_jobs).fit(coordinate_list)
     elif cluster == 'hdbscan':
         print('Using HDBSCAN clustering')
-        print(min_samples, eps, coordinate_list.shape)
+        print('  min_samples=%s eps=%s over %d coordinates'
+              % (min_samples, eps, coordinate_list.shape[0]))
         clustering = HDBSCAN(min_cluster_size=min_samples, cluster_selection_epsilon=eps, algorithm='kd_tree', n_jobs=n_jobs).fit(coordinate_list)
 
     cluster_labels = clustering.labels_
@@ -198,7 +199,7 @@ def cluster_coordinates_only(coordinate_list, cluster='hdbscan', min_samples=10,
     
             cluster_centers[label] = cluster_center
 
-    print(len(cluster_centers))
+    print('  %d cluster centers' % len(cluster_centers))
     return(cluster_labels, cluster_centers)
 
 

@@ -493,3 +493,95 @@ this sits inside ConSurf's own reproducibility noise.
 - **Limits:** one protein, correlational, burial not disentangled. The family
   scaffold is still exercised only on two runs of one sequence. 2F56/2F5M were
   excluded rather than renumbered, and that sensitivity check has not been run.
+
+
+---
+
+## 2026-09-06 - Phase 6: make it installable and runnable
+
+- **What:** The integration was scientifically complete but could not be
+  installed or run by anyone else. This phase turns the research checkout into a
+  tool: `pip install git+...` then `watcon demo` now works from a clean
+  environment, offline.
+- **Verified end to end**, not asserted: built a wheel, created a fresh
+  virtualenv, installed it, and ran the demo from the installed copy. All nine
+  runtime dependencies resolved automatically and the demo reproduced the same
+  193 sites / 30 occupied in all six / 57 highly conserved.
+
+### The packaging was broken
+
+| Gap | Effect |
+|---|---|
+| `dependencies` commented out in `pyproject.toml` | `pip install` produced a package that raised ImportError on first use. `egg-info/requires.txt` held only `[test] pytest`. |
+| `include-package-data = false`, `package-data = ["py.typed"]` | ConSurf fixtures and input templates absent after install, so `validate` had nothing to read |
+| no `[project.scripts]` | no `watcon` command existed |
+| `WatCon.yaml` requires MODELLER | blocked install for anyone without a licence |
+
+All fixed. Ten runtime dependencies declared (including `GridDataFormats`, which
+`find_conserved_networks` imports directly and which was in no dependency list).
+**MODELLER is now optional** -- it is needed only for MSA-based family alignment,
+and `WatCon.superpose` covers the same-protein case. The wheel is 0.58 MB and
+carries the example data and fixtures but **not** the 5.2 MB of raw ConSurf
+bundles kept in the repository for provenance.
+
+Distribution renamed to **`watcon-consurf`** to mark it as a derivative of
+WatCon (Brownless & Kamerlin, JACS Au 2025, GPL-3.0). **The import package is
+still `WatCon`**, so existing scripts and the upstream documentation are
+unaffected, and `python WatCon/WatCon.py --input ...` still works.
+
+### New: the preparation step
+
+`WatCon/prepare.py` promotes the barnase experiment's logic into the package.
+WatCon's input file began at `structure_directory: aligned_with_waters` -- the
+hardest part, picking the right chain and superposing with waters, was left to
+the user and needed MODELLER.
+
+`watcon prepare` finds the target chain (barnase is chain **L** in 1BRN and part
+of a complex in 1BRS), superposes with `WatCon.superpose`, carries the waters,
+relabels chains so one ConSurf file serves the set, and **rejects loudly with a
+reason**.
+
+One bug found while promoting it: the reference chain was chosen with `max()`
+over a **set**, so for a structure with several identical chains (1A2P has three)
+the choice depended on `PYTHONHASHSEED` and could differ between runs, shifting
+every coordinate. Now sorted first, with a regression test that prepares three
+times and asserts one answer.
+
+### New: `watcon` command
+
+`prepare`, `run`, `validate`, `demo`. Imports are deferred per-subcommand so
+`--help` and `validate` work even when the scientific stack is not importable --
+tested by blocking those imports in a subprocess. The user most in need of
+`validate` is often the one whose environment is broken.
+
+`watcon validate` also stopped throwing tracebacks: a file that fails to parse is
+the normal reason to run it, so a parse failure is now a reported finding with a
+hint ("is this really the grades file?") and a non-zero exit code.
+
+### Two more upstream defects fixed
+
+- `sequence_processing.py:510` -- `suggest_references()` did `import mdanalysis`
+  (lowercase). That module does not exist, so this documented helper had **never
+  worked**; it raised `ModuleNotFoundError` on every call.
+- `tests/make_pdb.py` imported `test_WatCon`, a module renamed to `test_static`.
+- Two stray debug prints in `cluster_coordinates_only` (`print(min_samples, eps,
+  coordinate_list.shape)` and a bare `print(len(cluster_centers))`) now say what
+  their numbers mean.
+
+### Documentation
+
+- `README.md` rewritten: upstream attribution and citation first, install,
+  one-command demo, what the tool checks for you, and the limits.
+- `docs/consurf_data.rst` -- **new, and the page that matters most**: how to
+  obtain ConSurf results, since there is no API. Naming, validation, the two sign
+  conventions, and why one run covers every structure of a protein.
+- `docs/tutorials/consurf_conservation.rst` -- the barnase study as a tutorial,
+  including why the pre-registered statistic had to be corrected.
+- `docs/api.rst` -- the 13 new modules were entirely absent; now documented.
+- `docs/installation.rst` -- pip first, MODELLER demoted to optional.
+
+- **Tests:** `python -m pytest WatCon/tests -q` -> **451 passed, 0 failed**
+  (was 416): +22 `test_prepare`, +13 `test_cli`.
+- **Limits:** verified on Windows with Python 3.13 only. The conda environment
+  file still pins MODELLER; it is now one of two documented paths rather than the
+  only one. The wheel is not published anywhere -- install is from a git URL.

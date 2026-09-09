@@ -1,3 +1,15 @@
 include CODE_OF_CONDUCT.md
+include LICENSE
+include README.md
+
+# Input-file templates and the data an installed copy needs to be usable:
+# the ConSurf fixtures (validation) and the barnase example (watcon demo).
+include WatCon/*.txt
+recursive-include WatCon/data/consurf/fixtures *
+recursive-include WatCon/data/examples *
+
+# Raw ConSurf result bundles (5.2 MB) are kept in the repository for
+# provenance but have no place in a distribution.
+recursive-exclude WatCon/data/consurf/exploratory *
 
 global-exclude *.py[cod] __pycache__ *.so

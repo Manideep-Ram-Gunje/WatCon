@@ -96,6 +96,7 @@ WatCon further allows for analysis of conserved water positions and interactions
 
    getting_started
    user_guide
+   consurf_data
    tutorials
    api
    installation
