@@ -6,7 +6,13 @@ Quick install (recommended)
 
 .. code-block:: bash
 
-   pip install git+https://github.com/kamerlinlab/WatCon.git
+   pip install git+https://github.com/YOUR-ACCOUNT/WatCon-ConSurf.git
+
+.. warning::
+
+   Replace ``YOUR-ACCOUNT`` with this fork's actual location. The upstream
+   repository at ``kamerlinlab/WatCon`` does **not** contain the ConSurf
+   integration; installing from there gives you plain WatCon.
 
 Then check it:
 

@@ -39,8 +39,12 @@ Licensed GPL-3.0, like the original. See [CHANGES](docs/CONSURF_CHANGELOG.md).
 ## Install
 
 ```bash
-pip install git+https://github.com/kamerlinlab/WatCon.git
+pip install git+https://github.com/YOUR-ACCOUNT/WatCon-ConSurf.git
 ```
+
+> **Replace `YOUR-ACCOUNT` with this fork's actual location.** The upstream
+> repository at `kamerlinlab/WatCon` does *not* contain the ConSurf
+> integration — installing from there gives you plain WatCon.
 
 Python ≥3.8. Everything needed is installed automatically.
 
