@@ -28,7 +28,7 @@ Try it first
    watcon demo
 
 Six barnase structures ship with the package. The whole pipeline runs offline in
-about a minute, and the output directory contains everything the rest of this
+about ten seconds, and the output directory contains everything the rest of this
 tutorial explains.
 
 

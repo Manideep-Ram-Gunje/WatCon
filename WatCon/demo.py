@@ -1,6 +1,6 @@
 """``watcon demo`` -- the whole pipeline on data shipped with the package.
 
-Runs, offline and in about a minute:
+Runs offline in about ten seconds:
 
     6 raw barnase structures + 1 ConSurf run
         -> prepare   (find the barnase chain, superpose, carry the waters)

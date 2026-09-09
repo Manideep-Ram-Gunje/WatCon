@@ -502,7 +502,7 @@ this sits inside ConSurf's own reproducibility noise.
 - **What:** The integration was scientifically complete but could not be
   installed or run by anyone else. This phase turns the research checkout into a
   tool: `pip install git+...` then `watcon demo` now works from a clean
-  environment, offline.
+  environment, offline, in about ten seconds.
 - **Verified end to end**, not asserted: built a wheel, created a fresh
   virtualenv, installed it, and ran the demo from the installed copy. All nine
   runtime dependencies resolved automatically and the demo reproduced the same

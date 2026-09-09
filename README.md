@@ -56,7 +56,7 @@ watcon demo
 ```
 
 Runs the whole pipeline on six real barnase crystal structures bundled with the
-package — offline, in about a minute:
+package — offline, in about ten seconds:
 
 ```
 STEP 1/5  Prepare: find the barnase chain, superpose, keep waters
