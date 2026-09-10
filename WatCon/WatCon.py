@@ -1,5 +1,6 @@
 import os, sys
 import argparse
+import warnings
 import pickle
 
 def parse_inputs(filename):
@@ -61,6 +62,23 @@ def parse_inputs(filename):
 
             if kw not in analysis_conditions.keys():
                 kwargs[kw] = kw_value
+
+    # The active-site parameters were renamed active_site_* -> active_region_*
+    # in the builders, but the sample input files kept the old spelling, so both
+    # shipped templates raised TypeError when used as written. Accept either,
+    # so input files written against the old templates keep working.
+    for old, new in (('active_site_reference', 'active_region_reference'),
+                     ('active_site_only', 'active_region_only'),
+                     ('active_site_radius', 'active_region_radius'),
+                     ('active_site_COM', 'active_region_COM')):
+        if old in kwargs:
+            value = kwargs.pop(old)
+            kwargs.setdefault(new, value)
+            warnings.warn(
+                "'%s' is the old name for '%s'; both work, but please update "
+                "your input file." % (old, new),
+                DeprecationWarning, stacklevel=2,
+            )
 
     if len(analysis_conditions.keys()) == 0:
         analysis_conditions = 'all'
@@ -181,10 +199,27 @@ def parse_analysis(filename):
         lines = FILE.readlines()
 
     for line in lines:
-        if 'concatemate:' in line:
-            files_to_concatenate = line.split(":")[1].split(';')[0]
-            kwargs['concatenate'] = list(files_to_concatenate)
-        elif 'active_region_definition' in line:
+        # Skip comments. Without this, any comment containing a colon became a
+        # setting -- a documentation line reading "; Writes one row per site:
+        # ..." was parsed as a keyword argument and rejected downstream.
+        stripped = line.strip()
+        if not stripped or stripped.startswith((';', '#')):
+            continue
+
+        if 'concatenate:' in line:
+            # Two bugs lived here. The key was misspelled 'concatemate', so this
+            # branch never fired and `concatenate` fell through to the generic
+            # parser as a plain string. Consumers then did `for f in concatenate`
+            # and iterated its CHARACTERS, looking for files called 'b', 'a', 'r'.
+            # Splitting on commas is what the sample file's
+            # "concatenate: run_1,run_2" always implied.
+            files_to_concatenate = line.split(":", 1)[1].split(';')[0]
+            names = [f.strip() for f in files_to_concatenate.split(',') if f.strip()]
+            # Accept names with or without the .pkl extension.
+            kwargs['concatenate'] = [
+                f if f.endswith('.pkl') else f + '.pkl' for f in names
+            ]
+        elif 'active_region_definition' in line or 'active_site_definition' in line:
             active_region_definition = ' '.join(line.split(":")[1].split(';')[0])
             kwargs['active_region_definition'] = active_region_definition
 
@@ -198,6 +233,19 @@ def parse_analysis(filename):
                     kw_value = False
 
                 kwargs[kw] = kw_value
+
+    # The active-site options were renamed active_site_* -> active_region_*, and
+    # cluster_file -> cluster_filebase, but analysis.txt kept the old spellings.
+    for old_key, new_key in (('active_site_definition', 'active_region_definition'),
+                             ('cluster_file', 'cluster_filebase')):
+        if old_key in kwargs:
+            value = kwargs.pop(old_key)
+            kwargs.setdefault(new_key, value)
+            warnings.warn(
+                "'%s' is the old name for '%s'; both work, but please update "
+                "your analysis file." % (old_key, new_key),
+                DeprecationWarning, stacklevel=2,
+            )
 
     # Numeric analysis options arrive as strings; coerce the ones that are used
     # in arithmetic so callers do not have to.
@@ -238,8 +286,82 @@ def run_watcon(structure_type, kwargs):
     else:
         from WatCon.generate_dynamic_networks import initialize_network
 
+    _check_input_keys(kwargs, initialize_network)
     results = initialize_network(**kwargs)
     return results
+
+
+#: Keys that belong under the ``; Property calculation`` heading rather than at
+#: the top level of an input file.  ``parse_inputs`` gathers everything after
+#: that literal comment into ``analysis_conditions``; without it these arrive as
+#: ordinary keyword arguments and the builder rejects them.
+_PROPERTY_KEYS = frozenset({
+    'density', 'connected_components', 'interaction_counts',
+    'per_residue_interactions', 'characteristic_path_length', 'graph_entropy',
+    'clustering_coefficient', 'save_coordinates',
+})
+
+
+def _check_input_keys(kwargs, builder):
+    """Reject an unusable input file with an explanation, before doing any work.
+
+    The ``; Property calculation`` comment in the input file is load-bearing:
+    ``parse_inputs`` only groups the property switches into
+    ``analysis_conditions`` when it sees that exact string.  Delete or rename the
+    comment and every switch below it is passed straight to the network builder,
+    which fails with ``TypeError: initialize_network() got an unexpected keyword
+    argument 'density'`` -- an error that says nothing about the real cause.
+
+    Comments should not be load-bearing, but changing the format would break
+    every existing input file.  Explaining the failure costs nothing and is
+    checked before any structure is read.
+    """
+    import inspect
+
+    accepted = set(inspect.signature(builder).parameters)
+    unknown = sorted(set(kwargs) - accepted)
+    if not unknown:
+        return
+
+    misplaced = [key for key in unknown if key in _PROPERTY_KEYS]
+    other = [key for key in unknown if key not in _PROPERTY_KEYS]
+
+    lines = ["This input file cannot be used as written."]
+    if misplaced:
+        lines.append(
+            "  These belong under a '; Property calculation' heading: %s"
+            % ", ".join(misplaced)
+        )
+        lines.append(
+            "  That comment is what tells WatCon to collect the switches below it"
+        )
+        lines.append(
+            "  into analysis_conditions. Add the line '; Property calculation'"
+        )
+        lines.append(
+            "  immediately above them. See WatCon/input_static.txt for a"
+        )
+        lines.append("  working example.")
+    if other:
+        lines.append("  Unrecognised setting(s): %s" % ", ".join(other))
+        lines.append("  Accepted settings: %s" % ", ".join(sorted(accepted)))
+
+    raise ValueError("\n".join(lines))
+
+def _normalise_concatenate(value):
+    """Accept a string, a comma-separated string, or a list; always return a list.
+
+    ``concatenate`` reaches this function as a raw string whenever the input file
+    is parsed by the generic key/value path.  Every consumer treats it as a list
+    of filenames, so a string is iterated character by character -- the failure
+    looked like "No such file or directory: 'watcon_output/b'".
+    """
+    if value is None:
+        return None
+    if isinstance(value, str):
+        value = [f.strip() for f in value.split(',') if f.strip()]
+    return [f if str(f).endswith('.pkl') else str(f) + '.pkl' for f in value]
+
 
 def run_watcon_postanalysis(concatenate=None, input_directory='watcon_output', histogram_metrics=False, residue_interactions=False, 
                         reference_topology=None, interaction_cutoff=0.0, calculate_densities=False, density_pdb=None, 
@@ -322,7 +444,16 @@ def run_watcon_postanalysis(concatenate=None, input_directory='watcon_output', h
 
     import WatCon.residue_analysis as residue_analysis
 
+    concatenate = _normalise_concatenate(concatenate)
+
     #Find all .pkl files in input_directory
+    if not os.path.isdir(input_directory):
+        raise FileNotFoundError(
+            "No such directory: %r. This is where WatCon looks for the .pkl "
+            "files written by the network-building step -- run `watcon run "
+            "--input <input file>` first, or set input_directory to wherever "
+            "those files are." % (input_directory,)
+        )
     all_files = [f for f in os.listdir(input_directory) if f.endswith('.pkl')]
 
     #Histogram metircs
@@ -364,7 +495,9 @@ def run_watcon_postanalysis(concatenate=None, input_directory='watcon_output', h
         combined_coordinates = collect_coordinates(files)
 
         cluster_labels, cluster_centers = cluster_coordinates_only(combined_coordinates, cluster='hdbscan', min_samples=min_samples, eps=eps, n_jobs=n_jobs)
-        project_clusters(cluster_centers, filename_base=cluster_filebase, separate_files=False, b_factors=None)
+        # project_clusters has no `separate_files` parameter; passing it raised
+        # TypeError every time the post-analysis reached this line.
+        project_clusters(cluster_centers, filename_base=cluster_filebase, b_factors=None)
     
     if calculate_commonality:
         from WatCon.find_conserved_networks import plot_commonality

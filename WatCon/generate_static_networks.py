@@ -2,7 +2,8 @@
 Generate water networks based on static structures
 """
 
-import os, sys
+import os
+import types, sys
 import numpy as np
 import MDAnalysis as mda
 from MDAnalysis.analysis import distances
@@ -1290,6 +1291,15 @@ class WaterNetwork:
             S = self.graph.edge_subgraph([(edge1, edge2) for (edge1,edge2, data) in self.graph.edges(data=True) if data['active_region']==selection])
 
         shortest_path = nx.shortest_path(S, source, target)
+
+        # With no source and no target, networkx returns a LAZY all-pairs
+        # generator. Stored straight into the metrics dict it made the whole
+        # results tuple unpicklable ("cannot pickle 'generator' object"), so
+        # `watcon run --input ...` crashed while writing its output -- after
+        # doing all the work. It is also single-use, so any caller that looked
+        # at it twice would silently get nothing the second time.
+        if isinstance(shortest_path, types.GeneratorType):
+            return dict(shortest_path)
         return shortest_path
 
 
@@ -1795,19 +1805,23 @@ def initialize_network(structure_directory, topology_file=None, trajectory_file=
             }
 
         #Calculate metrics as per user input
-        if analysis_conditions['density'] == 'on':
+        # .get rather than [] : an input file that simply omits a
+        # property switch is legitimate, and indexing raised KeyError
+        # for it. Only the shipped template lists every switch, so any
+        # customised file that dropped a line failed here.
+        if analysis_conditions.get('density') == 'on':
             metrics['density'] = network.get_density(selection=analysis_selection)
-        if analysis_conditions['connected_components'] == 'on':
+        if analysis_conditions.get('connected_components') == 'on':
             metrics['connected_components'] = network.get_connected_components(selection=analysis_selection)
-        if analysis_conditions['interaction_counts'] == 'on':
+        if analysis_conditions.get('interaction_counts') == 'on':
             metrics['interaction_counts'] = network.get_interactions()
-        if analysis_conditions['per_residue_interactions'] == 'on':
+        if analysis_conditions.get('per_residue_interactions') == 'on':
             metrics['per_residue_interaction'] = network.get_per_residue_interactions(selection=analysis_selection)
-        if analysis_conditions['characteristic_path_length'] == 'on':
+        if analysis_conditions.get('characteristic_path_length') == 'on':
             metrics['characteristic_path_length'] = network.get_CPL(selection=analysis_selection)
-        if analysis_conditions['graph_entropy'] == 'on':
+        if analysis_conditions.get('graph_entropy') == 'on':
             metrics['entropy'] = network.get_entropy(selection=analysis_selection)
-        if analysis_conditions['clustering_coefficient'] == 'on':
+        if analysis_conditions.get('clustering_coefficient') == 'on':
             metrics['clustering_coefficient'] = network.get_clustering_coefficient(selection=analysis_selection)
 
         if shortest_path_nodes is None:

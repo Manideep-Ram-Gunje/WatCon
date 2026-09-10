@@ -14,12 +14,12 @@ histogram_metrics: on                         ; Will make basic matplotlib histo
 calculate_densities: on                       ; Use MDAnalysis density to output density of waters (ONLY FOR DYNAMIC_NETWORKS)
 density_pdb: run_1.gro
 traj_directory: PTP1B_trajects
-active_site_definition: around 11 (resid 220 and name CA) ; MDAnalysis selection language for active site
+active_region_definition: around 11 (resid 220 and name CA) ; MDAnalysis selection language for active site
 
 
 ; Cluster conservation
 cluster_concatenated: on                      ; Indicate whether to cluster concatenated coordinates
-cluster_file: STATIC.pdb                      ; Name of pdb file containing clusters to compare to
+cluster_filebase: STATIC                      ; Name of pdb file containing clusters to compare to
 calculate_commonality: bar                    ; Produce commonality plot either as a 'bar' bar graph or 'hist' histogram 
 color_by_conservation: all                    ; Produce .pml file coloring either 'centers', 'connections' or 'all' by conservation
 

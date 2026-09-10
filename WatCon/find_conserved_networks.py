@@ -32,6 +32,13 @@ def collect_coordinates(pkl_list):
     """
     Collect coordinates into one array from .pkl files
 
+    Accepts either shape a WatCon run can write: the ``(metrics, networks,
+    cluster_centers, names)`` tuple that ``initialize_network`` returns and the
+    command line pickles, or a bare list of metric dictionaries. The two were
+    mismatched -- the runner pickled the tuple while this function assumed the
+    list, so every post-analysis run reported 'Could not find ["coordinates"]'
+    and then failed in HDBSCAN with an empty array.
+
     Parameters
     ----------
     pkl_list : list
@@ -40,19 +47,49 @@ def collect_coordinates(pkl_list):
     Returns
     -------
     np.ndarray
-        Array of combined coordinates
+        Array of combined coordinates, shape (N, 3)
     """
     combined_coords = []
     for file in pkl_list:
         with open(file, 'rb') as FILE:
             e = pickle.load(FILE)
 
-        try:
-            combined_coords.append([f['coordinates'] for f in e if f['coordinates'].shape[1] == 3])
-        except: 
-            print('Could not find ["coordinates"], check your inputs!')
+        # Unwrap the (metrics, networks, centers, names) tuple if that is what
+        # was stored; otherwise assume it is already the metrics sequence.
+        metrics = e
+        if isinstance(e, tuple) and len(e) == 4:
+            metrics = e[0]
 
-    return np.array(combined_coords)
+        try:
+            entries = [f for f in metrics if isinstance(f, dict) and 'coordinates' in f]
+        except TypeError:
+            raise ValueError(
+                "%s does not contain WatCon metrics. Expected the output of "
+                "initialize_network; got %s." % (file, type(e).__name__)
+            )
+
+        if not entries:
+            raise ValueError(
+                "No 'coordinates' found in %s. Set 'save_coordinates: on' in the "
+                "input file used to build the networks -- without it there are no "
+                "water positions to cluster." % file
+            )
+
+        # Same filter and concatenation initialize_network uses, so a run
+        # clustered afterwards matches one clustered inline.
+        combined_coords.extend(
+            f['coordinates'] for f in entries
+            if getattr(f['coordinates'], 'ndim', 0) == 2 and f['coordinates'].shape[1] == 3
+        )
+
+    if not combined_coords:
+        raise ValueError(
+            "No usable coordinates found in %d file(s). Expected arrays shaped "
+            "(N, 3)." % len(pkl_list)
+        )
+
+    return np.concatenate(combined_coords, axis=0)
+
 
 def get_coordinates_from_topology(pdb_file, atom_selection='all'):
     """
