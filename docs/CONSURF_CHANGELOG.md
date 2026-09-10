@@ -710,3 +710,23 @@ check available that they mean the same thing.
   cross-platform matrix depends on Actions being enabled on the fork. The dynamic
   (trajectory) input path shares the fixes above but has not been run end to end
   on a real trajectory; no trajectory data is held.
+
+### Addendum: CI has still never run
+
+GitHub reports the workflow as `state=disabled_fork`. Enabling Actions on a fork
+is a one-time manual step (the green button on the repository's **Actions** tab),
+and enabling it does **not** retroactively trigger anything -- so a push after
+enabling, or the `workflow_dispatch` trigger added for exactly this reason, is
+needed to get a first run.
+
+Because the workflow's own inline assertion scripts had never been executed,
+they were extracted and run verbatim locally before pushing:
+
+* demo check -> `sites: 193, of which scored: 165` (thresholds are >100 and >50)
+* wheel check -> `examples=6 fixtures=6 exploratory=0`, console script present,
+  all six new modules inside
+
+That verifies the assertions are correct, not that the package builds on other
+platforms. **Only Python 3.13 on Windows is installed here**, so the
+`requires-python = ">=3.10"` floor and the 3.10-3.12 matrix rest on dependency
+metadata and remain unverified until CI runs.
