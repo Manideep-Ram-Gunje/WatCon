@@ -1,1 +1,12 @@
 WatCon/_version.py export-subst
+
+# ConSurf grades fixtures: their line endings ARE the test data.
+#
+# The parser detects line endings from raw bytes (consurf/parser.py reads
+# path.read_bytes()), and test_line_ending_detection asserts that
+# 1BRS_A_150.grades.txt is LF and 1BRS_A_150.crlf.grades.txt is CRLF. Without
+# -text, git normalises both to LF on commit and autocrlf converts them back on
+# Windows checkout, so the CRLF fixture arrives as LF on Linux and the LF
+# fixture arrives as CRLF on a fresh Windows clone. Either way the test fails,
+# and it fails describing the symptom rather than the cause.
+WatCon/data/consurf/fixtures/*.grades.txt -text

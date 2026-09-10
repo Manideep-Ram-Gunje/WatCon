@@ -32,6 +32,8 @@ from WatCon.consurf import (
     parse_consurf,
 )
 
+from .conftest import FIXTURES
+
 # --------------------------------------------------------------------------
 # Builders
 # --------------------------------------------------------------------------
@@ -338,3 +340,51 @@ def test_empty_variety_is_allowed():
     )
     assert result.records[0].residue_variety == {}
     assert result.records[0].is_fully_conserved is False
+
+
+# ===========================================================================
+# The fixtures' line endings are test data, and git will destroy them
+# ===========================================================================
+
+def test_fixture_line_endings_survive_checkout():
+    """Each fixture must contain the line endings its name claims.
+
+    ``consurf/parser.py`` detects line endings from raw bytes, so
+    ``test_line_ending_detection`` depends on exactly what git checked out --
+    and git normalises line endings unless told not to.
+
+    Without the ``-text`` rule in ``.gitattributes`` this breaks in both
+    directions and never on the machine that committed it: the CRLF fixture is
+    stored as LF and arrives as LF on Linux and macOS, while ``core.autocrlf``
+    converts the LF fixtures to CRLF on a fresh Windows clone. The parser test
+    then fails as "LineEnding.LF is not LineEnding.CRLF", which describes the
+    symptom and not the cause.
+
+    This checks the bytes directly so the failure says what to fix.
+    """
+    import glob
+    import os
+
+    fixtures = sorted(glob.glob(os.path.join(str(FIXTURES), "*.grades.txt")))
+    assert fixtures, "no grades fixtures found"
+
+    for path in fixtures:
+        name = os.path.basename(path)
+        data = open(path, "rb").read()
+        crlf = data.count(b"\r\n")
+        bare_lf = data.count(b"\n") - crlf
+
+        if ".crlf." in name:
+            assert crlf and not bare_lf, (
+                "%s should be CRLF throughout but has CRLF=%d, bare LF=%d. "
+                "git has normalised it -- check the '-text' rule for "
+                "WatCon/data/consurf/fixtures/*.grades.txt in .gitattributes."
+                % (name, crlf, bare_lf)
+            )
+        else:
+            assert bare_lf and not crlf, (
+                "%s should be LF throughout but has CRLF=%d, bare LF=%d. "
+                "core.autocrlf has converted it on checkout -- check the "
+                "'-text' rule for WatCon/data/consurf/fixtures/*.grades.txt "
+                "in .gitattributes." % (name, crlf, bare_lf)
+            )
