@@ -133,3 +133,9 @@ images/
 MSA_images/
 aligned_pdbs/
 aligned_pdbs_with_water/
+
+# Outputs of the ConSurf-era commands, when run inside a clone
+watcon_demo/
+ci_demo/
+prepared/
+consurf/

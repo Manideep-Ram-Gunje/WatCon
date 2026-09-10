@@ -4,6 +4,10 @@ name: CI
 # a clean mirror of upstream. Testing only `main` would test upstream's code and
 # never this work, which is what the inherited configuration did.
 on:
+  # Lets the workflow be started by hand from the Actions tab, which is the
+  # only way to get a first run after enabling Actions on a fork -- enabling
+  # them does not retroactively trigger anything.
+  workflow_dispatch:
   push:
     branches:
       - "main"
