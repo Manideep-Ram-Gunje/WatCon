@@ -585,3 +585,128 @@ hint ("is this really the grades file?") and a non-zero exit code.
 - **Limits:** verified on Windows with Python 3.13 only. The conda environment
   file still pins MODELLER; it is now one of two documented paths rather than the
   only one. The wheel is not published anywhere -- install is from a git URL.
+
+
+---
+
+## 2026-09-10 - Phase 7: release readiness
+
+Published to the fork at `Manideep-Ram-Gunje/WatCon`, branch
+`consurf-integration`. `main` there is left as a clean mirror of upstream, so a
+future pull request stays straightforward -- which is why the install URL must
+name the branch:
+
+```
+pip install "git+https://github.com/Manideep-Ram-Gunje/WatCon.git@consurf-integration"
+```
+
+A URL without `@consurf-integration` installs plain WatCon with none of this
+work, and looks like it succeeded.
+
+### `requires-python` raised from 3.8 to 3.10
+
+The inherited floor was not true. Our own code is 3.8-safe, but the dependencies
+are not: MDAnalysis needs >=3.11, numpy and scipy >=3.12, biopython >=3.10. On
+3.8 pip would silently backsolve to ancient, untested versions. CI now tests
+3.10-3.12 so the number is backed by evidence.
+
+### CI could never have passed
+
+The inherited workflow installed with `--no-deps` into a conda environment
+containing **none** of the scientific packages, and triggered only on `main` --
+which on this fork is upstream's code. It has never tested anything here.
+
+It now installs the package the way a user does, across ubuntu/macOS/windows and
+Python 3.10-3.12, runs the suite, runs `watcon demo` end to end, and asserts the
+demo produced real output. A second job builds a wheel and checks that the
+example data and fixtures are inside and the 5.2 MB of raw research bundles are
+not -- data files have gone silently missing from this package before.
+
+**GitHub disables Actions on forks by default**; it must be enabled once from the
+Actions tab before any of this runs.
+
+### Three parameters the directed path silently discarded
+
+`generate_directed_network` calls `find_directed_connections` twice. The
+active-region branch passes the caller's arguments; the default branch hardcoded
+`dist_cutoff=2.5` and `max_neighbors=10`, and never passed `angle_criteria`.
+
+Measured before:
+
+| setting | values tried | edges |
+|---|---|---|
+| `max_distance` | 2.0, 3.3, 8.0 | 6, 6, 6 |
+| `max_neighbors` | 1, 10 | 6, 6 |
+| `angle_criteria` | 60 ... 180 | 6 every time |
+
+After: `max_distance` 2.0/3.3/8.0 -> 1/6/22, `max_neighbors` 1/2/5/10 ->
+0/6/16/22, `angle_criteria` 150/160/170/179 -> 6/5/3/0.
+
+Safe to change because this path raised `NameError` on every call in every
+released version, so nothing can depend on its behaviour.
+
+Fixing it exposed a crash that was unreachable while `max_neighbors` was
+hardcoded: `cKDTree.query(k=1)` returns scalars rather than length-1 rows, so
+every per-neighbour loop raised `'numpy.float64' object is not iterable`.
+Hardened at all 11 query sites across both builders.
+
+### The documented input-file workflow did not work at all
+
+Every test so far drove WatCon through its Python API. A user follows the
+tutorial instead. **Seven** separate failures stood between them and a result:
+
+1. **Both shipped templates were unusable as shipped.** `input_static.txt` and
+   `input_dynamic.txt` set `active_site_reference/only/radius`; the builders
+   accept `active_region_*`. Copying the template gave
+   `TypeError: unexpected keyword argument 'active_site_only'`.
+2. **`analysis_conditions` was indexed with `[]`**, so an input file that merely
+   omitted a property switch raised `KeyError`. Only the full template listed
+   every switch.
+3. **`parse_analysis` looked for `'concatemate:'`** -- a typo -- so the branch
+   never fired.
+4. **`concatenate` was then iterated character by character**, looking for a
+   file called `b`.
+5. **`metrics['shortest_path']` held a lazy generator**, making the results
+   unpicklable. The run crashed with `cannot pickle 'generator' object` while
+   writing its output, *after* doing all the work.
+6. **`collect_coordinates` expected a bare metrics list** but was handed the
+   four-tuple that gets pickled, printed `Could not find ["coordinates"]` from a
+   bare `except`, and then failed inside HDBSCAN on an empty array.
+7. **`project_clusters` was called with a `separate_files` argument** it does not
+   accept -- a hard `TypeError`.
+
+Plus: `parse_analysis` had no comment guard, so any comment containing a colon
+became a keyword argument -- the ConSurf documentation block added to
+`analysis.txt` tripped exactly that. `analysis.txt` also used `cluster_file` and
+`active_site_definition`, neither of which is a parameter.
+
+All fixed. Old key spellings are still accepted with a `DeprecationWarning`, so
+input files written against the old templates keep working.
+
+**Verified end to end:** the tutorial workflow now runs on the bundled barnase
+example and produces **193 sites, 165 scored** -- identical to what the Python
+API route produces. Two independent routes agreeing exactly is the strongest
+check available that they mean the same thing.
+
+### Also
+
+- `get_all_water_distances` raises `NotImplementedError` with an explanation
+  instead of lurking. It unpacks two values from a function returning one and
+  reads a structure that function never produced; it is called from nowhere and
+  has never worked. Keeping the name avoids an API break.
+- `suggest_references()` did `import mdanalysis` (lowercase, no such module) --
+  it had never worked.
+- `WatCon.yaml` documents MODELLER as optional and adds `griddataformats`, which
+  `find_conserved_networks` imports directly and which appeared in no dependency
+  list; it arrived via MDAnalysis by luck.
+- A missing `input_directory` now explains that the build step must run first.
+
+- **Tests:** `python -m pytest WatCon/tests -q` -> **475 passed, 0 failed**
+  (was 451). New: `test_directed_networks.py` (12), `test_input_file_workflow.py`
+  (12), each regression pinned by name.
+- **Verified from a clean virtualenv** installing from the GitHub URL: all
+  dependencies resolve, `watcon --version` and `watcon demo` both work.
+- **Limits:** local verification is Windows / Python 3.13 only -- the
+  cross-platform matrix depends on Actions being enabled on the fork. The dynamic
+  (trajectory) input path shares the fixes above but has not been run end to end
+  on a real trajectory; no trajectory data is held.

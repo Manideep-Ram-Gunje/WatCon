@@ -48,6 +48,9 @@ pip install "git+https://github.com/Manideep-Ram-Gunje/WatCon.git@consurf-integr
 
 Python ≥3.10. Everything needed is installed automatically.
 
+*(Running from a clone? GitHub disables Actions on forks — enable them once
+from the Actions tab to get the cross-platform test matrix.)*
+
 **MODELLER is optional.** Upstream WatCon required it for structural alignment;
 it is licensed and conda-only. `WatCon.superpose` now does the same job in numpy
 for structures of one protein, so you only need MODELLER for MSA-based alignment
@@ -149,7 +152,7 @@ Stated plainly, because they matter more than the headline:
 
 ```bash
 pip install -e ".[test]"
-python -m pytest WatCon/tests -q      # 451 tests
+python -m pytest WatCon/tests -q      # 475 tests
 ```
 
 ## License
