@@ -927,11 +927,31 @@ def conservation_of_clusters(networks, centers, dist_cutoff=1.5):
     produces much tighter sites than clustering a single structure.
     """
     centres = _normalise_centers(centers)
-    cutoff_sq = float(dist_cutoff) ** 2
     networks = list(networks)
 
     # Contact maps are expensive, so build one per structure, not per centre.
     contact_maps = [water_residue_contacts(net) for net in networks]
+
+    # One spatial index per structure, queried once per centre.
+    #
+    # The obvious triple loop -- every centre against every water of every
+    # structure -- is O(centres x structures x waters) in Python. On a real
+    # family that is not a small number: 50 PTP1B structures give ~2300 centres
+    # and ~11000 waters, which is 27 million distance evaluations for a single
+    # join, and the whole point of the tool is to run on families.
+    #
+    # A KD-tree per structure makes it O(centres x log waters) and returns
+    # exactly the same neighbours, so results are unchanged.
+    from scipy.spatial import cKDTree
+
+    trees, water_lists = [], []
+    for net in networks:
+        waters = list(net.water_molecules)
+        water_lists.append(waters)
+        if waters:
+            trees.append(cKDTree([w.O.coordinates for w in waters]))
+        else:
+            trees.append(None)
 
     results = {}
     for cluster_id, centre in centres:
@@ -939,20 +959,20 @@ def conservation_of_clusters(networks, centers, dist_cutoff=1.5):
         occupancy = 0
         structures_occupied = 0
 
-        for net, contacts in zip(networks, contact_maps):
-            occupied_here = False
-            for water in net.water_molecules:
-                if _distance_sq(water.O.coordinates, centre) > cutoff_sq:
-                    continue
-                occupancy += 1
-                occupied_here = True
-                for key, conservation in contacts.get(water.O.index, {}).items():
+        for tree, waters, contacts in zip(trees, water_lists, contact_maps):
+            if tree is None:
+                continue
+            near = tree.query_ball_point(centre, dist_cutoff)
+            if not near:
+                continue
+            occupancy += len(near)
+            structures_occupied += 1
+            for i in near:
+                for key, conservation in contacts.get(waters[i].O.index, {}).items():
                     # Prefer a scored entry: the same residue may be unscored in
                     # one structure and scored in another.
                     if key not in residues or residues[key] is None:
                         residues[key] = conservation
-            if occupied_here:
-                structures_occupied += 1
 
         aggregate = aggregate_water(residues.values())
         unscored = sum(1 for v in residues.values() if v is None)
