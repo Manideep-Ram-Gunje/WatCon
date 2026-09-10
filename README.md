@@ -1,5 +1,7 @@
 # WatCon-ConSurf
 
+[![CI](https://github.com/Manideep-Ram-Gunje/WatCon/actions/workflows/CI.yaml/badge.svg?branch=consurf-integration)](https://github.com/Manideep-Ram-Gunje/WatCon/actions/workflows/CI.yaml)
+
 **Conserved water networks, joined to evolutionary conservation.**
 
 WatCon finds water sites that recur across many structures of a protein —
@@ -47,9 +49,6 @@ pip install "git+https://github.com/Manideep-Ram-Gunje/WatCon.git@consurf-integr
 > an install URL without the branch gives you plain WatCon.
 
 Python ≥3.10. Everything needed is installed automatically.
-
-*(Running from a clone? GitHub disables Actions on forks — enable them once
-from the Actions tab to get the cross-platform test matrix.)*
 
 **MODELLER is optional.** Upstream WatCon required it for structural alignment;
 it is licensed and conda-only. `WatCon.superpose` now does the same job in numpy
@@ -152,7 +151,7 @@ Stated plainly, because they matter more than the headline:
 
 ```bash
 pip install -e ".[test]"
-python -m pytest WatCon/tests -q      # 475 tests
+python -m pytest WatCon/tests -q      # 476 tests
 ```
 
 ## License

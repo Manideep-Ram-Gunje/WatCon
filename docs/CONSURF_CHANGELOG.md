@@ -797,3 +797,38 @@ cause.
   locally, so the `requires-python = ">=3.10"` floor is still inference), the
   `shell: bash` heredocs on the Windows runner, and the console script being on
   `PATH` after install.
+
+---
+
+## 2026-09-10 - Phase 9: CI green, first run
+
+Actions were enabled on the fork, and the workflow executed for the first time.
+**All 10 jobs passed.**
+
+| job | result |
+|---|---|
+| ubuntu-latest / Python 3.10, 3.11, 3.12 | success |
+| macOS-latest / Python 3.10, 3.11, 3.12 | success |
+| windows-latest / Python 3.10, 3.11, 3.12 | success |
+| Wheel contents | success |
+
+Run: https://github.com/Manideep-Ram-Gunje/WatCon/actions/runs/34432536735
+
+This supersedes the Phase 7 addendum ("CI has still never run") and the Phase 8
+limit that Python 3.10-3.12 was inference. **`requires-python = ">=3.10"` is now
+backed by evidence** rather than dependency metadata.
+
+Green jobs can hide skipped work -- much of the suite is guarded by
+`pytest.importorskip("MDAnalysis")`, so a failed dependency install would skip
+tests and still report success. It did not: the *"Check the demo actually
+produced results"* step passed on every platform, and that step asserts more than
+100 cluster sites with more than 50 carrying conservation. Those numbers are
+unreachable unless MDAnalysis installed and the whole pipeline ran.
+
+The line-ending fix from Phase 8 is what made the six non-Windows jobs possible;
+without it they would have failed on `test_line_ending_detection`.
+
+**Now verified on every supported platform:** install from package metadata, the
+full suite, the `watcon` console script, `watcon demo` end to end on the bundled
+data, and the contents of the built wheel.
+
