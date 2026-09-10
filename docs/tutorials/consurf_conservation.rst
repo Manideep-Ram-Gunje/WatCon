@@ -98,19 +98,40 @@ Do this before the real run. See :doc:`../consurf_data`.
 Step 4 — build networks with conservation attached
 --------------------------------------------------
 
-In your input file:
+In your input file (start from ``WatCon/input_static.txt``):
 
 .. code-block:: text
 
+   structure_type: static
    structure_directory: prepared
    network_type: water-protein
+   include_hydrogens: off
+   water_name: HOH
    max_distance: 3.3
+
+   ; Property calculation
+   density: on
+   save_coordinates: on
+   analysis_selection: all
+
    cluster_coordinates: on
    clustering_method: hdbscan
    min_cluster_samples: 2
 
+   msa_indexing: off
+   classify_water: off
+
    consurf_directory: consurf
    consurf_strict: on
+   num_workers: 1
+
+.. warning::
+
+   The ``; Property calculation`` line is **load-bearing**, not decoration.
+   WatCon collects the switches beneath it into ``analysis_conditions``; without
+   it they are passed to the network builder as ordinary settings and rejected.
+   ``save_coordinates: on`` is also required -- the post-analysis has nothing to
+   cluster without it.
 
 .. code-block:: bash
 
@@ -139,16 +160,27 @@ In your analysis file:
 
 .. code-block:: text
 
+   concatenate: barnase            ; the run name from --name, .pkl optional
    input_directory: watcon_output
    cluster_concatenated: on
+   min_samples: 2                  ; see the note below
    conservation_report: on
    conservation_dist_cutoff: 1.5
+
+.. note::
+
+   ``min_samples`` defaults to **100** here, which is sensible for a large
+   trajectory and silently produces *zero* clusters on a handful of crystal
+   structures. Set it to the smallest number of structures a site must appear in
+   -- 2, as in the build step, keeps the low-occupancy sites you need as a
+   baseline.
 
 .. code-block:: bash
 
    watcon run --analysis analysis.txt
 
-This writes one row per conserved water site:
+This writes ``images/<cluster_filebase>_conservation.csv`` -- one row per
+conserved water site:
 
 =====================  ==========================================
 column                  meaning
@@ -174,14 +206,20 @@ column                  meaning
 Step 6 — look at it
 -------------------
 
+The post-analysis writes two cluster PDBs:
+
 .. code-block:: bash
 
-   pymol cluster_pdbs/*_evolutionary.pdb pymol_projections/*.pml
+   pymol cluster_pdbs/CLUSTER.pdb cluster_pdbs/CLUSTER_evolutionary.pdb
 
-The cluster PDB carries the ConSurf grade in the B-factor column; the ``.pml``
-colours residues on ConSurf's own 1–9 scale. WatCon's existing
-``project_clusters`` writes *structural* conservation into the same column of a
-*different* file, so you can load both and compare.
+``CLUSTER_evolutionary.pdb`` carries the **ConSurf grade** in the B-factor
+column; ``CLUSTER.pdb`` is the same set of centres from WatCon's existing
+``project_clusters``. Separate files on purpose -- load both and compare, rather
+than being handed one blended number.
+
+``watcon demo`` additionally writes a ``.pml`` colouring protein residues on
+ConSurf's own 1–9 scale (:func:`WatCon.visualize_structures.pymol_project_evolutionary`),
+which you can call directly from the API on any built network.
 
 
 What the barnase study found
