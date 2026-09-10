@@ -730,3 +730,70 @@ That verifies the assertions are correct, not that the package builds on other
 platforms. **Only Python 3.13 on Windows is installed here**, so the
 `requires-python = ">=3.10"` floor and the 3.10-3.12 matrix rest on dependency
 metadata and remain unverified until CI runs.
+
+---
+
+## 2026-09-10 - Phase 8: a bug CI would have caught, found before CI ran
+
+Actions are still reported as `state=disabled_fork`, so the workflow has still
+never executed. Rather than wait, the most likely cross-platform failure was
+looked for directly -- and found.
+
+### The fixtures' line endings were being destroyed by git
+
+`consurf/parser.py` detects line endings from **raw bytes**
+(`path.read_bytes()`), and `test_line_ending_detection` asserts that
+`1BRS_A_150.grades.txt` is LF and `1BRS_A_150.crlf.grades.txt` is CRLF.
+
+`.gitattributes` held only `WatCon/_version.py export-subst` -- no line-ending
+protection -- and the development machine has `core.autocrlf=true`. Measured:
+
+| file | working copy | **stored in git** |
+|---|---|---|
+| `1BRS_A_150.crlf.grades.txt` | CRLF x143 | **LF x143** |
+| `1BRS_A_150.grades.txt` | LF x143 | LF x143 |
+
+The CRLF fixture had been normalised to LF on commit. It passed locally only
+because this working copy predates that normalisation.
+
+**The failure would have appeared in both directions, and never on the machine
+that committed it:**
+
+* **Linux / macOS** -- the CRLF fixture checks out as LF, so the `CRLF`
+  assertion fails.
+* **A fresh Windows clone** -- `autocrlf` converts the LF fixtures to CRLF, so
+  the `LF` assertion fails.
+
+Six of the nine CI test jobs would have failed, as would anyone cloning on
+Windows. Confirmed by simulating a Linux checkout locally: both
+`test_line_ending_detection` and the new guard fail.
+
+Fixed with a `-text` rule for `WatCon/data/consurf/fixtures/*.grades.txt`, and
+the CRLF fixture re-stored with real CRLF bytes.
+
+### Fixing it nearly introduced a second bug
+
+Re-staging under the new rule freezes whatever `autocrlf` had already done to the
+working copy -- which would have committed `P00648_150.grades.txt` as **CRLF**,
+silently changing what that fixture represents.
+
+The original ConSurf downloads in `data/consurf/exploratory/*.tar.gz` preserve
+the true bytes and show that **every** ConSurf grades file is LF. Only the
+deliberately named `.crlf.` variant should be CRLF. All five fixtures now store
+exactly what their names claim, verified against the committed blob
+(`git show HEAD:<path>`) rather than the working copy -- which is what made the
+original bug invisible.
+
+### A guard that names the cause
+
+`test_fixture_line_endings_survive_checkout` reads the bytes directly and points
+at `.gitattributes`. The existing test fails as
+`LineEnding.LF is not LineEnding.CRLF`, which describes the symptom and not the
+cause.
+
+- **Tests:** **476 passed, 0 failed** (was 475).
+- **Limits:** this is one predicted failure found by inspection. CI remains the
+  only thing that can settle the rest -- Python 3.10-3.12 (only 3.13 is installed
+  locally, so the `requires-python = ">=3.10"` floor is still inference), the
+  `shell: bash` heredocs on the Windows runner, and the console script being on
+  `PATH` after install.
