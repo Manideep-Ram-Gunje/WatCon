@@ -6,13 +6,13 @@ Quick install (recommended)
 
 .. code-block:: bash
 
-   pip install git+https://github.com/YOUR-ACCOUNT/WatCon-ConSurf.git
+   pip install "git+https://github.com/Manideep-Ram-Gunje/WatCon.git@consurf-integration"
 
 .. warning::
 
-   Replace ``YOUR-ACCOUNT`` with this fork's actual location. The upstream
-   repository at ``kamerlinlab/WatCon`` does **not** contain the ConSurf
-   integration; installing from there gives you plain WatCon.
+   The ``@consurf-integration`` suffix is required. This fork's ``main`` is a
+   clean mirror of upstream WatCon, which does **not** contain the ConSurf
+   integration; an install URL without the branch gives you plain WatCon.
 
 Then check it:
 
@@ -21,7 +21,7 @@ Then check it:
    watcon --version
    watcon demo          # full pipeline on bundled example data, offline
 
-Every runtime dependency is installed automatically. Python >= 3.8.
+Every runtime dependency is installed automatically. Python >= 3.10.
 
 .. note::
 

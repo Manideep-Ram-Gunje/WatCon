@@ -104,8 +104,23 @@ def get_per_residue_interactions(network, selection='all', msa=False):
 
 
 def get_all_water_distances(network_group, box, selection='No-active-site', msa=False, offset=0):
-    """
-    Collect all distances for each protein-interacting water
+    """Collect all distances for each protein-interacting water.
+
+    .. warning::
+
+       **Not implemented.** This function is written against an API that no
+       longer exists and has never been callable in its current form. It is kept
+       so that importing it does not break, and raises immediately rather than
+       failing halfway through with a confusing error.
+
+    It unpacks two values from :func:`get_per_residue_interactions`, which
+    returns one (``residue_dict``), and then indexes
+    ``interaction_data[selection]['Water-Protein'][1]`` -- a structure that
+    function has never produced. It is also called from nowhere in the package.
+
+    Repairing it would mean inventing a specification for what it was supposed
+    to return, so it is left explicit instead of quietly wrong. The original body
+    is preserved in version control.
 
     Parameters
     ----------
@@ -114,37 +129,25 @@ def get_all_water_distances(network_group, box, selection='No-active-site', msa=
     box : array-like
         Dimensions of unit-cell
     selection : {'No-active-site', 'active-site', 'all'}
-        Analysis selection 
+        Analysis selection
     msa : bool, optional
-        Indicate whether to use MSA indexing or standard residue indexing. Defualt is False
+        Indicate whether to use MSA indexing or standard residue indexing. Default is False
     offset : int, optional
         Residue offset from desired numbering that can be given to match standard residue indexing. Default is 0.
+
+    Raises
+    ------
+    NotImplementedError
+        Always.
     """
-    tmp_list = []
-    residue_dict, interaction_data = get_per_residue_interactions(network_group, selection=selection, msa=msa)
-    residue_dict['water_distances'] = {}
-    for network, connections in zip(network_group, interaction_data[selection]['Water-Protein'][1]):
-        dist_arr = []
-        for connection in connections:
-            residue_atom = [mol for mol in network.protein_atoms if (mol.index == connection[0]) or (mol.index == connection[1])][0]
-            if msa==True:
-                tmp_list.append(residue_atom.resid+offset) #Add optional offset 
-                res = residue_atom.resid
-            else:
-                tmp_list.append(residue_atom.msa_resid+offset)
-                res = residue_atom.msa_resid
-            #ONLY WORKS FOR OXYGEN NETWORK RN
-            try:
-                water_mol = [mol for mol in network.water_molecules if (mol.O.index == connection[0]) or (mol.O.index == connection[1]) 
-                          or (mol.H1.index == connection[0]) or (mol.H1.index == connection[1]) or 
-                          (mol.H2.index == connection[0]) or (mol.H2.index == connection[1])][0]
-            except:
-                print(connection[0], connection[1])
-            dist = np.min(distances.distance_array(np.array(residue_atom.coordinates), 
-                                                   np.array([np.array(water_mol.O.coordinates), np.array(water_mol.H1.coordinates), np.array(water_mol.H2.coordinates)]).reshape(-1,3), box=box))
-            dist_arr.append(dist)
-        residue_dict['water_distances'][str(res)] = dist_arr
-    return residue_dict, interaction_data
+    raise NotImplementedError(
+        "get_all_water_distances is not implemented: it unpacks two values from "
+        "get_per_residue_interactions, which returns one, and then reads a data "
+        "structure that function does not produce. It is called from nowhere and "
+        "has never worked. If you need per-water distances, build them from "
+        "get_per_residue_interactions directly and please open an issue "
+        "describing what this should return."
+    )
 
 
 def classify_waters(network, ref1_coords, ref2_coords):

@@ -426,6 +426,11 @@ class WaterNetwork:
         # Water-Water connections
         tree = cKDTree(water_coords)
         dist, indices = tree.query(water_coords, k=max_neighbors, distance_upper_bound=dist_cutoff)
+        # k=1 makes cKDTree return one scalar per point instead of a length-1
+        # row, so the per-neighbour loops below raise 'float is not iterable'.
+        # Reshaping gives one row per query point for every value of k.
+        dist = np.asarray(dist).reshape(len(water_coords), -1)
+        indices = np.asarray(indices).reshape(len(water_coords), -1)
         for i, neighbors in enumerate(indices):
             for j, neighbor in enumerate(neighbors):
                 if neighbor != i and dist[i, j] <= dist_cutoff:
@@ -445,6 +450,11 @@ class WaterNetwork:
 
             tree = cKDTree(protein_coords)
             dist, indices = tree.query(water_coords, k=max_neighbors, distance_upper_bound=dist_cutoff)
+            # k=1 makes cKDTree return one scalar per point instead of a length-1
+            # row, so the per-neighbour loops below raise 'float is not iterable'.
+            # Reshaping gives one row per query point for every value of k.
+            dist = np.asarray(dist).reshape(len(water_coords), -1)
+            indices = np.asarray(indices).reshape(len(water_coords), -1)
 
             for i, neighbors in enumerate(indices):
                 for j, neighbor in enumerate(neighbors):
@@ -581,6 +591,11 @@ class WaterNetwork:
 
             #Query for distances with water O coordinates
             dist, indices = tree.query(water_O_coords, k=max_neighbors, distance_upper_bound=dist_cutoff)
+            # k=1 makes cKDTree return one scalar per point instead of a length-1
+            # row, so the per-neighbour loops below raise 'float is not iterable'.
+            # Reshaping gives one row per query point for every value of k.
+            dist = np.asarray(dist).reshape(len(water_O_coords), -1)
+            indices = np.asarray(indices).reshape(len(water_O_coords), -1)
 
             for index_near, index_ref in enumerate(indices):
                 for i, distance in enumerate(dist[index_near]):
@@ -627,6 +642,11 @@ class WaterNetwork:
 
             #Query for distances with water-H coords
             dist, indices = tree.query(water_H_coords, k=max_neighbors, distance_upper_bound=dist_cutoff)
+            # k=1 makes cKDTree return one scalar per point instead of a length-1
+            # row, so the per-neighbour loops below raise 'float is not iterable'.
+            # Reshaping gives one row per query point for every value of k.
+            dist = np.asarray(dist).reshape(len(water_H_coords), -1)
+            indices = np.asarray(indices).reshape(len(water_H_coords), -1)
             for index_near, index_ref in enumerate(indices):
                 for i, distance in enumerate(dist[index_near]):
                     if distance <= dist_cutoff:        
@@ -667,6 +687,11 @@ class WaterNetwork:
 
         #Query for distances with water-H coords
         dist, indices = tree.query(water_H_coords, k=max_neighbors, distance_upper_bound=dist_cutoff)
+        # k=1 makes cKDTree return one scalar per point instead of a length-1
+        # row, so the per-neighbour loops below raise 'float is not iterable'.
+        # Reshaping gives one row per query point for every value of k.
+        dist = np.asarray(dist).reshape(len(water_H_coords), -1)
+        indices = np.asarray(indices).reshape(len(water_H_coords), -1)
 
         
         for index_near, index_ref in enumerate(indices):
@@ -800,8 +825,16 @@ class WaterNetwork:
                                           else molecule.evolutionary.grade))
             
             #Add edges
-            self.connections = self.find_directed_connections(dist_cutoff=2.5, water_active=None, protein_active=None, 
-                                                            active_region_only=False, water_only=water_only, max_neighbors=10)
+            # Pass the caller's parameters through, as the active-region branch
+            # above does. These were hardcoded (2.5 A, 10 neighbours, and no
+            # angle filter at all), so max_connection_distance, max_neighbors
+            # and angle_criteria were silently discarded in the default path --
+            # measurably: every value of all three produced identical graphs.
+            self.connections = self.find_directed_connections(dist_cutoff=max_connection_distance,
+                                                            water_active=None, protein_active=None,
+                                                            active_region_only=False, water_only=water_only,
+                                                            angle_criteria=angle_criteria,
+                                                            max_neighbors=max_neighbors)
             for connection in self.connections:
                 G.add_edge(connection[0], connection[1], connection_type=connection[3], active_region=connection[4])
 

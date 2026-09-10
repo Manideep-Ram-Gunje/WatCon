@@ -424,6 +424,11 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
         # Water-Water connections
         tree = cKDTree(water_coords)
         dist, indices = tree.query(water_coords, k=max_neighbors, distance_upper_bound=dist_cutoff)
+        # k=1 makes cKDTree return one scalar per point instead of a length-1
+        # row, so the per-neighbour loops below raise 'float is not iterable'.
+        # Reshaping gives one row per query point for every value of k.
+        dist = np.asarray(dist).reshape(len(water_coords), -1)
+        indices = np.asarray(indices).reshape(len(water_coords), -1)
 
         for i, neighbors in enumerate(indices):
             for j, neighbor in enumerate(neighbors):
@@ -445,6 +450,11 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
 
             tree = cKDTree(protein_coords)
             dist, indices = tree.query(water_coords, k=max_neighbors, distance_upper_bound=dist_cutoff)
+            # k=1 makes cKDTree return one scalar per point instead of a length-1
+            # row, so the per-neighbour loops below raise 'float is not iterable'.
+            # Reshaping gives one row per query point for every value of k.
+            dist = np.asarray(dist).reshape(len(water_coords), -1)
+            indices = np.asarray(indices).reshape(len(water_coords), -1)
 
             for i, neighbors in enumerate(indices):
                 for j, neighbor in enumerate(neighbors):
@@ -582,6 +592,11 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
 
             #Query for distances with water O coordinates
             dist, indices = tree.query(water_O_coords, k=max_neighbors, distance_upper_bound=dist_cutoff)
+            # k=1 makes cKDTree return one scalar per point instead of a length-1
+            # row, so the per-neighbour loops below raise 'float is not iterable'.
+            # Reshaping gives one row per query point for every value of k.
+            dist = np.asarray(dist).reshape(len(water_O_coords), -1)
+            indices = np.asarray(indices).reshape(len(water_O_coords), -1)
 
             for index_near, index_ref in enumerate(indices):
                 for i, distance in enumerate(dist[index_near]):
@@ -636,6 +651,11 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
 
             #Query for distances with water-H coords
             dist, indices = tree.query(water_H_coords, k=max_neighbors, distance_upper_bound=dist_cutoff)
+            # k=1 makes cKDTree return one scalar per point instead of a length-1
+            # row, so the per-neighbour loops below raise 'float is not iterable'.
+            # Reshaping gives one row per query point for every value of k.
+            dist = np.asarray(dist).reshape(len(water_H_coords), -1)
+            indices = np.asarray(indices).reshape(len(water_H_coords), -1)
             for index_near, index_ref in enumerate(indices):
                 for i, distance in enumerate(dist[index_near]):
                     if distance <= dist_cutoff:        
@@ -683,6 +703,11 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
 
         #Query for distances with water-H coords
         dist, indices = tree.query(water_H_coords, k=max_neighbors, distance_upper_bound=dist_cutoff)
+        # k=1 makes cKDTree return one scalar per point instead of a length-1
+        # row, so the per-neighbour loops below raise 'float is not iterable'.
+        # Reshaping gives one row per query point for every value of k.
+        dist = np.asarray(dist).reshape(len(water_H_coords), -1)
+        indices = np.asarray(indices).reshape(len(water_H_coords), -1)
 
         
         for index_near, index_ref in enumerate(indices):
@@ -735,6 +760,11 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
 
         #Query for distances with water-H coords
         dist, indices = tree.query(water_O_coords, k=max_neighbors, distance_upper_bound=dist_cutoff)
+        # k=1 makes cKDTree return one scalar per point instead of a length-1
+        # row, so the per-neighbour loops below raise 'float is not iterable'.
+        # Reshaping gives one row per query point for every value of k.
+        dist = np.asarray(dist).reshape(len(water_O_coords), -1)
+        indices = np.asarray(indices).reshape(len(water_O_coords), -1)
 
         
         for index_near, index_ref in enumerate(indices):

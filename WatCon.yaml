@@ -1,9 +1,21 @@
+# Conda environment for WatCon-ConSurf.
+#
+# You do NOT need this to use the package -- `pip install` covers every runtime
+# dependency (see docs/installation.rst). This file exists for two cases:
+#   * you want MODELLER, which is licensed and cannot be pip-installed, or
+#   * you want a fully pinned scientific stack from conda-forge.
+#
+# MODELLER is needed ONLY for MSA-based structural alignment across a protein
+# family. For many structures of one protein, `watcon prepare` superposes them
+# with WatCon.superpose, which is plain numpy and needs no licence. If you do
+# not need family alignment, remove the `modeller` line below and drop the
+# `salilab` channel -- everything else works without them.
 name: WatCon
 channels:
 
   - conda-forge
   - defaults
-  - salilab
+  - salilab          # only required for MODELLER; remove with it
 dependencies:
     # Base depends
   - python=3.10
@@ -16,7 +28,8 @@ dependencies:
   - mdanalysis
   - scipy 
   - biopython
-  - modeller
+  - griddataformats
+  - modeller       # OPTIONAL, licensed: family MSA alignment only
   - pydata-sphinx-theme
   - sphinx-design
   - sphinx-copybutton

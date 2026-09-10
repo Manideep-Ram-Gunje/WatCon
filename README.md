@@ -39,14 +39,14 @@ Licensed GPL-3.0, like the original. See [CHANGES](docs/CONSURF_CHANGELOG.md).
 ## Install
 
 ```bash
-pip install git+https://github.com/YOUR-ACCOUNT/WatCon-ConSurf.git
+pip install "git+https://github.com/Manideep-Ram-Gunje/WatCon.git@consurf-integration"
 ```
 
-> **Replace `YOUR-ACCOUNT` with this fork's actual location.** The upstream
-> repository at `kamerlinlab/WatCon` does *not* contain the ConSurf
-> integration — installing from there gives you plain WatCon.
+> **The `@consurf-integration` part is required.** This fork's `main` is a clean
+> mirror of upstream WatCon, which does *not* contain the ConSurf integration —
+> an install URL without the branch gives you plain WatCon.
 
-Python ≥3.8. Everything needed is installed automatically.
+Python ≥3.10. Everything needed is installed automatically.
 
 **MODELLER is optional.** Upstream WatCon required it for structural alignment;
 it is licensed and conda-only. `WatCon.superpose` now does the same job in numpy

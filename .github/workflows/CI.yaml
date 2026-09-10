@@ -1,66 +1,113 @@
 name: CI
 
+# The ConSurf integration lives on `consurf-integration`; this fork's `main` is
+# a clean mirror of upstream. Testing only `main` would test upstream's code and
+# never this work, which is what the inherited configuration did.
 on:
-  # GitHub has started calling new repo's first branch "main" https://github.com/github/renaming
-  # The cookiecutter uses the "--initial-branch" flag when it runs git-init
   push:
     branches:
       - "main"
+      - "consurf-integration"
   pull_request:
     branches:
       - "main"
+      - "consurf-integration"
   schedule:
-    # Weekly tests run on main by default:
-    #   Scheduled workflows run on the latest commit on the default or base branch.
-    #   (from https://help.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events-schedule)
     - cron: "0 0 * * 0"
 
 jobs:
   test:
-    name: Test on ${{ matrix.os }}, Python ${{ matrix.python-version }}
+    name: ${{ matrix.os }} / Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [macOS-latest, ubuntu-latest, windows-latest]
-        python-version: [3.9, "3.10", "3.11"]
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        python-version: ["3.10", "3.11", "3.12"]
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Additional info about the build
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # Install from the package metadata rather than a separate conda
+      # environment file. pyproject.toml now declares every runtime dependency,
+      # so this exercises exactly what `pip install` gives a real user -- the
+      # previous configuration installed with --no-deps into an environment that
+      # contained none of them, and so could never have passed.
+      - name: Install the package as a user would
         shell: bash
         run: |
-          uname -a
-          df -h
-          ulimit -a
+          python -m pip install --upgrade pip
+          python -m pip install ".[test]"
 
-      # More info on options: https://github.com/marketplace/actions/setup-micromamba
-      - uses: mamba-org/setup-micromamba@v1
-        with:
-          environment-file: devtools/conda-envs/test_env.yaml
-          environment-name: test
-          condarc: |
-            channels:
-              - conda-forge
-          create-args: >- 
-            python=${{ matrix.python-version }}
+      - name: Show what was resolved
+        shell: bash
+        run: python -m pip list
 
-      - name: Install package
-        # conda setup requires this special shell
-        shell: bash -l {0}
+      - name: Run the test suite
+        shell: bash
+        run: python -m pytest WatCon/tests/ -v --color=yes
+
+      # The strongest smoke test available: the documented one-command entry
+      # point, on the data shipped inside the wheel. It fails if the console
+      # script is missing, if package data did not ship, or if any stage of the
+      # pipeline breaks on this platform.
+      - name: Run the bundled demo end to end
+        shell: bash
         run: |
-          python -m pip install . --no-deps
-          micromamba list
+          watcon --version
+          watcon demo --out-dir ci_demo
 
-      - name: Run tests
-        # conda setup requires this special shell
-        shell: bash -l {0}
+      - name: Check the demo actually produced results
+        shell: bash
         run: |
-          pytest -v --cov=WatCon --cov-report=xml --color=yes WatCon/tests/
+          python - <<'PY'
+          import csv, sys, pathlib
+          rows = list(csv.DictReader(open("ci_demo/conservation.csv")))
+          scored = [r for r in rows if r["evo_mean_score"] != "NA"]
+          print("sites: %d, of which scored: %d" % (len(rows), len(scored)))
+          assert len(rows) > 100, "too few sites -- pipeline degraded"
+          assert len(scored) > 50, "conservation did not reach the sites"
+          assert pathlib.Path("ci_demo/pymol/conserved_sites.pdb").is_file()
+          assert pathlib.Path("ci_demo/preparation.csv").is_file()
+          PY
 
-      - name: CodeCov
-        uses: codecov/codecov-action@v1
+  build:
+    name: Wheel contents
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          file: ./coverage.xml
-          flags: unittests
-          name: codecov-${{ matrix.os }}-py${{ matrix.python-version }}
+          python-version: "3.12"
+
+      - name: Build a wheel
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build --wheel
+
+      # Data files have been silently missing from this package before. Assert
+      # what must be inside the wheel, and what must not.
+      - name: Verify what ships
+        run: |
+          python - <<'PY'
+          import glob, zipfile
+          names = zipfile.ZipFile(glob.glob("dist/*.whl")[0]).namelist()
+          def count(part): return sum(1 for n in names if part in n)
+
+          examples = count("data/examples/barnase/structures")
+          fixtures = count("data/consurf/fixtures")
+          bundles  = count("data/consurf/exploratory")
+          print("examples=%d fixtures=%d exploratory=%d" % (examples, fixtures, bundles))
+
+          assert examples >= 6, "the demo dataset did not ship"
+          assert fixtures >= 5, "ConSurf fixtures did not ship"
+          assert bundles == 0, "5 MB of raw research bundles leaked into the wheel"
+          assert any(n.endswith("entry_points.txt") for n in names), "no console script"
+          for module in ("cli.py", "prepare.py", "demo.py", "superpose.py",
+                         "evolutionary.py", "residue_index.py"):
+              assert any(n.endswith("/" + module) for n in names), module
+          PY

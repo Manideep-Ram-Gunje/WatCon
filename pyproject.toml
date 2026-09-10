@@ -21,7 +21,11 @@ classifiers = [
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Programming Language :: Python :: 3",
 ]
-requires-python = ">=3.8"
+# Our own code is 3.8-safe, but the dependencies are not: MDAnalysis needs
+# >=3.11, numpy and scipy >=3.12, biopython >=3.10. The inherited ">=3.8" would
+# let pip silently backsolve to ancient, untested versions. 3.10 is the honest
+# floor; CI tests 3.10-3.12 so this number is backed by evidence.
+requires-python = ">=3.10"
 # Every third-party module actually imported by the package. These were
 # previously commented out, so `pip install` produced a distribution that raised
 # ImportError on first use.
@@ -39,10 +43,10 @@ dependencies = [
 ]
 
 [project.urls]
-# TODO: replace YOUR-ACCOUNT with the fork this package is published from.
-# The upstream repository below does NOT contain the ConSurf integration --
-# installing from it would silently give you plain WatCon.
-"Source" = "https://github.com/YOUR-ACCOUNT/WatCon-ConSurf"
+# The ConSurf integration lives on the `consurf-integration` branch. This
+# fork's `main` is a clean mirror of upstream, so an install URL that does not
+# name the branch would silently give you plain WatCon.
+"Source" = "https://github.com/Manideep-Ram-Gunje/WatCon/tree/consurf-integration"
 "Upstream project" = "https://github.com/kamerlinlab/WatCon"
 "Upstream paper" = "https://pubs.acs.org/doi/10.1021/jacsau.5c00447"
 "Documentation" = "https://watcon.readthedocs.io/"
