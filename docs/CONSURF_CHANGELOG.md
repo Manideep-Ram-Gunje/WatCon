@@ -942,3 +942,81 @@ doubles every backslash, giving the user a path they cannot paste back.
 - **Still open:** mmCIF input is not yet supported (`'CIF' isn't a valid
   topology format`) -- that is the next step and needs `gemmi`.
 
+---
+
+## 2026-09-11 - Phase 12: read what the PDB actually serves
+
+- **What:** mmCIF is now a first-class input, and `watcon fetch` downloads
+  structures by id. Without this, a tenth of a modern dataset is unreachable.
+
+### The archive moved and WatCon did not
+
+`prepare.py` parses `ATOM`/`HETATM` text directly -- fast, dependency-free, and
+PDB-only. Point it at anything else:
+
+```
+ValueError: 'CIF' isn't a valid topology format
+```
+
+MDAnalysis 2.10 is no help here: it reads MMTF, which RCSB has retired, and not
+mmCIF. So the limitation was total.
+
+This is not a hypothetical gap. Fetching the PTP1B benchmark set, **31 of the
+287 selected entries had no PDB file at all** -- every `7GS*`/`7GT*` fragment
+structure among them. Verified against the live archive today:
+
+```
+7GSA .pdb -> HTTP 404
+7GSA .cif -> 559,816 bytes
+```
+
+RCSB stops issuing PDB format for entries above 62 chains or 99,999 atoms, and
+increasingly for new depositions regardless of size.
+
+### What was added
+
+`WatCon/structure_io.py` converts to PDB text with `gemmi` and then gets out of
+the way, so no second parser enters the codebase and everything downstream is
+untouched. `prepare_directory` converts into a temporary directory that is
+removed afterwards; the common all-PDB case copies nothing. A file that is
+already PDB is **copied, not round-tripped** -- reformatting a file WatCon can
+already read could only introduce a difference.
+
+`pdb_name_for` uses `os.path.splitext`, so `1A2P.run1.cif` becomes
+`1A2P.run1.pdb` and still matches its ConSurf file. Same bug class as Phase 11.
+
+`WatCon/fetch.py` and `watcon fetch --ids 1AAX 7GSA`. **PDB format is tried
+first and mmCIF second** -- deliberately that order, since the PDB file is
+smaller and needs no conversion but does not always exist. One id that cannot be
+fetched is named and does not stop the others; `FetchError` is raised only when
+nothing at all arrived, so an empty directory never reaches `prepare` disguised
+as a wrong path.
+
+### Verified end to end on real data
+
+Not on a synthetic file -- on the entry that motivated the work:
+
+```
+watcon fetch --ids 1AAX,7GSA
+  1AAX   pdb (252 kB)
+  7GSA   cif (547 kB)
+
+watcon prepare --reference 1AAX
+  Converted 1 file(s) to PDB format: 7GSA.cif
+  1AAX   chain A  identity 1.00   233 waters  RMSD 0.00 A over 297 CA
+  7GSA   chain A  identity 0.94   250 waters  RMSD 1.15 A over 283 CA
+```
+
+An mmCIF-only PTP1B structure superposed onto a PDB-format one. Before today the
+tool could not open it.
+
+- **New dependency:** `gemmi` -- the library the PDB's own tooling uses.
+- **Tests:** **529 passed, 2 skipped** (was 500). New `test_mmcif.py` (31).
+  The two skips are the tests that contact RCSB; they are opt-in via
+  `WATCON_NETWORK_TESTS=1` so CI cannot fail because the archive is briefly
+  down. Both pass when enabled.
+- **Unchanged:** `watcon demo` still reproduces 193 / 190 / 165.
+- **Limits:** entries genuinely too large for PDB format cannot be prepared at
+  all, and now say so explicitly instead of failing inside a reader. Extracting
+  one chain first is the workaround; doing that automatically is not attempted.
+

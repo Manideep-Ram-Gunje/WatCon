@@ -40,6 +40,9 @@ dependencies = [
     "joblib",
     "matplotlib",
     "GridDataFormats",          # imported directly by find_conserved_networks
+    "gemmi",                    # mmCIF -> PDB; RCSB no longer issues PDB for
+                                # large or recent entries, and neither WatCon's
+                                # own parser nor MDAnalysis 2.10 reads mmCIF
 ]
 
 [project.urls]

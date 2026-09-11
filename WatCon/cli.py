@@ -1,8 +1,10 @@
 """The ``watcon`` command.
 
+    watcon fetch    --ids 1AAX 7GSA --out-dir raw/
     watcon prepare  --input-dir raw/ --out-dir prepared/
     watcon run      --input input.txt [--analysis analysis.txt]
     watcon validate --consurf FILE...
+    watcon view     --prepared prepared/ --consurf grades.txt
     watcon demo
 
 ``run`` delegates to the existing :mod:`WatCon.WatCon` entry points, so
@@ -30,6 +32,38 @@ def _version() -> str:
         return __version__
     except Exception:                       # noqa: BLE001 - version is cosmetic
         return "unknown"
+
+
+# ---------------------------------------------------------------------------
+# fetch
+# ---------------------------------------------------------------------------
+
+def cmd_fetch(args) -> int:
+    from .fetch import FetchError, fetch_structures
+
+    ids = []
+    for item in args.ids:
+        ids.extend(part for part in item.replace(",", " ").split() if part)
+
+    try:
+        paths, failures = fetch_structures(ids, args.out_dir,
+                                           overwrite=args.overwrite)
+    except FetchError as error:
+        print("error: %s" % error, file=sys.stderr)
+        return 1
+
+    # Name every failure again at the end, where it will not scroll past --
+    # the same reasoning as `prepare` reporting its rejections twice.
+    if failures:
+        print()
+        print("%d id(s) could NOT be fetched:" % len(failures))
+        for pdb_id, reason in failures:
+            print("  %-6s %s" % (pdb_id, reason.splitlines()[0]))
+
+    print()
+    print("Next:  watcon prepare --input-dir %s --out-dir prepared/ --reference %s"
+          % (args.out_dir, os.path.splitext(os.path.basename(paths[0]))[0]))
+    return 0
 
 
 # ---------------------------------------------------------------------------
@@ -153,6 +187,26 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", metavar="COMMAND")
 
     # -- prepare ------------------------------------------------------------
+    fetch = subparsers.add_parser(
+        "fetch",
+        help="download structures from RCSB by PDB id",
+        description=(
+            "Download entries from RCSB. PDB format is tried first and mmCIF "
+            "second, because RCSB no longer issues PDB files for large or "
+            "recent entries -- 31 of 287 PTP1B entries we selected are "
+            "mmCIF-only. An id that cannot be fetched is named, and does not "
+            "stop the others."
+        ),
+    )
+    fetch.add_argument("--ids", required=True, nargs="+",
+                       help="PDB ids, space- or comma-separated (e.g. 1AAX 7GSA)")
+    fetch.add_argument("--out-dir", default="raw",
+                       help="destination folder (default: raw)")
+    fetch.add_argument("--overwrite", action="store_true",
+                       help="re-download files that are already present")
+    fetch.set_defaults(func=cmd_fetch)
+
+    # -- prepare ------------------------------------------------------------
     prepare = subparsers.add_parser(
         "prepare",
         help="align a folder of structures into one frame, keeping their waters",
@@ -162,7 +216,8 @@ def build_parser() -> argparse.ArgumentParser:
             "match are rejected with a reason, never dropped silently."
         ),
     )
-    prepare.add_argument("--input-dir", required=True, help="folder of raw .pdb files")
+    prepare.add_argument("--input-dir", required=True,
+                     help="folder of raw structures (.pdb, .cif, .gz)")
     prepare.add_argument("--out-dir", required=True,
                          help="destination (CLEARED, not merged)")
     prepare.add_argument("--reference", default=None,

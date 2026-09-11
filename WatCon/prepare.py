@@ -43,12 +43,14 @@ from __future__ import annotations
 
 import os
 import shutil
+import tempfile
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 
 from .residue_index import StructureResidue, residues_from_pdb_file
+from .structure_io import as_pdb_directory, needs_conversion
 from .superpose import kabsch, rmsd
 
 __all__ = [
@@ -332,6 +334,51 @@ def _ca_coordinates(lines):
 # ---------------------------------------------------------------------------
 
 def prepare_directory(
+    input_dir: str,
+    out_dir: str,
+    reference: Optional[str] = None,
+    chain_label: str = "A",
+    min_identity: float = DEFAULT_MIN_IDENTITY,
+    water_cutoff: float = DEFAULT_WATER_CUTOFF,
+    min_shared: int = DEFAULT_MIN_SHARED,
+    verbose: bool = True,
+) -> PreparationReport:
+    """Prepare every structure in ``input_dir`` into a shared frame in ``out_dir``.
+
+    Accepts PDB, mmCIF and gzipped forms of either. mmCIF is converted to PDB
+    text first (see :mod:`WatCon.structure_io`) because RCSB no longer issues
+    PDB files for large or recent entries -- 31 of the 287 PTP1B structures we
+    selected have no PDB file at all -- and neither this module nor MDAnalysis
+    reads mmCIF.
+
+    The conversion happens in a temporary directory that is removed afterwards,
+    so nothing downstream sees anything but PDB and ``input_dir`` is untouched.
+
+    Every parameter is passed through unchanged; see
+    :func:`_prepare_pdb_directory` for the full description.
+    """
+    if not os.path.isdir(input_dir):
+        raise PreparationError("no such directory: %r" % (input_dir,))
+
+    if not any(needs_conversion(name) or name.lower().endswith(".gz")
+               for name in os.listdir(input_dir)):
+        return _prepare_pdb_directory(
+            input_dir, out_dir, reference, chain_label, min_identity,
+            water_cutoff, min_shared, verbose,
+        )
+
+    work = tempfile.mkdtemp(prefix="watcon_convert_")
+    try:
+        readable, _converted, _failed = as_pdb_directory(input_dir, work, verbose)
+        return _prepare_pdb_directory(
+            readable, out_dir, reference, chain_label, min_identity,
+            water_cutoff, min_shared, verbose,
+        )
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
+
+
+def _prepare_pdb_directory(
     input_dir: str,
     out_dir: str,
     reference: Optional[str] = None,
