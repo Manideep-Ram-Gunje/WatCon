@@ -101,7 +101,8 @@ def build_session(prepared, consurf, out_dir="watcon_view", reference=None,
     if verbose:
         print("Clustering %d waters..." % len(coordinates))
     _, centers = cluster_coordinates_only(
-        coordinates, cluster="hdbscan", min_samples=min_cluster_samples, eps=0.0)
+        coordinates, cluster="hdbscan", min_samples=min_cluster_samples, eps=0.0,
+        source=names)
     clusters = conservation_of_clusters(networks, centers, dist_cutoff=site_radius)
 
     write_conservation_report(clusters, out / "conservation.csv")

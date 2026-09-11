@@ -886,3 +886,59 @@ nothing alone.
   guarantee is local rather than enforced by CI. The default view is one opinion
   about what matters; `enable sites` shows the rest.
 
+---
+
+## 2026-09-11 - Phase 11: survive a directory someone else assembled
+
+- **What:** WatCon read *everything* in the structure folder and let the
+  failures surface from deep inside MDAnalysis and scikit-learn. Five measured
+  failure modes now name their own cause.
+
+### What a stranger's folder did
+
+Each row is the message produced by the code as published, not a guess:
+
+| input | before |
+|---|---|
+| a `README.txt` beside the structures | `ValueError: 'TXT' isn't a valid topology format` |
+| a subdirectory (`results/`) | `ValueError: '' isn't a valid topology format` |
+| `1A2P.run1.pdb` | name truncated to `1A2P`, so outputs were mislabelled |
+| an empty directory | `ValueError: not enough values to unpack (expected 2, got 0)` |
+| structures with no waters | built fine, then `Found array with 0 sample(s)` in HDBSCAN |
+
+The cause was one line, `generate_static_networks.py:1857`:
+
+```python
+pdbs = [f for f in os.listdir(pdb_dir) if 'swp' not in f]
+```
+
+Everything in the folder was a structure unless it was an editor backup.
+
+### The fix
+
+`residue_index.list_structure_files` / `require_structure_files` decide what is
+a structure by extension, return what was skipped so it can be reported, and
+refuse to return an empty list. The builder now says, once:
+
+```
+Skipping 2 non-structure item(s) in prepared/: README.txt, results
+```
+
+`names` uses `os.path.splitext`, so `1A2P.run1.pdb` stays `1A2P.run1`. Verified
+end to end: its ConSurf file resolves and 315 of its atoms are scored.
+
+`cluster_coordinates_only` gained a `NoWaterCoordinates` guard naming the
+structures involved, and its bare `except` around the reshape -- which printed a
+warning and then carried on with the un-reshaped array -- is now an explicit
+error. That bare `except` is how a `(0,)`-shaped array reached sklearn.
+
+Error messages use `%s` rather than `%r` for paths: `repr` of a Windows path
+doubles every backslash, giving the user a path they cannot paste back.
+
+- **Tests:** **500 passed, 0 failed** (was 483). New `test_robustness.py` (17),
+  which asserts on message *content*, since a clear message is the feature.
+- **Unchanged:** `watcon demo` still reproduces 193 clusters / 190 occupied
+  sites / 165 with conservation.
+- **Still open:** mmCIF input is not yet supported (`'CIF' isn't a valid
+  topology format`) -- that is the next step and needs `gemmi`.
+

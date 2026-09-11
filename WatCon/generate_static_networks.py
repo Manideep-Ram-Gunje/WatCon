@@ -1641,8 +1641,16 @@ def initialize_network(structure_directory, topology_file=None, trajectory_file=
             List of PDB names for easier processing
     """
     pdb_dir = structure_directory
-    names = [f.split('.')[0] for f in os.listdir(pdb_dir)]
-    names.sort()
+    # os.path.splitext, not split('.')[0]: a file called 1A2P.run1.pdb was being
+    # reported as "1A2P", so the ConSurf lookup searched for the wrong name and
+    # failed blaming ConSurf. Non-structure files are excluded here rather than
+    # handed to the reader -- see residue_index.list_structure_files.
+    from WatCon.residue_index import require_structure_files
+
+    # The skip report is printed once, at the point the files are actually
+    # read, further down -- not here as well.
+    structure_files, _skipped = require_structure_files(pdb_dir)
+    names = sorted(os.path.splitext(f)[0] for f in structure_files)
 
     if multi_model_pdb:
         print('Use dynamic networks for multi model pdbs')
@@ -1854,8 +1862,17 @@ def initialize_network(structure_directory, topology_file=None, trajectory_file=
             return metrics, None
     
     #Gather pdbs (or any MDAnalysis-readable topology)
-    pdbs = [f for f in os.listdir(pdb_dir) if 'swp' not in f]
-    pdbs.sort()
+    # Was: everything in the directory not containing 'swp'. A README, a
+    # subdirectory or an editor backup was passed straight to MDAnalysis, which
+    # raised "'TXT' isn't a valid topology format" -- naming neither the file
+    # nor what to do about it.
+    from WatCon.residue_index import require_structure_files
+
+    pdbs, skipped_files = require_structure_files(pdb_dir)
+    if skipped_files:
+        print('Skipping %d non-structure item(s) in %s: %s'
+              % (len(skipped_files), pdb_dir, ', '.join(skipped_files[:6])
+                 + (', ...' if len(skipped_files) > 6 else '')))
 
     if analysis_conditions == 'all':
         analysis_conditions = {

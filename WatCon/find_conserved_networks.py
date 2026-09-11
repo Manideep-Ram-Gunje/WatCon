@@ -184,7 +184,18 @@ def cluster_nodes(combined_graph, cluster='hdbscan', min_samples=10):
     return(cluster_labels, cluster_centers)
 
 
-def cluster_coordinates_only(coordinate_list, cluster='hdbscan', min_samples=10, eps=0.0, n_jobs=1):
+class NoWaterCoordinates(ValueError):
+    """Raised when there is nothing to cluster.
+
+    Structures with no water molecules -- a crystal structure solved without
+    waters, or a selection that excluded them -- used to build a network
+    without complaint and then die inside scikit-learn with
+    ``Found array with 0 sample(s) (shape=(0, 3)) while a minimum of 1 is
+    required``, which names neither water nor the structures responsible.
+    """
+
+
+def cluster_coordinates_only(coordinate_list, cluster='hdbscan', min_samples=10, eps=0.0, n_jobs=1, source=None):
     """
     Cluster a set of coordinates.
 
@@ -196,17 +207,46 @@ def cluster_coordinates_only(coordinate_list, cluster='hdbscan', min_samples=10,
         Clustering method, can be 'optics', 'dbscan', or 'hdbscan'.
     min_samples : int
         Minimum number of samples required for a cluster.
+    source : list[str] or str, optional
+        What the coordinates came from, named in the error message if there is
+        nothing to cluster. Default None gives a generic message.
 
     Returns
     -------
     tuple
         - Cluster labels (array-like)
         - Cluster centers (dict)
+
+    Raises
+    ------
+    NoWaterCoordinates
+        If no coordinates were supplied, or they are not 3-dimensional.
     """
-    try:
-        coordinate_list = np.array(coordinate_list).reshape(-1,3)
-    except:
-        print("Couldn't reshape coordinates correctly, check your inputs.")
+    if source is None:
+        where = ""
+    elif isinstance(source, str):
+        where = " from %s" % source
+    else:
+        source = list(source)
+        where = (" from %s" % ", ".join(str(x) for x in source[:6])
+                 + (", ..." if len(source) > 6 else ""))
+
+    coordinate_list = np.asarray(coordinate_list, dtype=float)
+    if coordinate_list.size == 0:
+        raise NoWaterCoordinates(
+            "No water coordinates to cluster%s. WatCon found no water molecules "
+            "in the structures it read. Check that the files contain waters "
+            "(HOH/WAT/SOL/TIP3), and that any water_name setting matches the "
+            "residue name they actually use." % where
+        )
+    if coordinate_list.size % 3:
+        # Previously a bare `except` printed a warning and carried on with the
+        # un-reshaped array, so a (0,)- or (N,)-shaped array reached sklearn.
+        raise NoWaterCoordinates(
+            "Coordinates%s are not 3-dimensional: %d values do not divide into "
+            "(N, 3) xyz rows." % (where, coordinate_list.size)
+        )
+    coordinate_list = coordinate_list.reshape(-1, 3)
 
     #scaler = MinMaxScaler()
     #scaler.fit(coordinate_list)

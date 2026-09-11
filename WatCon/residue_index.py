@@ -124,6 +124,79 @@ class StructureResidue:
 
 
 # ---------------------------------------------------------------------------
+# Choosing which files in a directory are structures
+# ---------------------------------------------------------------------------
+
+#: Extensions treated as structures. Deliberately explicit: the previous rule
+#: was "everything in the directory that does not contain 'swp'", which handed
+#: READMEs, subdirectories and stray output files to the structure reader.
+STRUCTURE_SUFFIXES = (
+    ".pdb", ".ent", ".cif", ".mmcif", ".gro", ".pdbqt", ".xyz", ".mol2",
+    ".prmtop", ".parm7", ".psf", ".top", ".tpr",
+)
+
+
+class NoStructuresFound(ValueError):
+    """Raised when a directory contains nothing that can be read."""
+
+
+def list_structure_files(directory, suffixes=STRUCTURE_SUFFIXES):
+    """``(structure filenames, skipped filenames)`` for one directory.
+
+    Anything that is not a regular file with a known structure extension is
+    skipped and reported rather than passed to the reader. A user who leaves a
+    README, a results folder or a ``.DS_Store`` beside their structures
+    previously got ``ValueError: 'TXT' isn't a valid topology format`` from deep
+    inside MDAnalysis, which names neither the file nor the fix.
+
+    Compressed structures (``.pdb.gz``) are recognised by their inner extension.
+    """
+    import os
+
+    structures, skipped = [], []
+    for name in sorted(os.listdir(directory)):
+        path = os.path.join(directory, name)
+        if not os.path.isfile(path):
+            skipped.append(name)
+            continue
+        stem = name[:-3] if name.lower().endswith(".gz") else name
+        if stem.lower().endswith(suffixes):
+            structures.append(name)
+        else:
+            skipped.append(name)
+    return structures, skipped
+
+
+def require_structure_files(directory, suffixes=STRUCTURE_SUFFIXES):
+    """Like :func:`list_structure_files`, but refuses to return nothing.
+
+    An empty result used to surface much later as
+    ``ValueError: not enough values to unpack (expected 2, got 0)``.
+    """
+    import os
+
+    if not os.path.isdir(directory):
+        # %s, not %r: repr of a Windows path doubles every backslash, so
+        # the message shows a path the user cannot paste back.
+        raise NoStructuresFound(
+            "No such directory: %s. This should hold the structure files to "
+            "analyse." % (directory,)
+        )
+    structures, skipped = list_structure_files(directory, suffixes)
+    if not structures:
+        detail = ""
+        if skipped:
+            shown = ", ".join(skipped[:6])
+            detail = (" It contains %d item(s) that are not structures (%s%s)."
+                      % (len(skipped), shown, ", ..." if len(skipped) > 6 else ""))
+        raise NoStructuresFound(
+            "No structure files in %s.%s Recognised extensions: %s."
+            % (directory, detail, ", ".join(suffixes))
+        )
+    return structures, skipped
+
+
+# ---------------------------------------------------------------------------
 # Reading residues from a structure
 # ---------------------------------------------------------------------------
 
