@@ -338,7 +338,8 @@ def project_clusters_by_conservation(clusters, centers, filename_base='EVO_CLUST
 
 
 def pymol_project_evolutionary(network, filename='EVO_RESIDUES.pml',
-                               out_path='pymol_projections', grade_cutoff=None):
+                               out_path='pymol_projections', grade_cutoff=None,
+                               structure=None):
     """Write a .pml colouring protein residues by ConSurf grade.
 
     Uses ConSurf's own 1-9 colour scale so the projection matches what the user
@@ -356,6 +357,19 @@ def pymol_project_evolutionary(network, filename='EVO_RESIDUES.pml',
         If given, only colour residues at or above this grade -- useful for
         highlighting just the conserved end, which is also the most reproducible
         part of a ConSurf run.
+    structure : str, optional
+        Path to the structure these residues belong to.  **Strongly recommended.**
+        Without it the script is a bare list of ``color`` commands that assume a
+        structure is already open; opened on its own it colours an empty session
+        and shows nothing at all:
+
+            $ pymol EVO_RESIDUES.pml
+            objects loaded: []
+            atoms visible: 0
+
+        Every command succeeds, so there is no error to notice.  Passing the
+        structure makes the file self-contained.  ``watcon view`` does this for
+        you.
 
     Returns
     -------
@@ -387,6 +401,13 @@ def pymol_project_evolutionary(network, filename='EVO_RESIDUES.pml',
     with open(filename, 'w') as FILE:
         FILE.write('# Evolutionary conservation (ConSurf grade), 9 = most conserved.\n')
         FILE.write('# Residues with no ConSurf score are NOT coloured.\n')
+        if structure is not None:
+            FILE.write('load %s\n' % os.path.abspath(structure).replace('\\', '/'))
+        else:
+            FILE.write('#\n')
+            FILE.write('# NOTE: no structure was given, so this file only COLOURS.\n')
+            FILE.write('# Load your structure first, or it will colour an empty\n')
+            FILE.write('# session and show nothing:   pymol structure.pdb this.pml\n')
         FILE.write('bg white\n')
         FILE.write('hide everything\n')
         FILE.write('show cartoon\n')

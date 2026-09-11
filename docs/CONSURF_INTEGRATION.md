@@ -641,3 +641,56 @@ mean inventing a specification.
   hydrogen-bond geometry is still covered by no test.
 - `2F56`/`2F5M` were excluded rather than renumbered; the renumbered sensitivity
   check has not been run.
+
+---
+
+## 16. What you can do with this
+
+Verified against the running code, not recalled.
+
+### Supported today
+
+| capability | entry point |
+|---|---|
+| ConSurf parsing, both dialects, cross-checked against ConSurf's annotated PDB | `watcon validate`, `consurf/parser.py` |
+| **Numbering cannot silently mis-map** -- the guarantee published WatCon lacks | `enforce_identity`, `ConservationMap.coverage` |
+| Conservation on residues, on waters, **and on the network graph** | protein nodes carry `evo_grade`/`evo_score`; water nodes carry `evo_min_score`/`evo_n_residues` |
+| Which residues each water contacts | `water_residue_contacts` |
+| Conserved-site to conservation join, at family scale | `conservation_of_clusters` |
+| Summary over an arbitrary region or water set | `aggregate_site`, `aggregate_water` |
+| Pooling separate ConSurf runs at shared MSA columns | `conservation_by_msa_column`, `family_summary` |
+| One row per conserved site, CSV | `write_conservation_report` |
+| Dataset preparation without a MODELLER licence | `watcon prepare`, `superpose.kabsch` |
+| A PyMOL session that opens | `watcon view` |
+
+The graph point is the one with the most reach: because conservation sits on
+NetworkX node attributes, **any graph analysis can be filtered or weighted by it
+without new code** -- shortest paths, centrality, subgraph extraction.
+
+### Buildable on what exists
+
+* **Water-mediated bridges between conserved residues.** The graph already holds
+  conservation on nodes and water-protein edges; ask which conserved residue
+  pairs are connected through a water.
+* **Variant or engineering triage.** Given candidate mutation sites, which line a
+  conserved water position? The residue -> water -> conservation lookup is there.
+* **Conformational-state comparison.** WatCon already separates open/closed or
+  apo/holo sets; conservation says which state's waters sit on conserved
+  residues.
+* **Family-level conserved-water maps.** `conservation_by_msa_column` is built
+  and unit-tested; it needs one ConSurf run per family member.
+* **Burial-matched analysis.** The sharpest open question from the benchmark --
+  whether conservation separates sites beyond acting as a burial proxy.
+
+### What the benchmark showed, so nobody builds on a false premise
+
+Conservation **does not** improve prediction of where water sits: dAUC +0.0004
+(barnase) and +0.0001/-0.0002 (PTP1B), all inside their own permutation nulls,
+against a pre-registered bar of 0.02. It is *redundant* with occupancy, not
+uninformative -- alone it scores AUC 0.65 and 0.57.
+
+What it does do is separate sites that occupancy alone conflates: the two
+measures disagree at 36-42% of sites, and sites that recur *without* conservation
+are overwhelmingly surface. Burial and conservation are correlated, so part of
+that separation is a burial proxy. See `experiments/benchmark/FINDINGS.md`.
+

@@ -84,8 +84,23 @@ messy, because real depositions are.
 watcon prepare  --input-dir raw/ --out-dir prepared/ --reference 1A2P
 watcon run      --input input.txt --analysis analysis.txt
 watcon validate --consurf my_run_consurf_grades.txt
+watcon view     --prepared prepared/ --consurf grades.txt
 watcon demo
 ```
+
+## See it
+
+```bash
+watcon view --prepared prepared/ --consurf my_run_consurf_grades.txt
+pymol watcon_view/watcon_view.pml
+```
+
+The protein is coloured on **ConSurf's own 1-9 scale** (maroon conserved, cyan
+variable) and the water sites lined by a highly conserved residue are marked.
+Type `enable sites` in PyMOL to add every occupied site, coloured by grade.
+
+The script is self-contained -- it loads what it colours, so opening it is all
+you do.
 
 `python WatCon/WatCon.py --input input.txt` still works exactly as before.
 

@@ -178,8 +178,21 @@ def run_demo(out_dir: str = "watcon_demo", keep: bool = False) -> int:
     print("                     cluster centres, ConSurf grade in the B-factors")
     print("  %s" % os.path.relpath(pml_path, out))
     print("                     residues coloured on ConSurf's own 1-9 scale")
+    # Build a session that opens on its own. The projection files above are
+    # correct but not self-contained -- the .pml is colour commands with no
+    # `load`, so opening it alone shows an empty window.
+    _heading("BONUS", "A PyMOL session you can just open")
+    from .view import build_session
+
+    session = build_session(str(prepared), str(GRADES),
+                            out_dir=str(out / "view"), verbose=False)
+
+    print("  Wrote %s" % os.path.relpath(session, out))
     print()
     print("  To look at it:")
-    print("    pymol %s %s" % (os.path.relpath(pdb_path, out),
-                               os.path.relpath(pml_path, out)))
+    print("    pymol %s" % session)
+    print()
+    print("  You will see barnase coloured on ConSurf's 1-9 scale, with the")
+    print("  water sites lined by highly conserved residues marked in red.")
+    print("  Type   enable sites   in PyMOL to add every occupied site.")
     return 0

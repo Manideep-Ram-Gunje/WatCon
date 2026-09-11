@@ -832,3 +832,57 @@ without it they would have failed on `test_line_ending_detection`.
 full suite, the `watcon` console script, `watcon demo` end to end on the bundled
 data, and the contents of the built wheel.
 
+---
+
+## 2026-09-11 - Phase 10: make it viewable
+
+- **What:** `watcon view` builds a PyMOL session that opens on its own, and the
+  projection writer stopped producing files that silently show nothing.
+
+### The .pml displayed nothing, and always had
+
+`pymol_project_evolutionary` wrote `hide everything` followed by ~200
+`color ... resi N` commands and **no `load` command at all**. Opened as a user
+would open it:
+
+```
+$ pymol 1A2P_conservation.pml
+objects loaded: []
+atoms visible: 0
+```
+
+Every command succeeds against an empty session, so there is no error to notice.
+The data was correct throughout -- the companion cluster PDB carries the real
+ConSurf grades in its B-factor column, 0.0 to 9.0 -- but nothing could be seen
+without knowing to load a structure first, and which one.
+
+It shipped because no test ever opened the file. The new
+`tests/test_view.py` runs PyMOL headlessly and asserts atoms are visible; it is
+skipped where PyMOL is absent, so CI is unaffected.
+
+### `watcon view`
+
+One command from prepared structures plus a ConSurf file to a session:
+
+* protein cartoon on **ConSurf's own 1-9 scale**;
+* `sites_conserved` -- sites lined by a grade >= 8 residue -- **shown on
+  opening**, because that is the picture the tool exists to make;
+* `sites` -- every occupied site, coloured by grade -- loaded but disabled, since
+  190 spheres bury the protein and the point;
+* a legend printed to the log, including that a site B-factor of 0 means *no
+  data*, not low conservation.
+
+Verified on the bundled example: 3 objects, 1085 atoms visible, 190 sites, 57
+conserved.
+
+`pymol_project_evolutionary` now takes an optional `structure=` and writes the
+`load` line; without one it says in the file that it only colours and will show
+nothing alone.
+
+- **Also:** `watcon demo` ends by building such a session and naming the one
+  command that opens it.
+- **Tests:** **483 passed, 0 failed** (was 476). New `test_view.py` (7).
+- **Limits:** the headless PyMOL test only runs where PyMOL is installed, so the
+  guarantee is local rather than enforced by CI. The default view is one opinion
+  about what matters; `enable sites` shows the rest.
+

@@ -122,6 +122,23 @@ def cmd_demo(args) -> int:
 
 
 # ---------------------------------------------------------------------------
+# view
+# ---------------------------------------------------------------------------
+
+def cmd_view(args) -> int:
+    from .view import build_session
+
+    try:
+        build_session(args.prepared, args.consurf, out_dir=args.out_dir,
+                      reference=args.reference, site_radius=args.site_radius,
+                      min_cluster_samples=args.min_cluster_samples)
+    except (ValueError, FileNotFoundError) as error:
+        print("error: %s" % error, file=sys.stderr)
+        return 1
+    return 0
+
+
+# ---------------------------------------------------------------------------
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -203,6 +220,31 @@ def build_parser() -> argparse.ArgumentParser:
     demo.add_argument("--keep", action="store_true",
                       help="reuse an existing output directory instead of clearing it")
     demo.set_defaults(func=cmd_demo)
+
+    # -- view ---------------------------------------------------------------
+    view = subparsers.add_parser(
+        "view", help="build a PyMOL session showing conserved water sites",
+        description=(
+            "Write a self-contained PyMOL script: the protein coloured on "
+            "ConSurf's 1-9 scale, with conserved water sites as spheres coloured "
+            "by the conservation of the residues lining them. Open the .pml "
+            "directly -- it loads everything it needs."
+        ),
+    )
+    view.add_argument("--prepared", required=True,
+                      help="directory of prepared structures (from `watcon prepare`)")
+    view.add_argument("--consurf", required=True,
+                      help="a *_consurf_grades.txt file; one run covers every "
+                           "structure of the same protein")
+    view.add_argument("--out-dir", default="watcon_view", help="output directory")
+    view.add_argument("--reference", default=None,
+                      help="which structure to draw (default: first by name); "
+                           "sites always come from all of them")
+    view.add_argument("--site-radius", type=float, default=1.5,
+                      help="a water occupies a site within this distance (A)")
+    view.add_argument("--min-cluster-samples", type=int, default=2,
+                      help="minimum waters per site")
+    view.set_defaults(func=cmd_view)
 
     return parser
 
