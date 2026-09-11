@@ -78,29 +78,81 @@ STEP 4/5  Cluster recurring water sites and join to conservation
 Note that 1BRN's barnase is chain **L**, not A — the example is deliberately
 messy, because real depositions are.
 
+## Use it inside PyMOL
+
+```bash
+watcon plugin --install
+```
+
+Restart PyMOL, then **Plugin → WatCon + ConSurf**. Choose a folder of
+structures (or type PDB ids and let it fetch them), pick the reference structure
+and chain from the dropdowns, point it at your ConSurf file, and press **Run**.
+
+The session is drawn in the viewport you are already looking at, and a sortable
+table of every site appears beside it — site, ConSurf grade, how many structures
+it is occupied in, and which residues line it. **Click a row** and the camera
+flies to that site and shows its lining side chains.
+
+The analysis runs on a background thread, so PyMOL stays usable while it works.
+
+This needs PyMOL and WatCon in the same Python, which is what a normal
+`pip install` of both gives you.
+
 ## The commands
 
 ```bash
-watcon prepare  --input-dir raw/ --out-dir prepared/ --reference 1A2P
+watcon fetch    --ids 1AAX 7GSA --out-dir raw/
+watcon prepare  --input-dir raw/ --out-dir prepared/ --reference 1AAX
 watcon run      --input input.txt --analysis analysis.txt
 watcon validate --consurf my_run_consurf_grades.txt
 watcon view     --prepared prepared/ --consurf grades.txt
+watcon plugin   --install
 watcon demo
 ```
 
-## See it
+PDB and **mmCIF** are both read, gzipped or not. That matters more than it
+sounds: RCSB no longer issues PDB files for large or recent entries — 31 of the
+287 PTP1B structures used to test this have no PDB file at all.
+
+## See it without the plugin
 
 ```bash
 watcon view --prepared prepared/ --consurf my_run_consurf_grades.txt
 pymol watcon_view/watcon_view.pml
 ```
 
-The protein is coloured on **ConSurf's own 1-9 scale** (maroon conserved, cyan
-variable) and the water sites lined by a highly conserved residue are marked.
-Type `enable sites` in PyMOL to add every occupied site, coloured by grade.
+The protein is coloured on **ConSurf's own 1-9 scale** — maroon conserved, cyan
+variable, and **yellow where ConSurf has no score**, which is not the same as
+low conservation. Water sites lined by a highly conserved residue are marked,
+and sphere size tracks how many structures hold a water there.
 
-The script is self-contained -- it loads what it colours, so opening it is all
-you do.
+```
+enable sites              every occupied site, coloured by grade
+enable WatCon_contacts    the residues lining them, and their polar contacts
+```
+
+The script is self-contained — it loads what it colours, so opening it is all
+you do. The plugin runs this identical file, so the two cannot disagree.
+
+## Does it work on real data?
+
+Yes, and here is the honest version. On **253 PTP1B crystal structures** with one
+real ConSurf run, in 126 seconds, it finds 293 recurring water sites. Among the
+conserved ones:
+
+* **site 250**, occupied in 213/253 structures, lined by the entire P-loop
+  (Cys215 the nucleophile, Ser216, Ala217, Gly218, Ile219, Gly220) **and
+  Gln262** — the catalytic water position;
+* **sites 278 and 280**, lined by **Gln262**, whose job is to position the
+  catalytic water;
+* **sites 270, 271, 284**, on the WPD loop at **Asp181**, the general acid.
+
+It found those with no knowledge of PTP1B's chemistry. But conservation does
+**not** put them at the top: ranked by conservation then occupancy, the first
+ten sites are buried structural waters, and the catalytic ones only accumulate
+by depth 50 (17/50, against 4/50 by occupancy alone). Conservation re-ranks
+toward the active site; it is not a shortcut to it. Full numbers in
+[docs/CONSURF_CHANGELOG.md](docs/CONSURF_CHANGELOG.md).
 
 `python WatCon/WatCon.py --input input.txt` still works exactly as before.
 

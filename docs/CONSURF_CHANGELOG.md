@@ -1195,3 +1195,79 @@ A table rather than a 3D pick handler: it is far more reliable, and it sorts.
   with one site atom and eight lining atoms selected.
 - **Wheel checked:** `WatCon/pymol_plugin/` ships.
 
+---
+
+## 2026-09-11 - Phase 15: run it on a real protein
+
+- **What:** the whole pipeline on **253 PTP1B crystal structures** with a real
+  ConSurf run (1AAX chain A, UniProt P18031), through the plugin's own code
+  path. Until now everything had only ever been run on six barnase structures.
+
+### It scales
+
+| structures | min waters / site | time | result |
+|---|---|---|---|
+| 10 | 2 | 6.0 s | 599 sites, 135 conserved |
+| 25 | 6 | 4.8 s | 377 sites, 93 conserved |
+| 50 | 12 | 15.2 s | 330 sites, 93 conserved |
+| 100 | 25 | 50.2 s | 304 sites, 96 conserved |
+| **253** | **63** | **125.9 s** | **293 sites, 282 scored, 96 conserved** |
+
+Two minutes for the full set, on one core. Because the analysis runs on a
+worker thread, PyMOL stays usable throughout. The dialog warns above 60
+structures; these numbers are where that threshold comes from.
+
+### It finds the catalytic water positions
+
+Given 253 structures and one ConSurf file, and **no knowledge of PTP1B
+chemistry**, the top conserved sites include:
+
+| site | occupied | grade | lined by |
+|---|---|---|---|
+| 250 | 213/253 | 9 | **Cys215 (nucleophile), Ser216, Ala217, Gly218, Ile219, Gly220 -- the entire P-loop -- and Gln262** |
+| 278, 280 | 192/253 | 9 | **Gln262**, whose textbook role is positioning the catalytic water |
+| 270, 271 | ~195/253 | 9 | **Asp181 (general acid)**, Pro180, Phe182, Arg221 -- the WPD loop |
+| 284 | 197/253 | 9 | Asp181, Phe182 |
+
+The catalytic-residue list was taken from the literature before looking at the
+output, not derived from it.
+
+### What that does and does not show
+
+34 of the 96 conserved sites (35%) touch catalytic machinery, against 1 of the
+other 197 (1%). **That figure is partly circular** and should not be quoted on
+its own: a site is called conserved *because* a conserved residue lines it, and
+catalytic residues are conserved almost by definition.
+
+The non-circular question is about *ordering*. WatCon alone ranks the 293 sites
+by occupancy. Does conservation move the catalytic ones up?
+
+| top N | by occupancy alone | by conservation, then occupancy |
+|---|---|---|
+| 10 | 0/10 | 0/10 |
+| 20 | 1/20 | 3/20 |
+| 30 | 2/30 | 4/30 |
+| 50 | 4/50 | **17/50** |
+
+So: conservation **does** re-rank toward the active site, clearly by depth 50 --
+but it does not put the catalytic waters first. The most-occupied,
+most-conserved sites are buried structural waters (sites 0, 1, 2, 4, 5 -- all
+253/253, all grade 9, none catalytic).
+
+That is exactly consistent with the benchmark: conservation does not predict
+where water sits, and it is not a shortcut to the active site. What it does is
+separate sites that occupancy alone conflates. Anyone building on this should
+take the ranking table above, not the 35% figure.
+
+### Also observed
+
+Real archive data is untidy in ways the barnase set is not. WatCon warns, as it
+should, about waters with alternate conformations -- `7GTV.pdb` residue 649 and
+others -- and uses the first. Not a defect, but worth knowing before quoting an
+occupancy to three figures.
+
+- **Results archived** outside the repository, with the scripts that produced
+  them, in `experiments/benchmark/results/ptp1b_conserved_waters/`.
+- **No code changes were needed.** The pipeline ran on 253 real structures
+  first time, which is what Phases 11-14 were for.
+
