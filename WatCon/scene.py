@@ -326,6 +326,12 @@ def build_scene(prepared, consurf, out_dir="watcon_view", reference=None,
     )
     scene.commands = _commands_for(scene, grade_of_residue,
                                    CONSURF_GRADE_COLORS)
+    # Written here, not left to the caller. `pml_path` is an attribute that
+    # promises a file, and a Scene whose pml_path pointed at nothing is exactly
+    # what broke the plugin: it ran `@<path>` and PyMOL raised FileNotFoundError
+    # after the analysis had already succeeded. build_scene writes three other
+    # files already; this is the fourth.
+    scene.write_pml()
     step(1.0, "Done.")
     return scene
 

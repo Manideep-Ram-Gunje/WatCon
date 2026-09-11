@@ -1107,3 +1107,91 @@ source of truth.
   arbitrary zoom; the legend is printed to the log instead, and now says what
   yellow and the sphere sizes mean.
 
+---
+
+## 2026-09-11 - Phase 14: the PyMOL plugin
+
+- **What:** `Plugin > WatCon + ConSurf` inside PyMOL. Pick the folder, the
+  reference structure, the chain and the cutoffs from a dialog, press Run, and
+  the session is drawn in the viewport you are already looking at. A table of
+  sites sits beside it; clicking a row flies the camera there and shows what
+  lines it.
+
+### Why a plugin and not an app
+
+PyMOL and WatCon share an interpreter in a normal pip install, so the plugin
+just `import`s WatCon -- no environment work, and **no new dependency** for the
+package. PyMOL stays optional. Verified here: PyMOL is installed into the same
+Python 3.13 that runs WatCon, `pymol.Qt` resolves to PyQt5, `pymol.plugins`
+imports.
+
+### Three decisions
+
+**The analysis runs on a worker thread.** Building networks for a few hundred
+structures takes minutes; on Qt's main thread that freezes PyMOL solid -- no
+redraw, no rotation, and on Windows a "(Not Responding)" title bar in the middle
+of a demonstration. `_Worker` computes, `WatConDialog` only draws.
+
+**Only the main thread talks to PyMOL.** `cmd` is not safe to drive from a
+worker. This is affordable exactly because `WatCon.scene` computes the whole
+picture without importing PyMOL, so the thread boundary falls where it should.
+
+**The plugin displays by running the same `.pml` that `watcon view` writes** --
+not by replaying the command list separately, but by `@`-ing the file. The two
+front ends execute identical bytes and cannot draw different pictures.
+
+### A bug only the plugin could find
+
+`build_scene` computed everything correctly and **never wrote its `.pml`**. Only
+`Scene.write_pml()` did, and `watcon view` called it -- so the command line was
+fine while the plugin ran `@<path>` on a file that did not exist and failed
+*after* the analysis had already succeeded, which is the worst possible moment.
+`build_scene` now writes it: `pml_path` is an attribute that promises a file, and
+three other files were already being written there.
+
+### Two PyMOL details worth recording
+
+`get_startup_path(True)` returns the directories the **user** configured, which
+in a plain `pip install pymol` is none at all -- that list is populated by
+PyMOL's own Plugin Manager the first time it installs something. So
+`plugin_directory()` falls back: the user's directory, then `~/.pymol/startup`
+if it exists, then the bundled startup directory, which is always scanned.
+
+Deliberately **not** done: creating a user directory and registering it by
+rewriting `~/.pymolpluginsrc.py`. That file also carries autoload settings and
+plugin preferences, and rewriting it from a bare interpreter -- where none of
+that has been loaded -- would silently discard them. Installing a plugin must
+not cost someone their PyMOL configuration.
+
+### The dialog
+
+* structures folder, or PDB ids typed into a box and fetched (Phase 12);
+* **reference dropdown** filled from the folder, **chain dropdown** filled from
+  the reference structure itself;
+* H-bond cutoff, site radius, minimum waters per site, conserved-grade
+  threshold, minimum identity, workers -- all of which were hard-coded before
+  Phase 13 lifted them to parameters;
+* a **sortable site table**: site, grade, structures occupied, waters, and the
+  residues lining it. Selecting a row zooms to that site, shows its lining side
+  chains, and prints the residues with their individual grades. A site with no
+  ConSurf-scored lining residue reads "no data", with a tooltip saying that is
+  not the same as low conservation.
+
+A table rather than a 3D pick handler: it is far more reliable, and it sorts.
+
+- **Install:** `watcon plugin --install` writes a three-line shim into PyMOL's
+  startup directory. A shim, not a copy -- the code stays in the installed
+  package, so upgrading WatCon upgrades the plugin, and there is never a stale
+  second copy to debug. `--uninstall` removes it.
+- **Tests:** **566 passed, 2 skipped** (was 550). New `test_plugin.py` (16).
+  One of them imports the plugin package with `pymol` **blocked**, because a
+  plugin that cannot be imported without PyMOL cannot be checked by CI at all.
+  Another asserts the package has no module-scope imports whatsoever: PyMOL
+  imports every file in its startup directory at launch, so a plugin that drags
+  in scikit-learn there would slow every session.
+- **Verified in a live PyMOL:** dialog constructs, dropdowns fill (6 references,
+  chain A), a run draws 5 objects with 1085 atoms visible, and clicking a row
+  reports `Site 98 -- grade 9, occupied in 2/6 structures. Lined by: A20 (g9)`
+  with one site atom and eight lining atoms selected.
+- **Wheel checked:** `WatCon/pymol_plugin/` ships.
+

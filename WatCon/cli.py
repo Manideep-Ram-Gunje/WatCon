@@ -5,6 +5,7 @@
     watcon run      --input input.txt [--analysis analysis.txt]
     watcon validate --consurf FILE...
     watcon view     --prepared prepared/ --consurf grades.txt
+    watcon plugin   --install
     watcon demo
 
 ``run`` delegates to the existing :mod:`WatCon.WatCon` entry points, so
@@ -32,6 +33,119 @@ def _version() -> str:
         return __version__
     except Exception:                       # noqa: BLE001 - version is cosmetic
         return "unknown"
+
+
+# ---------------------------------------------------------------------------
+# plugin
+# ---------------------------------------------------------------------------
+
+#: What gets written into PyMOL's startup directory. A shim, not a copy: the
+#: real code stays in the installed package, so upgrading WatCon upgrades the
+#: plugin and there is never a stale second copy to debug.
+PLUGIN_SHIM = '''"""WatCon + ConSurf -- PyMOL plugin entry point.
+
+Written by `watcon plugin --install`. This file is a shim: the plugin itself
+lives in the installed WatCon package, so upgrading WatCon upgrades the plugin.
+Delete this file to uninstall.
+"""
+
+from WatCon.pymol_plugin import __init_plugin__  # noqa: F401
+'''
+
+PLUGIN_FILENAME = "watcon_consurf_plugin.py"
+
+
+def plugin_directory():
+    """Where to write the plugin shim, and why that directory.
+
+    Returns ``(path, explanation)``.
+
+    PyMOL scans several startup directories. ``get_startup_path(True)`` returns
+    only the ones the user configured -- which in a plain ``pip install pymol``
+    is **none at all**, because that list is populated by PyMOL's own Plugin
+    Manager the first time it installs something.
+
+    So: the user's own directory if there is one, then PyMOL's conventional
+    ``~/.pymol/startup`` if it already exists, and otherwise the bundled startup
+    directory, which is always scanned.
+
+    Deliberately *not* done: creating a user directory and registering it by
+    rewriting ``~/.pymolpluginsrc.py``. That file also carries the user's
+    autoload settings and plugin preferences, and rewriting it from a bare
+    interpreter -- where none of that has been loaded -- would silently discard
+    them. Installing a plugin must not cost someone their PyMOL configuration.
+    """
+    from pymol.plugins import get_startup_path
+
+    user = get_startup_path(True)
+    if user:
+        return user[0], "your PyMOL plugin directory"
+
+    conventional = os.path.join(os.path.expanduser("~"), ".pymol", "startup")
+    if os.path.isdir(conventional):
+        return conventional, "PyMOL's per-user plugin directory"
+
+    everything = get_startup_path()
+    if not everything:
+        raise RuntimeError("PyMOL reported no plugin startup directory at all.")
+    return everything[0], ("PyMOL's bundled startup directory (no per-user one "
+                           "is configured yet)")
+
+
+def cmd_plugin(args) -> int:
+    try:
+        import pymol.plugins                     # noqa: F401
+    except ImportError:
+        print("error: PyMOL is not importable from this Python\n"
+              "       (%s).\n"
+              "       The plugin needs WatCon and PyMOL in the same "
+              "interpreter.\n"
+              "       Either install PyMOL here, or install WatCon into the "
+              "Python that PyMOL uses." % sys.executable, file=sys.stderr)
+        return 1
+
+    try:
+        directory, explanation = plugin_directory()
+    except RuntimeError as error:
+        print("error: %s" % error, file=sys.stderr)
+        return 1
+    target = os.path.join(directory, PLUGIN_FILENAME)
+
+    if args.uninstall:
+        if os.path.exists(target):
+            os.remove(target)
+            print("Removed %s" % target)
+        else:
+            print("Nothing to remove at %s" % target)
+        return 0
+
+    if os.path.exists(target) and not args.force:
+        print("Already installed at %s" % target)
+        print("Use --force to overwrite, or --uninstall to remove it.")
+        return 0
+
+    os.makedirs(directory, exist_ok=True)
+    with open(target, "w") as handle:
+        handle.write(PLUGIN_SHIM)
+
+    # Fail now rather than at PyMOL startup: the shim imports WatCon, so if the
+    # package is not importable from this interpreter the menu entry would
+    # simply never appear, with the reason buried in PyMOL's log.
+    try:
+        import WatCon.pymol_plugin                # noqa: F401
+    except Exception as error:                    # noqa: BLE001
+        print("warning: wrote %s, but importing WatCon.pymol_plugin failed "
+              "here: %s" % (target, error), file=sys.stderr)
+
+    print("Installed the PyMOL plugin into %s:" % explanation)
+    print("  %s" % target)
+    print()
+    print("Restart PyMOL, then:  Plugin  >  WatCon + ConSurf")
+    print()
+    print("The file is a three-line shim -- the plugin itself stays in the")
+    print("installed package, so upgrading WatCon upgrades the plugin.")
+    print("Remove it with:  watcon plugin --uninstall")
+    return 0
 
 
 # ---------------------------------------------------------------------------
@@ -187,6 +301,25 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", metavar="COMMAND")
 
     # -- prepare ------------------------------------------------------------
+    plugin = subparsers.add_parser(
+        "plugin",
+        help="install the WatCon + ConSurf plugin into PyMOL",
+        description=(
+            "Write a shim into PyMOL's startup directory so that "
+            "Plugin > WatCon + ConSurf opens the dialog. The plugin code stays "
+            "in the installed package, so upgrading WatCon upgrades the "
+            "plugin. Requires PyMOL and WatCon in the same Python."
+        ),
+    )
+    plugin.add_argument("--install", action="store_true",
+                        help="install it (the default action)")
+    plugin.add_argument("--uninstall", action="store_true",
+                        help="remove it again")
+    plugin.add_argument("--force", action="store_true",
+                        help="overwrite an existing installation")
+    plugin.set_defaults(func=cmd_plugin)
+
+    # -- fetch --------------------------------------------------------------
     fetch = subparsers.add_parser(
         "fetch",
         help="download structures from RCSB by PDB id",
