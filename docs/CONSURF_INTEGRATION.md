@@ -661,11 +661,22 @@ Verified against the running code, not recalled.
 | Pooling separate ConSurf runs at shared MSA columns | `conservation_by_msa_column`, `family_summary` |
 | One row per conserved site, CSV | `write_conservation_report` |
 | Dataset preparation without a MODELLER licence | `watcon prepare`, `superpose.kabsch` |
+| Structures by PDB id, **mmCIF included** | `watcon fetch`, `structure_io`, `fetch.py` |
 | A PyMOL session that opens | `watcon view` |
+| **Interactive use inside PyMOL**, with a site table | `watcon plugin --install`, `pymol_plugin/` |
+| The scene as data, so every front end draws the same picture | `scene.build_scene` -> `Scene` |
 
 The graph point is the one with the most reach: because conservation sits on
 NetworkX node attributes, **any graph analysis can be filtered or weighted by it
 without new code** -- shortest paths, centrality, subgraph extraction.
+
+`scene.build_scene` is the second most reusable thing here. It returns a `Scene`
+carrying one `Site` record per occupied water site -- centre, ConSurf grade,
+occupancy, how many structures hold a water there, and **which residues line it,
+with their individual grades** -- alongside an ordered list of PyMOL commands.
+Anything that wants the analysis without the picture can take the records and
+ignore the commands; anything that wants a different picture can take the
+records and write its own. It imports PyMOL not at all.
 
 ### Buildable on what exists
 
@@ -681,6 +692,23 @@ without new code** -- shortest paths, centrality, subgraph extraction.
   and unit-tested; it needs one ConSurf run per family member.
 * **Burial-matched analysis.** The sharpest open question from the benchmark --
   whether conservation separates sites beyond acting as a burial proxy.
+
+### Validated on
+
+| dataset | scale | outcome |
+|---|---|---|
+| Barnase | 6 structures, 1 ConSurf run | 193 sites, 165 scored, 57 conserved. Asserted by the test suite, so a regression breaks a test rather than a paper. |
+| **PTP1B** | **253 structures, 1 ConSurf run, 126 s** | 293 sites, 282 scored, 96 conserved. Finds the catalytic water positions -- the P-loop/Gln262 site occupied in 213/253 structures, and the WPD-loop sites at Asp181 -- with no knowledge of the chemistry. |
+
+The PTP1B run needed **no code changes**, which is what the robustness, mmCIF and
+scene work was for.
+
+Read the PTP1B result carefully before building on it. Conservation re-ranks the
+293 sites toward the active site (17 of the top 50 touch catalytic machinery,
+against 4 by occupancy alone) but does **not** put them first: the top ten by
+conservation are buried structural waters. And the headline "35% of conserved
+sites are catalytic vs 1% of the rest" is partly circular, since a site is called
+conserved precisely because a conserved residue lines it.
 
 ### What the benchmark showed, so nobody builds on a false premise
 
