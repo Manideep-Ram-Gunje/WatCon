@@ -1020,3 +1020,90 @@ tool could not open it.
   all, and now say so explicitly instead of failing inside a reader. Extracting
   one chain first is the workaround; doing that automatically is not attempted.
 
+---
+
+## 2026-09-11 - Phase 13: the scene becomes data, and gets better
+
+- **What:** the picture is now built once, as a `Scene` object, and both
+  `watcon view` and the forthcoming PyMOL plugin consume it. Then four things
+  the first session got wrong or left out.
+
+### Why the refactor came first
+
+`watcon view` writes a `.pml`; the plugin will drive a live session. If each
+built its own scene they would drift until the file and the plugin disagreed
+about what the data shows. This project has already been bitten by that class of
+bug twice -- the duplicated contact walk, and the two pickle shapes.
+
+`WatCon/scene.py` holds all of it: `build_scene()` returns a `Scene` carrying the
+files written, one `Site` record per occupied site, and an **ordered list of
+PyMOL command strings**. Write them to a file and you have `watcon view`; feed
+them to `cmd.do` and you have the plugin. The module imports PyMOL not at all, so
+it is testable everywhere -- which matters, because **CI has no PyMOL**, and a
+scene bug only a running PyMOL could catch would reach users.
+
+`view.py` is now thirty lines of "build the scene, write it out".
+
+### What the first session got wrong
+
+**Yellow, not grey, for no data.** Residues with no ConSurf score were `grey70`,
+which is almost exactly the near-white of grades 3-6. So "we have no score for
+this residue" and "this residue is averagely conserved" looked alike. Those are
+opposite claims. Yellow is ConSurf's own convention for insufficient data.
+
+**Sphere radius now tracks occupancy.** Every site was the same size, so one
+found in 6/6 structures looked exactly like one found in 1/6 -- discarding the
+structural half of the measurement in the picture that is supposed to show both.
+The occupancy fraction goes in the PDB occupancy column, so a single
+`alter sites, vdw=0.25+0.45*q` sizes all 190 spheres.
+
+**The network was never drawn.** WatCon is a water *network* tool and the scene
+was loose spheres. There is now a `WatCon_contacts` group: sticks for the
+residues WatCon says line each conserved site, and dashes for the polar contacts
+among them. WatCon chooses the residues; PyMOL only decides which atom pair each
+dash connects. Off by default, because 57 sites' worth is dense.
+
+**Site records carry their lining residues.** `ClusterConservation.residue_keys`
+held exactly this and nothing surfaced it. Each `Site` now knows its residues and
+their individual grades -- which is what the plugin's site table will show.
+
+Also: `cartoon_transparency` dropped from the default view, and the B-factor
+column fixed. The old writer put it one column late; it parsed only because the
+trailing digit fell off the end of the field, which works until a value changes
+width.
+
+### A PyMOL trap worth recording
+
+PyMOL splits on `;` **inside a `#` comment**. This line:
+
+```
+# WatCon chose the residues; PyMOL only decides which atom pair each
+```
+
+ran everything after the semicolon as Python and raised `SyntaxError: invalid
+syntax` in the middle of an otherwise working session. `test_scene.py` now
+asserts that no emitted command contains a semicolon.
+
+Second trap, same session: a PyMOL **group carries its own enabled flag**.
+Disabling `lining_residues` and `site_contacts` left the `WatCon_contacts`
+container switched on, so the group appeared in the object panel as enabled.
+
+### A bug the new tests caught
+
+`highly_conserved` was a parameter of `build_scene` but `Site.conserved` read the
+**module constant**, so building at threshold 9 wrote the correct PDB while
+`Scene.conserved_sites` still reported the grade-8 set. The property is gone --
+the threshold belongs to the `Scene`, and the `Scene` does the filtering. One
+source of truth.
+
+- **Tests:** **550 passed, 2 skipped** (was 529). New `test_scene.py` (21), all
+  of which run without PyMOL. The existing headless-PyMOL test still passes.
+- **Verified in PyMOL:** 6 objects load, 1085 atoms visible, only `protein` and
+  `sites_conserved` enabled on opening, sphere radii spanning 0.33-0.70 A, 392
+  atoms in the lining-residue selection, and **no errors of any kind**.
+- **Unchanged:** 193 clusters / 190 occupied / 165 scored / 57 conserved. These
+  four numbers are now asserted by a test rather than quoted from memory.
+- **Not done:** a floating 3D legend. It reads as a gimmick and places badly at
+  arbitrary zoom; the legend is printed to the log instead, and now says what
+  yellow and the sphere sizes mean.
+
