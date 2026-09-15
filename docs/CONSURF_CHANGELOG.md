@@ -1384,3 +1384,62 @@ without saying so.
   atoms are network nodes carrying grade 9; it appears in water contacts; the
   identity check passes at 1.0; MDAnalysis's bare `protein` is shown to miss it.
 
+---
+
+## 2026-09-16 - Phase 18: place family structures on an alignment by sequence, checked
+
+- **What:** `WatCon/alignment.py` maps each structure of a protein family onto a
+  shared alignment by sequence, then cross-checks structures of the same protein
+  against each other. Needed because the authors' own published PTP alignment
+  has two defects that a trusting mapping reproduces silently.
+
+### The two defects, in the published alignment
+
+| row | defect | effect on a trusting mapping |
+|---|---|---|
+| 5HDE | omits CSP231, the catalytic phosphocysteine | every later column shifted, or the nucleophile vanishes |
+| 3O4U | slides E124, D125 and E241 across disordered loops | E241 lands in the column every other PTP fills with the WPD general-acid Asp |
+
+3O4U's native numbering jumps W234 P235 -> E241 (236-240 disordered); the
+aligner slid E241 left across the gap. Mapped "by sequence" to that row, the
+slide is reproduced exactly: nothing in the row looks wrong.
+
+### How it is caught
+
+1. `map_structure_to_row` aligns a structure's own residues to its row
+   (Biopython `PairwiseAligner`) and refuses below 95% identity. Residues the row
+   lacks get **no** column, never a neighbour's.
+2. `consensus_columns` merges rows of structures of **one** protein by native
+   residue number. Two structures of one protein must put residue 241 in the
+   same column; where they disagree the residue is a conflict and excluded.
+   Where only one row places a residue, that column is used and its source
+   recorded - which is how 5HDE's CSP231 gets a column from 5J8R.
+3. `residue_index_for` feeds the result into the existing `ResidueIndex`, which
+   now accepts `None` for "no column" instead of failing on `int(None)`.
+
+Anchors are never hard-coded in the tests: they are read off PTP1B's own D181,
+Q262 and C215 through the mapping.
+
+### Verified on real data
+
+Ten RCSB structures (CA extracts, native numbering) against the ten
+corresponding rows of the published alignment (Zenodo 10.5281/zenodo.15213225,
+CC-BY-4.0; rows kept verbatim, defects included):
+
+- every structure matches its own row at identity **1.000**
+- the only residue without a letter in its row: **5HDE CSP231**
+- conflicts: **PTPN7 = {124, 125, 241}**, all 3O4U slides; PTPN1/6/12/22: **none**
+- WPD general-acid column: D in every structure except 3BRH (**A**, engineered
+  D195A) and 3O4U (**excluded**, its slid E241)
+- Q-loop column: Q in all ten; nucleophile column: C, or the engineered S in
+  4GRZ, 3BRH and 3OLR, and C for 5HDE's CSP231 via 5J8R
+
+A bug found by these tests, in the new code: the first PIR reader split the file
+on every `>`, and MODELLER's description lines contain `<unknown name>`.
+Headers are now only lines that start with `>`.
+
+- **Fixtures:** `data/examples/ptp_family/` - the ten alignment rows, CA-only
+  chain-A extracts of the ten structures (22-26 kB each), and a README with
+  provenance and licence.
+- **Tests:** new `tests/test_alignment_mapping.py` (23).
+

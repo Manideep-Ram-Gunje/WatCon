@@ -532,8 +532,13 @@ class ResidueIndex:
         source: Optional[str] = None,
     ) -> None:
         self._residues: List[StructureResidue] = list(residues)
-        self._msa_indices: Optional[List[int]] = (
-            None if msa_indices is None else [int(i) for i in msa_indices]
+        # An entry may be None: "this residue has no alignment column" -- a
+        # residue its row omits, or one whose rows disagree (WatCon.alignment).
+        # msa_column() already promises None for "cannot say", so it passes
+        # through rather than being forced to a number.
+        self._msa_indices: Optional[List[Optional[int]]] = (
+            None if msa_indices is None
+            else [None if i is None else int(i) for i in msa_indices]
         )
         self.source = source
 
