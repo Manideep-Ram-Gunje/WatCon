@@ -1324,3 +1324,63 @@ the mutation nor its irrelevance to the grade is forgotten downstream.
 - **Tests:** **610 passed, 2 skipped** (was 566). New
   `tests/test_ptp_family_runs.py` (44). No existing test changed.
 
+---
+
+## 2026-09-16 - Phase 17: modified residues are protein
+
+- **What:** in-chain modified residues (phospho-, oxidised and alkylated Cys,
+  phospho-Tyr/Thr/Ser, modified Lys, MSE and others) are now read as residues and
+  selected as protein everywhere. They were silently dropped.
+
+### How 5HDE lost its catalytic nucleophile
+
+5HDE's Cys231 is deposited as **CSP**, the phosphocysteine intermediate - a
+HETATM record. ConSurf grades it 9. WatCon lost it three independent ways:
+
+| layer | behaviour before |
+|---|---|
+| `residue_index.residues_from_pdb_file` | ATOM records only by default: 299 of 300 residues |
+| network builders' `protein` selection | MDAnalysis's `protein` keyword excludes CSP - 0 of its atoms |
+| `build_scene`, `view`, `demo`, plugin, CLI | never pass `custom_selection`, so nothing could add it back |
+
+Its phosphate hydrogen-bonds waters 563, 598 and 601 at 2.76-3.11 A. All of
+that contributed nothing, and nothing reported it.
+
+### The fix
+
+- `residue_index.MODIFIED_RESIDUES`: a **curated** table of polymer
+  modifications mapped to their MODRES parent (CSP, CSO, OCS -> C; PTR -> Y;
+  TPO -> T; MLY, KCX -> K; ...), merged into the residue table.
+- The residue walk accepts HETATM records **only** for those names by default,
+  so a free ligand named TYR stays a ligand and 7O7W's fused chromophore PIA
+  stays excluded, as the existing tests require.
+- `residue_index.protein_selection()` is now the single definition of protein.
+  It is used by the static builder's selection, all four of the dynamic
+  builder's, `collect_densities`, and `residues_from_universe`. MDAnalysis
+  already counts CME, MSE and HYP; the others it did not.
+
+### Measured impact on earlier results: none
+
+Checked before changing anything. Among the 253 PTP1B structures, only 1PTY
+(PTR on the bound peptide), 2CNH (a calcium ion named CA) and 9CYO/P/R (CME92,
+already protein to MDAnalysis) carry non-standard residues, none at a catalytic
+position. Barnase carries none. Re-run after the change:
+
+- barnase demo: **193 / 190 / 165 / 57**, unchanged (asserted in `test_scene.py`)
+- PTP1B, 253 structures: **293 / 293 / 282 / 96**, unchanged
+
+### Compatibility
+
+A user holding an **old** alignment, built from a FASTA that silently dropped a
+modified residue, will now get `ResidueIndex`'s length-mismatch error instead of
+columns shifted by one. That is the intended outcome: the old result was wrong
+without saying so.
+
+- **Fixture:** `data/examples/ptp_family/5HDE_A_csp_site.pdb` - real 5HDE,
+  native numbering, trimmed to 12 A around CSP231 (66 residues, 20 waters,
+  46 kB), so the real 5HDE ConSurf run attaches to it directly.
+- **Tests:** **622 passed, 2 skipped** (was 610). New
+  `tests/test_modified_residues.py` (12): CSP231 read once despite altlocs; its
+  atoms are network nodes carrying grade 9; it appears in water contacts; the
+  identity check passes at 1.0; MDAnalysis's bare `protein` is shown to miss it.
+

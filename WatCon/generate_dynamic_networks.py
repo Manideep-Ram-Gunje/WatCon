@@ -1470,7 +1470,7 @@ def collect_densities(topology_file, trajectory_file, active_region_definition, 
         tmp_txt = f"or {custom_selection}"
     else:
         tmp_txt = ''
-    ag = u.select_atoms(f'protein {tmp_txt}')
+    ag = u.select_atoms(f'{residue_index_module.protein_selection()} {tmp_txt}')
     ag.write(f'{output_name}.pdb')
 
     if active_region_COM:
@@ -1616,11 +1616,11 @@ def extract_objects_per_frame(pdb_file, trajectory_file, frame_idx, network_type
         #Separate key atom groups
         ag_wat = u.select_atoms(f'{water} and (sphzone {max_distance+0.5} protein)', updating=True)
         if not directed:
-            ag_protein = u.select_atoms(f'(protein {custom_sel}) and (name N* or name O* or name P* or name S*)', updating=True)
+            ag_protein = u.select_atoms(f'({residue_index_module.protein_selection()} {custom_sel}) and (name N* or name O* or name P* or name S*)', updating=True)
         else:
             # Restrict hydrogens to those near polar atoms to minimize guess_bonds() overhead
-            polar_heavy = u.select_atoms(f'(protein {custom_sel}) and (name N* or name O* or name P* or name S*)')
-            hydrogens = u.select_atoms(f'protein {custom_sel} and name H*')
+            polar_heavy = u.select_atoms(f'({residue_index_module.protein_selection()} {custom_sel}) and (name N* or name O* or name P* or name S*)')
+            hydrogens = u.select_atoms(f'({residue_index_module.protein_selection()} {custom_sel}) and name H*')
 
             # Find hydrogens near these heavy atoms (within 1.2 Å, a typical H-bond distance)
             from MDAnalysis.analysis.distances import distance_array
@@ -1641,7 +1641,7 @@ def extract_objects_per_frame(pdb_file, trajectory_file, frame_idx, network_type
             relevant_atoms.guess_bonds()  # Guess bonds only for relevant hydrogens
 
 
-            ag_protein = u.select_atoms(f"(protein {custom_sel}) and ((name H* and bonded (name N* or name O* or name P* or name S*)) or name N* or name O* or name P* or name S*)", updating=True)
+            ag_protein = u.select_atoms(f"({residue_index_module.protein_selection()} {custom_sel}) and ((name H* and bonded (name N* or name O* or name P* or name S*)) or name N* or name O* or name P* or name S*)", updating=True)
 
         ag_misc = u.select_atoms(f'not (protein or {water})', updating=True) #Keeping this for non-biological systems or where other solvent is important
 

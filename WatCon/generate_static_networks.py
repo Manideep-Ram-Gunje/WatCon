@@ -1416,7 +1416,7 @@ def extract_objects(pdb_file, network_type, custom_selection, active_region_refe
         #If not directed, only take oxygen atoms
         ag_wat = u.select_atoms(f"{water} and name O*", updating=True)
 
-    ag_protein = u.select_atoms(f'(protein {custom_sel}) and (name N* or name O* or name P* or name S*)', updating=True)
+    ag_protein = u.select_atoms(f'({residue_index_module.protein_selection()} {custom_sel}) and (name N* or name O* or name P* or name S*)', updating=True)
     ag_misc = u.select_atoms(f'not (protein or {water})', updating=True) #Keeping this for non-biological systems or where other solvent is important
 
     #Initiate active site reference atomgroup

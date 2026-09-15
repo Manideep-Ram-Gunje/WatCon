@@ -45,6 +45,8 @@ from typing import Dict, Iterable, List, Optional, Sequence, Tuple, Union
 
 __all__ = [
     "AMINO_ACID_3TO1",
+    "MODIFIED_RESIDUES",
+    "protein_selection",
     "ResidueIndexError",
     "ResidueKey",
     "StructureResidue",
@@ -88,6 +90,47 @@ AMINO_ACID_3TO1: Dict[str, str] = {
     "CYX": "C", "CYM": "C", "CSP": "C", "SEP": "S", "ASX": "D",
     "HSD": "H", "HSP": "H", "HSE": "H", "MSE": "M",
 }
+
+#: Residues chemically modified in place within a protein chain, mapped to the
+#: standard amino acid they derive from (the MODRES parent).  Deposited as
+#: HETATM, so a reader that takes ATOM records only drops them without a word.
+#:
+#: That is not hypothetical: 5HDE's catalytic nucleophile is CSP231, the
+#: phosphocysteine intermediate.  ConSurf grades it 9; WatCon read 299 of 5HDE's
+#: 300 residues, attached no conservation to it, and -- because MDAnalysis's
+#: ``protein`` selection excludes CSP -- gave its phosphate no water contacts.
+#:
+#: Deliberately a curated list of polymer modifications, not "any HETATM whose
+#: name looks like an amino acid": a free TYR ligand must stay a ligand, and a
+#: fused chromophore such as 7O7W's PIA must stay excluded.
+MODIFIED_RESIDUES: Dict[str, str] = {
+    # cysteine
+    "CSP": "C", "CME": "C", "CSO": "C", "OCS": "C", "CSD": "C", "CAS": "C",
+    "CSX": "C", "SCH": "C", "SMC": "C", "YCM": "C", "SNC": "C", "CSS": "C",
+    # phosphorylated / sulfated
+    "PTR": "Y", "TPO": "T", "SEP": "S", "TYS": "Y",
+    # lysine
+    "MLY": "K", "M3L": "K", "ALY": "K", "KCX": "K", "LLP": "K",
+    # others
+    "MSE": "M", "FME": "M", "OMT": "M", "HYP": "P", "NEP": "H", "MHS": "H",
+    "CGU": "E", "AGM": "R",
+}
+
+AMINO_ACID_3TO1.update(MODIFIED_RESIDUES)
+
+
+def protein_selection() -> str:
+    """MDAnalysis selection for protein, **including** in-chain modified residues.
+
+    MDAnalysis's own ``protein`` keyword recognises CME, MSE and HYP but not CSP,
+    CSO, OCS, PTR, TPO, SEP or the modified lysines, so a network built on
+    ``protein`` silently loses them and every water they bind.  Every protein
+    selection in WatCon is built from this one function so the network builders
+    and the residue walk cannot disagree about what counts as protein.
+
+    Returned parenthesised, so callers can append ``or <custom selection>``.
+    """
+    return "(protein or resname %s)" % " ".join(sorted(MODIFIED_RESIDUES))
 
 
 def _resolve_table(custom_residues: Optional[Dict[str, str]]) -> Dict[str, str]:
@@ -241,8 +284,11 @@ def residues_from_pdb_file(
     custom_residues:
         Extra three-letter to one-letter mappings.
     include_hetatm:
-        Also consider ``HETATM`` records, for modified residues that are part of
-        the chain (``MSE``, for example).  Off by default.
+        Accept *every* ``HETATM`` residue whose name is in the residue table.
+        Off by default.  Regardless of this flag, ``HETATM`` residues listed in
+        :data:`MODIFIED_RESIDUES` -- in-chain modifications such as CSP or MSE --
+        are always read, because leaving them out removes real residues from
+        the chain (5HDE's catalytic CSP231 was lost this way).
 
     Returns
     -------
@@ -258,7 +304,7 @@ def residues_from_pdb_file(
     a residue must find it by another route.
     """
     table = _resolve_table(custom_residues)
-    prefixes = ("ATOM  ", "HETATM") if include_hetatm else ("ATOM  ",)
+    prefixes = ("ATOM  ", "HETATM")
 
     residues: List[StructureResidue] = []
     seen: set = set()
@@ -275,6 +321,9 @@ def residues_from_pdb_file(
 
         resname = line[_RESNAME].strip().upper()
         if resname not in table:
+            continue
+        if (line.startswith("HETATM") and not include_hetatm
+                and resname not in MODIFIED_RESIDUES):
             continue
 
         chain_id = line[_CHAIN]
@@ -309,7 +358,7 @@ def residues_from_universe(
     universe,
     chain: Optional[str] = None,
     custom_residues: Optional[Dict[str, str]] = None,
-    selection: str = "protein",
+    selection: Optional[str] = None,
 ) -> List[StructureResidue]:
     """Ordered protein residues from an MDAnalysis Universe.
 
@@ -324,6 +373,9 @@ def residues_from_universe(
     on it -- :func:`check_sequence_consistency` is there for exactly that.
     """
     table = _resolve_table(custom_residues)
+    if selection is None:
+        # Same definition of protein as the network builders and the file walk.
+        selection = protein_selection()
 
     residues: List[StructureResidue] = []
     for residue in universe.select_atoms(selection).residues:
