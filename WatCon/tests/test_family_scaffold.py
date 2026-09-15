@@ -18,7 +18,6 @@ from __future__ import annotations
 import pytest
 
 from WatCon.evolutionary import (
-    CROSS_RUN_AGREEMENT,
     ColumnConservation,
     ConservationError,
     ConservationMap,
@@ -160,7 +159,10 @@ def test_spread_exposes_disagreement_between_runs():
 
     assert agree.spread == pytest.approx(0.1)
     assert disagree.spread == pytest.approx(3.0)
-    assert disagree.spread > CROSS_RUN_AGREEMENT["grade_changed_fraction"]
+    # Previously compared the spread (a score range) with
+    # CROSS_RUN_AGREEMENT["grade_changed_fraction"] (a proportion of positions):
+    # different units, so it asserted nothing. The meaningful property is order.
+    assert disagree.spread > agree.spread
 
 
 def test_spread_is_undefined_for_a_single_member():

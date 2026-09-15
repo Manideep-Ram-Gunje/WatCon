@@ -280,7 +280,8 @@ protein is not residue 40 of another — the correspondence runs through the MSA
 
    ConSurf scores are z-normalised **within each run**, so pooled values are
    only relatively comparable, and grades are per-run bins that must never be
-   averaged. Two runs of the *same* barnase sequence from different starting
-   structures agree at only ρ ≈ 0.37 — that is the floor. Prefer
+   averaged. Independent runs of barnase, with residues paired by sequence,
+   agree at ρ = 0.94–0.97 (an earlier version of this page said ρ ≈ 0.37; that
+   came from pairing runs by position across different numbering). Prefer
    ``unanimous_conserved``, which uses each run's own verdict instead of
    comparing separately normalised numbers.

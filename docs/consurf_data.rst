@@ -183,8 +183,10 @@ Two conventions catch people out, so WatCon states them in every output:
 .. caution::
 
    **Do not compare raw scores between different ConSurf runs.** Both are
-   normalised within their own run. Two runs of the same barnase sequence from
-   different starting structures agree at only ρ ≈ 0.37. For pooling across a
+   normalised within their own run, so they are only relatively comparable --
+   and always pair residues by sequence, never by ConSurf position: two barnase
+   runs numbered differently agree at ρ = 0.97 paired by sequence, but appear to
+   agree at only 0.38 paired by position. For pooling across a
    family, use :func:`WatCon.evolutionary.conservation_by_msa_column` and prefer
    ``unanimous_conserved``, which uses each run's own verdict rather than
    comparing separately normalised numbers.

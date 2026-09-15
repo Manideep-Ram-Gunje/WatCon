@@ -1443,3 +1443,54 @@ Headers are now only lines that start with `>`.
   provenance and licence.
 - **Tests:** new `tests/test_alignment_mapping.py` (23).
 
+---
+
+## 2026-09-16 - Correction: there is no 0.37 cross-run "floor"
+
+- **What:** since Phase 5d this project has stated that two ConSurf runs of the
+  same barnase sequence from different starting structures agree at only
+  **rho ~= 0.37**, and used that as the noise floor for any family-level claim.
+  **It was wrong.** Corrected in the README, `CONSURF_INTEGRATION.md`, the
+  conservation tutorial, `consurf_data.rst`, and `experiments/barnase_waters/FINDINGS.md`.
+
+### How it was found
+
+Running the family path on the five PTP runs gave pairwise score correlations
+between *different* proteins of **rho = 0.91-0.96** -- far above the supposed
+same-protein floor. Two explanations were tested, not assumed:
+
+1. *The five runs share a homologue pool, so they are not independent.* **No.**
+   Their 150-sequence MSAs overlap at Jaccard <= 0.01; one sequence is common to
+   all five.
+2. *The 0.37 is an artefact.* **Yes.** The 1BRS run is numbered from residue 3,
+   the P00648 run from residue 48, and the Phase 5d comparison paired them by
+   position (the family-scaffold test helper `index_for`, which is documented as
+   valid only for runs of the same sequence and numbering).
+
+| 1BRS run vs | paired by position | paired by sequence |
+|---|---|---|
+| P00648, depth 150 | residue identity 0.50, rho **0.379** | 106 identical, rho **0.969** |
+| P00648, depth 50 | residue identity 0.50, rho **0.367** | 106 identical, rho **0.941** |
+
+The recorded figures, 0.380 and 0.367, are exactly the position-paired ones. The
+entry for Phase 5d above is left as it was written; this entry supersedes its
+second and third table rows.
+
+### What was and was not affected
+
+- `CROSS_RUN_AGREEMENT` (score rho 0.955, P00648 depth 150 vs 50) is **valid**:
+  those runs share numbering, so position and sequence pairing coincide.
+- The barnase study's rho = -0.375 (site occupancy vs conservation) is a
+  different quantity and is **unaffected**.
+- No code computed the 0.37; it was an analysis figure repeated in prose.
+- The family scaffold refuses to pool without an alignment, and
+  `WatCon.alignment` (Phase 18) pairs structures by sequence, so the error class
+  is closed in code.
+
+- **Also fixed:** `test_spread_exposes_disagreement_between_runs` compared a
+  score spread with `CROSS_RUN_AGREEMENT["grade_changed_fraction"]` -- a range
+  against a proportion, so it asserted nothing. Now asserts the ordering it meant.
+- **Tests:** new `tests/test_cross_run_agreement.py` (5) pins the correct
+  sequence-paired figures **and** the position-paired artefact, so pairing runs
+  of differently numbered structures by position cannot quietly return.
+

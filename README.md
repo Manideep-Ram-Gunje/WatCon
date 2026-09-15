@@ -199,9 +199,13 @@ Stated plainly, because they matter more than the headline:
 - **Burial is not disentangled**: buried residues are both more conserved
   (median −0.694 vs +0.180) and more likely to hold ordered water. No causal
   claim is made.
-- Cross-run ConSurf agreement is the ceiling on any family-level claim: two runs
-  of the *same* barnase sequence from different starting structures agree at only
-  ρ ≈ 0.37. Effects smaller than that are inside ConSurf's own noise.
+- ConSurf scores are normalised within each run, so separate runs are only
+  relatively comparable. Measured agreement between independent runs of barnase,
+  paired by sequence: ρ = 0.955 (same sequence, two MSA depths) and 0.94–0.97
+  (different starting structures). An earlier version of this README gave
+  ρ ≈ 0.37 for the latter; that figure came from pairing the two runs by
+  position across different numbering, so half the pairs were different amino
+  acids. There is no 0.37 floor.
 - The multi-protein family path (`conservation_by_msa_column`) is built and
   tested, but has never been run on a real family — the join is tested, the
   biology is not.

@@ -583,18 +583,27 @@ the first underscore) *before* the full stem, so the prefix `P00648` matched bot
 and the alphabetically first won. Now the most specific token is tried first, and
 an ambiguous match is refused rather than resolved arbitrarily.
 
-**Measured cross-run agreement**, the honest floor for any family claim:
+**Measured cross-run agreement** between independent ConSurf runs of barnase:
 
-| pair | score ρ | grade ρ | grade changed |
+| pair | residues paired by | score ρ | grade ρ |
 |---|---|---|---|
-| P00648 depth 150 vs depth 50 | 0.955 | 0.947 | 42% |
-| 1BRS run vs P00648 depth 150 | **0.380** | 0.365 | 62% |
-| 1BRS run vs P00648 depth 50 | **0.367** | 0.360 | 66% |
+| P00648 depth 150 vs depth 50 | same numbering (107 residues) | 0.955 | 0.947 |
+| 1BRS run vs P00648 depth 150 | sequence alignment (106 identical) | **0.969** | 0.952 |
+| 1BRS run vs P00648 depth 50 | sequence alignment (106 identical) | **0.941** | 0.940 |
 
-The same protein, run from a different starting structure, agrees at only
-ρ ≈ 0.37. Recorded in `CROSS_RUN_AGREEMENT`. Grades are never averaged (ordinal
-per-run bins); `spread` accompanies every pooled value; the recommended statistic
-is `unanimous_conserved`, which uses each run's own verdict rather than comparing
+**Correction.** An earlier version of this table gave **0.380** and **0.367** for
+the last two rows and concluded that "the same protein, run from a different
+starting structure, agrees at only ρ ≈ 0.37". Those runs had been paired by
+position. P00648 is numbered from residue 48 and 1BRS from 3, so position-paired,
+half of the pairs held different amino acids (residue identity 0.50) -- the same
+class of error the residue-identity layer exists to prevent. Paired by sequence,
+the runs agree at 0.97 and 0.94. There is no 0.37 floor.
+`WatCon/tests/test_cross_run_agreement.py` now pins both pairings.
+
+`CROSS_RUN_AGREEMENT` (the depth-150 vs depth-50 row, which shares numbering) was
+unaffected. Grades are never averaged (ordinal per-run bins); `spread`
+accompanies every pooled value; the recommended statistic is
+`unanimous_conserved`, which uses each run's own verdict rather than comparing
 separately normalised scores.
 
 ### 15.4 The study — `experiments/barnase_waters/`
