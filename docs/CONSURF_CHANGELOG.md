@@ -1271,3 +1271,56 @@ occupancy to three figures.
 - **No code changes were needed.** The pipeline ran on 253 real structures
   first time, which is what Phases 11-14 were for.
 
+---
+
+## 2026-09-16 - Phase 16: the five PTP ConSurf runs, verified and pinned
+
+- **What:** ConSurf runs for PTPN6 (4GRZ), PTPN7 (1ZC0), PTPN12 (5HDE) and
+  PTPN22 (3BRH), chain A, joining PTP1B (1AAX). The first real multi-protein
+  family this project holds. Filed, verified against independent evidence, and
+  pinned as tests before anything is pooled across them.
+
+### Where the data went
+
+The four result bundles (~33 MB each) were copied to
+`experiments/benchmark/data/consurf_raw/` beside the PTP1B bundle, **hash-verified,
+and only then** removed from the repository root. Grades files and ConSurf's
+annotated PDBs sit beside 1AAX in `experiments/benchmark/consurf/`.
+
+Into the repository, as CI fixtures: the five grades files (43-46 kB, all LF),
+and a **CA-only extract** of each annotated PDB (23-50 kB instead of 245-507 kB).
+ConSurf writes the grade on every atom of a residue, so the CA line carries it.
+The extracts reproduce the full files' cross-check **exactly** - identical
+checked, agree, mismatch, missing and blank counts for all five.
+
+### What was verified, and against what
+
+| check | evidence independent of our parser | result |
+|---|---|---|
+| grades are what ConSurf wrote | ConSurf's own annotated-PDB B-factors | **1461/1461 agree** |
+| runs are poolable | provenance | all webserver, Bayesian, 150 homologues |
+| catalytic machinery conserved | PTP biochemistry | P-loop 9 except one variable position (8 or 7); WPD general-acid column and Q-loop Gln grade 9 in all five |
+| what the queries are | the PDB's SEQADV records | 1AAX C215S, 4GRZ C453S, 3BRH C227S + D195A; 5HDE carries CSP231, the phospho-Cys intermediate |
+
+ConSurf grades the alignment **column**, so a Cys-to-Ser query still reads
+Cys-conserved (98-99% of homologues). The tests assert both facts, so neither
+the mutation nor its irrelevance to the grade is forgotten downstream.
+
+### Found while verifying - fixed in later phases, recorded now
+
+- **WatCon silently drops 5HDE's catalytic CSP231.** ConSurf grades it 9. Our
+  residue reader reads ATOM records only by default, the network builder's
+  `protein` selection excludes CSP (0 of 16 atoms), and no front end passes
+  `custom_selection`. Measured impact on earlier results: none - across the 253
+  PTP1B structures and barnase no modified residue sits at a catalytic position.
+- **The authors' published family alignment has two defects.** Its 5HDE row
+  omits CSP231, and 3O4U's row slides residues across disordered loops (E241 into
+  the WPD-Asp column; E124/D125 likewise).
+- **`experiments/benchmark` Phase A overstates its PTP figure.** The "99.0%" is
+  produced by our own reader skipping CSP230 in the authors' renumbered 5HDE, not
+  measured behaviour of published WatCon; its "ours 0 wrong" column checks the
+  identity-to-ordinal lookup against stand-in columns, not a real alignment.
+
+- **Tests:** **610 passed, 2 skipped** (was 566). New
+  `tests/test_ptp_family_runs.py` (44). No existing test changed.
+

@@ -25,3 +25,23 @@ What each one exercises:
 
 Full result bundles, including the annotated PDBs used for the B-factor
 cross-check, are in `../exploratory/`.
+
+## Protein tyrosine phosphatase family
+
+One ConSurf run per member, chain A, all webserver / Bayesian / 150 homologues,
+all LF. Used by `tests/test_ptp_family_runs.py` and the family path.
+
+| Grades file | CA extract | PDB | UniProt | Gene | Query state |
+|---|---|---|---|---|---|
+| `1AAX_A.grades.txt` | `1AAX_A.consurf_ca.pdb` | 1AAX | P18031 | PTPN1 | C215S trap |
+| `4GRZ_A.grades.txt` | `4GRZ_A.consurf_ca.pdb` | 4GRZ | P29350 | PTPN6 | C453S trap |
+| `1ZC0_A.grades.txt` | `1ZC0_A.consurf_ca.pdb` | 1ZC0 | P35236 | PTPN7 | wild type |
+| `5HDE_A.grades.txt` | `5HDE_A.consurf_ca.pdb` | 5HDE | Q05209 | PTPN12 | CSP231 phospho-Cys |
+| `3BRH_A.grades.txt` | `3BRH_A.consurf_ca.pdb` | 3BRH | Q9Y2R2 | PTPN22 | C227S + D195A trap |
+
+The `*.consurf_ca.pdb` files keep only the CA line of ConSurf's
+`*_ATOMS_section_With_ConSurf.pdb` (the grade is written on every atom, so the
+CA carries it). They reproduce the full file's cross-check exactly — identical
+checked/agree/mismatch/missing/blank counts, 1461/1461 — at ~25 kB instead of
+245–507 kB. The full bundles (~33 MB each) live outside this repository in
+`experiments/benchmark/data/consurf_raw/`.

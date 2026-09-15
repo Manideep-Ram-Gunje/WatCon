@@ -44,6 +44,27 @@ BUNDLES = [
     ("1788241897_ConSurf.tar.gz", "1BRS_A"),
 ]
 
+# -- the protein tyrosine phosphatase family --------------------------------
+#: One ConSurf run per member, chain A: {PDB id: (UniProt, gene)}.  Each has a
+#: grades file and a CA-only extract of ConSurf's own annotated PDB (the grade
+#: is written on every atom of a residue, so the CA line carries it; the
+#: extract reproduces the full file's cross-check exactly, 1461/1461).
+PTP_FAMILY = {
+    "1AAX": ("P18031", "PTPN1"),
+    "4GRZ": ("P29350", "PTPN6"),
+    "1ZC0": ("P35236", "PTPN7"),
+    "5HDE": ("Q05209", "PTPN12"),
+    "3BRH": ("Q9Y2R2", "PTPN22"),
+}
+
+
+def ptp_grades(pdb_id: str) -> Path:
+    return FIXTURES / f"{pdb_id}_A.grades.txt"
+
+
+def ptp_annotated_ca(pdb_id: str) -> Path:
+    return FIXTURES / f"{pdb_id}_A.consurf_ca.pdb"
+
 
 def bundle_member(archive: str, member: str) -> bytes:
     """Read one member out of a ConSurf result bundle without extracting it."""
