@@ -1494,3 +1494,78 @@ second and third table rows.
   sequence-paired figures **and** the position-paired artefact, so pairing runs
   of differently numbered structures by position cannot quietly return.
 
+---
+
+## 2026-09-16 - Phase 19: alternate conformers stop being counted twice
+
+- **What:** residues modelled in two or more alternate positions no longer turn
+  one hydrogen-bonding atom into several network nodes. `WatCon/conformers.py`
+  keeps, per residue, every position tied for the highest mean occupancy and drops
+  only positions that are strictly less populated. Both network builders apply
+  it, waters included. Code committed in `d54c04b`; this entry was meant to go
+  with it and was lost to a formatting error in the commit script.
+
+### Measured before deciding
+
+| | 2F71 | 8U1E | PanDDA ensembles (5QFP, 5QFS, 5QE2, 5QF8) |
+|---|---|---|---|
+| duplicate water-protein edges | 1.0 percent | 4.3 percent | **about 70 percent** |
+
+188 of the 253 prepared PTP1B structures carry alternate conformers. The
+conservation join de-duplicates to residues, so it was never inflated; WatCon's
+own edge counts were.
+
+### Two decisions, both put to the user with the measurements
+
+1. **Most populated position, not first-listed.** In 8U1E, 4GRZ and 5HDE the
+   first-listed position is the minority state in 21-33 percent of
+   alternate-conformer residues.
+2. **Ties keep every tied position.** Not in the first question, and it turned
+   out to decide almost everything: **92 percent** of alternate-conformer
+   residues in the PTP1B set (21,719 of 23,521) and **95 percent** in barnase are
+   exact ties -- 0.50/0.50, or four positions at 0.25 in the PanDDA models. A
+   "ties go to the first-listed" rule discarded real contacts arbitrarily. On
+   barnase it removed Asp54 from a grade-9 site whose water touched only
+   conformer B at 0.50 (and Ser85 from two others), changing 165 / 57 to
+   164 / 55. Keeping tied positions restores exactly 165 / 57.
+
+### A bug found in the first version of this change
+
+The filter was applied to the water selection, but both builders then read each
+water's atoms from `mol.atoms` -- the **whole residue** -- which brought the
+filtered positions straight back. Waters ignored the policy, and the builder's
+old "multiple oxygens, using the first" fallback chose for them. Found because
+the in-builder PTP1B run disagreed with the same policy applied to pre-filtered
+files (293 vs 295 clusters). Water atoms now come from the filtered group, only
+when a filter ran, so structures without altlocs are untouched. The dynamic
+builder's flag is set before its `try`, whose `except` path builds a water-only
+network and would otherwise have raised `NameError`.
+
+### Effect on reported numbers
+
+| | before | after |
+|---|---|---|
+| barnase demo | 193 / 190 / 165 / 57 | **193 / 190 / 165 / 57** (unchanged) |
+| PTP1B, 253 structures | 293 / 293 / 282 / 96 | **295 / 295 / 278 / 92** |
+
+The PTP1B catalytic sites did not change: the P-loop/Gln262 site is still
+occupied in 213/253 structures, the Gln262-lined sites in 192/253, the WPD/Asp181
+sites in 197 and 191/253. Ranked by conservation then occupancy, 19 of the top 50
+sites touch catalytic machinery (previously 17), against 4 by occupancy alone;
+the top ten are still buried structural waters. README and
+`CONSURF_INTEGRATION.md` updated; site labels are no longer quoted, because they
+are cluster numbers from one run.
+
+### Limits, stated
+
+- Tied duplicates remain by design, so WatCon's own edge counts stay inflated for
+  structures with many tied positions -- above all the PanDDA ensembles.
+- A water node holds one oxygen, so a water with two *tied* positions keeps the
+  first surviving one. 470 such waters in the PTP1B set, none in barnase.
+- The builders' pre-existing behaviour of failing when a structure has waters but
+  no polar protein atoms at all is unchanged.
+
+- **Tests:** **677 passed, 2 skipped** at `d54c04b`. New `tests/test_conformers.py`
+  (13), including an independent re-derivation of every choice from the PDB text
+  of the real 5HDE fixture, the barnase Asp54 tie case, and water positions.
+
