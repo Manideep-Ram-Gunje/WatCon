@@ -137,21 +137,26 @@ you do. The plugin runs this identical file, so the two cannot disagree.
 ## Does it work on real data?
 
 Yes, and here is the honest version. On **253 PTP1B crystal structures** with one
-real ConSurf run, in 126 seconds, it finds 293 recurring water sites. Among the
-conserved ones:
+real ConSurf run, in about two minutes, it finds 295 recurring water sites, 92 of
+them lined by a residue ConSurf grades 8 or 9. Among those:
 
-* **site 250**, occupied in 213/253 structures, lined by the entire P-loop
-  (Cys215 the nucleophile, Ser216, Ala217, Gly218, Ile219, Gly220) **and
-  Gln262** — the catalytic water position;
-* **sites 278 and 280**, lined by **Gln262**, whose job is to position the
-  catalytic water;
-* **sites 270, 271, 284**, on the WPD loop at **Asp181**, the general acid.
+* a site occupied in **213/253** structures, lined by the entire P-loop (Cys215
+  the nucleophile, Ser216, Ala217, Gly218, Ile219, Gly220) **and Gln262** — the
+  catalytic water position;
+* two sites occupied in **192/253**, lined by **Gln262**, whose job is to
+  position the catalytic water;
+* sites occupied in **197** and **191/253** on the WPD loop at **Asp181**, the
+  general acid, together with Arg221.
 
 It found those with no knowledge of PTP1B's chemistry. But conservation does
 **not** put them at the top: ranked by conservation then occupancy, the first
 ten sites are buried structural waters, and the catalytic ones only accumulate
-by depth 50 (17/50, against 4/50 by occupancy alone). Conservation re-ranks
-toward the active site; it is not a shortcut to it. Full numbers in
+by depth 50 (19/50, against 4/50 by occupancy alone). Conservation re-ranks
+toward the active site; it is not a shortcut to it.
+
+Site numbers are cluster labels from one run, not residue numbers, so they are
+not quoted here. Residues with alternate conformations use the most populated
+position, keeping every position tied for most populated. Full numbers in
 [docs/CONSURF_CHANGELOG.md](docs/CONSURF_CHANGELOG.md).
 
 `python WatCon/WatCon.py --input input.txt` still works exactly as before.

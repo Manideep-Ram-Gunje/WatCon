@@ -14,6 +14,7 @@ from scipy.spatial import cKDTree
 
 import WatCon.sequence_processing as sequence_processing
 import WatCon.residue_index as residue_index_module
+import WatCon.conformers as conformers_module
 import WatCon.evolutionary as evolutionary
 import WatCon.residue_analysis as residue_analysis
 import WatCon.visualize_structures as visualize_structures
@@ -1417,6 +1418,17 @@ def extract_objects(pdb_file, network_type, custom_selection, active_region_refe
         ag_wat = u.select_atoms(f"{water} and name O*", updating=True)
 
     ag_protein = u.select_atoms(f'({residue_index_module.protein_selection()} {custom_sel}) and (name N* or name O* or name P* or name S*)', updating=True)
+    # One conformer per residue: the most populated. MDAnalysis keeps every
+    # alternate position as its own atom, which turned one hydrogen-bonding
+    # atom into two nodes and one water contact into two edges -- about 70% of
+    # water-protein edges in PanDDA ensemble models. See WatCon.conformers.
+    # Skipped when there are no altlocs, so MD topologies keep their updating
+    # per-frame selections untouched.
+    _conformers_filtered = conformers_module.has_alternate_conformers(u.atoms)
+    if _conformers_filtered:
+        _kept_atoms = conformers_module.highest_occupancy_atoms(u.atoms)
+        ag_wat = ag_wat & _kept_atoms
+        ag_protein = ag_protein & _kept_atoms
     ag_misc = u.select_atoms(f'not (protein or {water})', updating=True) #Keeping this for non-biological systems or where other solvent is important
 
     #Initiate active site reference atomgroup
@@ -1466,8 +1478,12 @@ def extract_objects(pdb_file, network_type, custom_selection, active_region_refe
 
     #Add waters to network
     for mol in ag_wat.residues:
-        oxygen = [atom for atom in mol.atoms if 'O' in atom.name]
-        hydrogens = [atom for atom in mol.atoms if 'O' not in atom.name]
+        # mol.atoms is the WHOLE residue, so reading it directly would bring back
+        # the alternate positions filtered out above. Only when a filter ran:
+        # structures without altlocs keep exactly the previous behaviour.
+        mol_atoms = (mol.atoms & ag_wat) if _conformers_filtered else mol.atoms
+        oxygen = [atom for atom in mol_atoms if 'O' in atom.name]
+        hydrogens = [atom for atom in mol_atoms if 'O' not in atom.name]
 
         #Water molecules are objects which contain H1, H2, O atoms
         if len(oxygen) > 1:

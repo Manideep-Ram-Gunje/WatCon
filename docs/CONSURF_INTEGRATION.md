@@ -707,17 +707,19 @@ records and write its own. It imports PyMOL not at all.
 | dataset | scale | outcome |
 |---|---|---|
 | Barnase | 6 structures, 1 ConSurf run | 193 sites, 165 scored, 57 conserved. Asserted by the test suite, so a regression breaks a test rather than a paper. |
-| **PTP1B** | **253 structures, 1 ConSurf run, 126 s** | 293 sites, 282 scored, 96 conserved. Finds the catalytic water positions -- the P-loop/Gln262 site occupied in 213/253 structures, and the WPD-loop sites at Asp181 -- with no knowledge of the chemistry. |
+| **PTP1B** | **253 structures, 1 ConSurf run, ~2 min** | 295 sites, 278 scored, 92 conserved. Finds the catalytic water positions -- the P-loop/Gln262 site occupied in 213/253 structures, and the WPD-loop sites at Asp181 -- with no knowledge of the chemistry. |
 
 The PTP1B run needed **no code changes**, which is what the robustness, mmCIF and
-scene work was for.
+scene work was for. Its figures were first reported as 293 / 282 / 96; they moved
+to 295 / 278 / 92 when alternate conformers stopped being counted as duplicate
+atoms (Phase 19). The catalytic sites and their occupancies did not change.
 
 Read the PTP1B result carefully before building on it. Conservation re-ranks the
-293 sites toward the active site (17 of the top 50 touch catalytic machinery,
+295 sites toward the active site (19 of the top 50 touch catalytic machinery,
 against 4 by occupancy alone) but does **not** put them first: the top ten by
-conservation are buried structural waters. And the headline "35% of conserved
-sites are catalytic vs 1% of the rest" is partly circular, since a site is called
-conserved precisely because a conserved residue lines it.
+conservation are buried structural waters. And the headline "36% of conserved
+sites are catalytic vs 0.5% of the rest" (33/92 vs 1/203) is partly circular,
+since a site is called conserved precisely because a conserved residue lines it.
 
 ### What the benchmark showed, so nobody builds on a false premise
 

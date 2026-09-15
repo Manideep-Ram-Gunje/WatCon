@@ -18,6 +18,7 @@ import numpy as np
 from WatCon.sequence_processing import *
 import WatCon.sequence_processing as sequence_processing
 import WatCon.residue_index as residue_index_module
+import WatCon.conformers as conformers_module
 import WatCon.evolutionary as evolutionary
 from WatCon.visualize_structures import project_clusters
 import WatCon.residue_analysis as residue_analysis
@@ -1606,6 +1607,10 @@ def extract_objects_per_frame(pdb_file, trajectory_file, frame_idx, network_type
     #Create mda Universe
     u = mda.Universe(pdb_file, trajectory_file) 
 
+    # Set before the try: the except path below builds a water-only network
+    # and never reaches the conformer filter, but the water loop still reads
+    # this flag.
+    _conformers_filtered = False
     try:
         #Find maximum distance between edge of protein and middle of protein
         protein = u.select_atoms("protein")
@@ -1643,6 +1648,17 @@ def extract_objects_per_frame(pdb_file, trajectory_file, frame_idx, network_type
 
             ag_protein = u.select_atoms(f"({residue_index_module.protein_selection()} {custom_sel}) and ((name H* and bonded (name N* or name O* or name P* or name S*)) or name N* or name O* or name P* or name S*)", updating=True)
 
+        # One conformer per residue: the most populated. MDAnalysis keeps every
+        # alternate position as its own atom, which turned one hydrogen-bonding
+        # atom into two nodes and one water contact into two edges -- about 70% of
+        # water-protein edges in PanDDA ensemble models. See WatCon.conformers.
+        # Skipped when there are no altlocs, so MD topologies keep their updating
+        # per-frame selections untouched.
+        _conformers_filtered = conformers_module.has_alternate_conformers(u.atoms)
+        if _conformers_filtered:
+            _kept_atoms = conformers_module.highest_occupancy_atoms(u.atoms)
+            ag_wat = ag_wat & _kept_atoms
+            ag_protein = ag_protein & _kept_atoms
         ag_misc = u.select_atoms(f'not (protein or {water})', updating=True) #Keeping this for non-biological systems or where other solvent is important
 
     except:
@@ -1704,10 +1720,13 @@ def extract_objects_per_frame(pdb_file, trajectory_file, frame_idx, network_type
     #Add waters to network
     for mol in ag_wat.residues:
 
-        if len(mol.atoms) > 3:
-            valid_atoms = [f for f in mol.atoms if ('H' in f.name or 'O' in f.name)]
+        # See the static builder: mol.atoms is the whole residue, and would
+        # bring back filtered alternate positions.
+        mol_atoms = (mol.atoms & ag_wat) if _conformers_filtered else mol.atoms
+        if len(mol_atoms) > 3:
+            valid_atoms = [f for f in mol_atoms if ('H' in f.name or 'O' in f.name)]
         else:
-            valid_atoms = mol.atoms
+            valid_atoms = mol_atoms
 
         
         ats = [atom for atom in valid_atoms]
