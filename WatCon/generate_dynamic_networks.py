@@ -420,6 +420,7 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
         -------
         list of tuples
             Each connection is represented as a tuple with the following elements:
+
             - connections[0] : int  
                 Index of the first atom.
             - connections[1] : int  
@@ -528,6 +529,7 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
         -------
         list of tuples
             Each connection is represented as a tuple with the following elements:
+
             - connections[0] : int  
               Index of the first atom.
             - connections[1] : int  
@@ -1851,7 +1853,7 @@ def initialize_network(topology_file, trajectory_file, structure_directory='.', 
         If True, returns the computed network. Default is False.
     cluster_coordinates : bool, optional
         If True, performs clustering analysis on the network. Default is False.
-    clustering_method : {'hdbscan', 'dbscan', 'kmeans'}, optional
+    clustering_method : {'hdbscan', 'dbscan', 'optics'}, optional
         Clustering method to use if clustering is enabled. Default is 'hdbscan'.
     cluster_water_only : bool, optional
         If True, clusters only water molecules, excluding protein atoms. Default is True.
@@ -2142,16 +2144,24 @@ def initialize_network(topology_file, trajectory_file, structure_directory='.', 
         structure_io.require_constant_atom_count(pdb_file)
 
     #Create universe object just once to get number of frames
+    # A bare `except` here swallowed everything -- a corrupt file, an
+    # unreadable format, a typo in a path -- and silently reinterpreted it as
+    # "this is a single structure", so the run continued over one frame and
+    # reported success. The fallback is still taken, because topology-only
+    # input is legitimate, but the reason is now carried and reported.
     try:
         u = mda.Universe(pdb_file, traj_file)
         frames = len(u.trajectory)
         residues = u.residues.resids.tolist()
 
-    except:
+    except Exception as trajectory_error:
         if multi_model_pdb == True:
             u = mda.Universe(pdb_file, multiframe=True)
             frames = len(u.trajectory)
         else:
+            print('Warning: %s could not be read as a trajectory for %s (%s: %s).'
+                  % (trajectory_file, topology_file,
+                     type(trajectory_error).__name__, trajectory_error))
             print('Warning: You are attempting to create networks for only one structure. Consider using generate_static_networks instead')
             u = mda.Universe(pdb_file)
             frames = 0

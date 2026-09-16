@@ -1,0 +1,10856 @@
+{
+ "0": {
+  "occupancy": 1,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": [
+   "A|139|"
+  ]
+ },
+ "1": {
+  "occupancy": 1,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "2": {
+  "occupancy": 2,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": [
+   "A|144|"
+  ]
+ },
+ "3": {
+  "occupancy": 0,
+  "n_structures_occupied": 0,
+  "occupying": [],
+  "residues": []
+ },
+ "4": {
+  "occupancy": 0,
+  "n_structures_occupied": 0,
+  "occupying": [],
+  "residues": []
+ },
+ "5": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B20",
+   "1B21"
+  ],
+  "residues": []
+ },
+ "6": {
+  "occupancy": 1,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": [
+   "A|134|"
+  ]
+ },
+ "7": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|51|",
+   "A|75|"
+  ]
+ },
+ "8": {
+  "occupancy": 2,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "9": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|50|",
+   "A|75|",
+   "A|77|",
+   "A|78|"
+  ]
+ },
+ "10": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|50|",
+   "A|75|",
+   "A|77|",
+   "A|78|"
+  ]
+ },
+ "11": {
+  "occupancy": 0,
+  "n_structures_occupied": 0,
+  "occupying": [],
+  "residues": []
+ },
+ "12": {
+  "occupancy": 1,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": [
+   "A|125|"
+  ]
+ },
+ "13": {
+  "occupancy": 1,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "14": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|75|",
+   "A|84|",
+   "A|87|"
+  ]
+ },
+ "15": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|50|",
+   "A|75|",
+   "A|77|",
+   "A|78|"
+  ]
+ },
+ "16": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|50|",
+   "A|75|",
+   "A|77|",
+   "A|78|"
+  ]
+ },
+ "17": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRI",
+   "2C4B"
+  ],
+  "residues": [
+   "A|66|"
+  ]
+ },
+ "18": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|51|",
+   "A|75|"
+  ]
+ },
+ "19": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|50|",
+   "A|75|",
+   "A|77|",
+   "A|78|"
+  ]
+ },
+ "20": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|75|",
+   "A|84|",
+   "A|87|"
+  ]
+ },
+ "21": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|51|",
+   "A|75|"
+  ]
+ },
+ "22": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|51|",
+   "A|75|"
+  ]
+ },
+ "23": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|50|",
+   "A|75|",
+   "A|77|",
+   "A|78|"
+  ]
+ },
+ "24": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|50|",
+   "A|75|",
+   "A|77|",
+   "A|78|"
+  ]
+ },
+ "25": {
+  "occupancy": 2,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "1B20"
+  ],
+  "residues": [
+   "A|2|"
+  ]
+ },
+ "26": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|75|",
+   "A|84|",
+   "A|87|"
+  ]
+ },
+ "27": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|75|",
+   "A|84|",
+   "A|87|"
+  ]
+ },
+ "28": {
+  "occupancy": 0,
+  "n_structures_occupied": 0,
+  "occupying": [],
+  "residues": []
+ },
+ "29": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRN",
+   "1RNB"
+  ],
+  "residues": [
+   "A|33|"
+  ]
+ },
+ "30": {
+  "occupancy": 2,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": [
+   "A|118|",
+   "A|120|",
+   "A|131|"
+  ]
+ },
+ "31": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2X",
+   "1X1Y"
+  ],
+  "residues": [
+   "A|39|"
+  ]
+ },
+ "32": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B20",
+   "1BSC"
+  ],
+  "residues": [
+   "A|104|"
+  ]
+ },
+ "33": {
+  "occupancy": 1,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": [
+   "A|121|"
+  ]
+ },
+ "34": {
+  "occupancy": 2,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": [
+   "A|129|"
+  ]
+ },
+ "35": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1BRI",
+   "1X1Y"
+  ],
+  "residues": [
+   "A|79|",
+   "A|80|"
+  ]
+ },
+ "36": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1A2P",
+   "1B2X"
+  ],
+  "residues": []
+ },
+ "37": {
+  "occupancy": 1,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "38": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "39": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "40": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|59|"
+  ]
+ },
+ "41": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|59|"
+  ]
+ },
+ "42": {
+  "occupancy": 2,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "1B2S"
+  ],
+  "residues": [
+   "A|2|"
+  ]
+ },
+ "43": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X"
+  ],
+  "residues": [
+   "A|22|"
+  ]
+ },
+ "44": {
+  "occupancy": 2,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": [
+   "A|114|"
+  ]
+ },
+ "45": {
+  "occupancy": 1,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": [
+   "A|115|"
+  ]
+ },
+ "46": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|17|"
+  ]
+ },
+ "47": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRI",
+   "1BRN"
+  ],
+  "residues": [
+   "A|17|"
+  ]
+ },
+ "48": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "2C4B"
+  ],
+  "residues": [
+   "A|17|"
+  ]
+ },
+ "49": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRS",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "50": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "1X1Y"
+  ],
+  "residues": []
+ },
+ "51": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRS",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|15|",
+   "A|16|",
+   "A|132|"
+  ]
+ },
+ "52": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B21",
+   "1BRN",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "53": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "2C4B"
+  ],
+  "residues": [
+   "A|15|",
+   "A|116|"
+  ]
+ },
+ "54": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1BRK",
+   "1RNB",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|16|",
+   "A|18|",
+   "A|132|"
+  ]
+ },
+ "55": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRH",
+   "1BRJ",
+   "2C4B"
+  ],
+  "residues": [
+   "A|18|"
+  ]
+ },
+ "56": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1A2P",
+   "1X1Y"
+  ],
+  "residues": []
+ },
+ "57": {
+  "occupancy": 1,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "1X1Y"
+  ],
+  "residues": []
+ },
+ "58": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|15|",
+   "A|18|",
+   "A|110|",
+   "A|113|"
+  ]
+ },
+ "59": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1A2P",
+   "1RNB",
+   "3KCH"
+  ],
+  "residues": [
+   "A|16|"
+  ]
+ },
+ "60": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BSE",
+   "3KCH"
+  ],
+  "residues": [
+   "A|16|"
+  ]
+ },
+ "61": {
+  "occupancy": 2,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": [
+   "A|117|"
+  ]
+ },
+ "62": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRN",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|22|"
+  ]
+ },
+ "63": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B20",
+   "1BSE",
+   "1RNB"
+  ],
+  "residues": [
+   "A|67|"
+  ]
+ },
+ "64": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|15|",
+   "A|94|"
+  ]
+ },
+ "65": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRS",
+   "6PQK"
+  ],
+  "residues": [
+   "A|65|"
+  ]
+ },
+ "66": {
+  "occupancy": 2,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "1B2S"
+  ],
+  "residues": [
+   "A|2|"
+  ]
+ },
+ "67": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRH",
+   "1BRS"
+  ],
+  "residues": []
+ },
+ "68": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|67|"
+  ]
+ },
+ "69": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "2C4B"
+  ],
+  "residues": [
+   "A|67|"
+  ]
+ },
+ "70": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2X"
+  ],
+  "residues": [
+   "A|22|"
+  ]
+ },
+ "71": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRN",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|33|",
+   "A|45|"
+  ]
+ },
+ "72": {
+  "occupancy": 1,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "1B20"
+  ],
+  "residues": [
+   "A|91|",
+   "A|93|"
+  ]
+ },
+ "73": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRS",
+   "1X1Y"
+  ],
+  "residues": []
+ },
+ "74": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRS",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|3|"
+  ]
+ },
+ "75": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|19|",
+   "A|22|"
+  ]
+ },
+ "76": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1BRI",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|13|",
+   "A|19|",
+   "A|20|",
+   "A|22|"
+  ]
+ },
+ "77": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1BRI",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|13|",
+   "A|19|",
+   "A|20|",
+   "A|22|"
+  ]
+ },
+ "78": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|37|"
+  ]
+ },
+ "79": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRN",
+   "1RNB"
+  ],
+  "residues": [
+   "A|102|",
+   "A|104|"
+  ]
+ },
+ "80": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1B2X"
+  ],
+  "residues": []
+ },
+ "81": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "1B2X",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|34|"
+  ]
+ },
+ "82": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1A2P",
+   "2C4B"
+  ],
+  "residues": [
+   "A|49|"
+  ]
+ },
+ "83": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X"
+  ],
+  "residues": []
+ },
+ "84": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRN",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|80|",
+   "A|81|"
+  ]
+ },
+ "85": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B20",
+   "1RNB"
+  ],
+  "residues": [
+   "A|49|"
+  ]
+ },
+ "86": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B20",
+   "1B2X"
+  ],
+  "residues": []
+ },
+ "87": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRK",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|16|"
+  ]
+ },
+ "88": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "2C4B"
+  ],
+  "residues": [
+   "A|47|",
+   "A|49|"
+  ]
+ },
+ "89": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "1X1Y"
+  ],
+  "residues": [
+   "A|1|",
+   "A|2|",
+   "A|3|"
+  ]
+ },
+ "90": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B20",
+   "1B2X",
+   "1X1Y",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "91": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B20",
+   "1B2X",
+   "1X1Y",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "92": {
+  "occupancy": 2,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "93": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|19|"
+  ]
+ },
+ "94": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "2C4B"
+  ],
+  "residues": [
+   "A|3|",
+   "A|22|"
+  ]
+ },
+ "95": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1BRK",
+   "1BSE",
+   "3KCH"
+  ],
+  "residues": [
+   "A|39|"
+  ]
+ },
+ "96": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1A2P",
+   "1BRI",
+   "1BRK",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|93|"
+  ]
+ },
+ "97": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1A2P",
+   "1BRK"
+  ],
+  "residues": []
+ },
+ "98": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|19|"
+  ]
+ },
+ "99": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1BRI",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|22|",
+   "A|48|",
+   "A|49|"
+  ]
+ },
+ "100": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1BNF",
+   "1BSA",
+   "1BSC",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|17|"
+  ]
+ },
+ "101": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRS",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|48|"
+  ]
+ },
+ "102": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRS",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|48|"
+  ]
+ },
+ "103": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "1B2X"
+  ],
+  "residues": [
+   "A|41|"
+  ]
+ },
+ "104": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|8|"
+  ]
+ },
+ "105": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|8|"
+  ]
+ },
+ "106": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2X",
+   "2C4B"
+  ],
+  "residues": [
+   "A|12|",
+   "A|16|"
+  ]
+ },
+ "107": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "1X1Y"
+  ],
+  "residues": [
+   "A|19|"
+  ]
+ },
+ "108": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "1X1Y"
+  ],
+  "residues": []
+ },
+ "109": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRS",
+   "1BSC",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|4|",
+   "A|22|",
+   "A|23|"
+  ]
+ },
+ "110": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "111": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|44|"
+  ]
+ },
+ "112": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B21",
+   "1B2X",
+   "1BNF",
+   "3KCH"
+  ],
+  "residues": []
+ },
+ "113": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "2C4B"
+  ],
+  "residues": [
+   "A|44|"
+  ]
+ },
+ "114": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|41|",
+   "A|44|"
+  ]
+ },
+ "115": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|40|",
+   "A|43|",
+   "A|78|",
+   "A|81|"
+  ]
+ },
+ "116": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRK",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|12|",
+   "A|15|"
+  ]
+ },
+ "117": {
+  "occupancy": 11,
+  "n_structures_occupied": 11,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BSC",
+   "2C4B",
+   "3KCH"
+  ],
+  "residues": [
+   "A|12|",
+   "A|15|",
+   "A|110|"
+  ]
+ },
+ "118": {
+  "occupancy": 9,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRS",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|4|",
+   "A|22|",
+   "A|23|"
+  ]
+ },
+ "119": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRS",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|4|",
+   "A|22|",
+   "A|23|"
+  ]
+ },
+ "120": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1RNB",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "121": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1BNF",
+   "1BRH",
+   "1BSA",
+   "1BSB",
+   "1RNB",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|40|",
+   "A|44|"
+  ]
+ },
+ "122": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|40|",
+   "A|43|",
+   "A|78|",
+   "A|81|"
+  ]
+ },
+ "123": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|60|",
+   "A|61|"
+  ]
+ },
+ "124": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRN",
+   "1RNB"
+  ],
+  "residues": [
+   "A|60|"
+  ]
+ },
+ "125": {
+  "occupancy": 10,
+  "n_structures_occupied": 10,
+  "occupying": [
+   "1A2P",
+   "1BNF",
+   "1BRI",
+   "1BRJ",
+   "1BSA",
+   "1BSB",
+   "1BSE",
+   "1X1Y",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|12|"
+  ]
+ },
+ "126": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1B2X",
+   "1BNF",
+   "1BRI",
+   "1BSC",
+   "2C4B"
+  ],
+  "residues": [
+   "A|39|"
+  ]
+ },
+ "127": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B2X",
+   "1BNF",
+   "1BRI",
+   "1BRS",
+   "1BSC",
+   "2C4B"
+  ],
+  "residues": [
+   "A|39|"
+  ]
+ },
+ "128": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|40|",
+   "A|43|",
+   "A|78|",
+   "A|81|"
+  ]
+ },
+ "129": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1BRJ",
+   "1X1Y",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "130": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRS",
+   "6PQK"
+  ],
+  "residues": [
+   "A|60|"
+  ]
+ },
+ "131": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|60|"
+  ]
+ },
+ "132": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|60|"
+  ]
+ },
+ "133": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|60|"
+  ]
+ },
+ "134": {
+  "occupancy": 11,
+  "n_structures_occupied": 11,
+  "occupying": [
+   "1A2P",
+   "1BNF",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BSA",
+   "1BSB",
+   "1BSE",
+   "1X1Y",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|12|"
+  ]
+ },
+ "135": {
+  "occupancy": 11,
+  "n_structures_occupied": 11,
+  "occupying": [
+   "1A2P",
+   "1BNF",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BSA",
+   "1BSB",
+   "1BSE",
+   "1X1Y",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|12|"
+  ]
+ },
+ "136": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRI",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|13|",
+   "A|22|"
+  ]
+ },
+ "137": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRI",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|13|",
+   "A|22|"
+  ]
+ },
+ "138": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|40|",
+   "A|43|",
+   "A|78|",
+   "A|81|"
+  ]
+ },
+ "139": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|40|",
+   "A|43|",
+   "A|78|",
+   "A|81|"
+  ]
+ },
+ "140": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B20",
+   "1B2X"
+  ],
+  "residues": []
+ },
+ "141": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1A2P",
+   "1B20"
+  ],
+  "residues": []
+ },
+ "142": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRK",
+   "1BSC",
+   "1BSE"
+  ],
+  "residues": [
+   "A|44|"
+  ]
+ },
+ "143": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|7|",
+   "A|77|"
+  ]
+ },
+ "144": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRI",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|13|",
+   "A|22|"
+  ]
+ },
+ "145": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRI",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|13|",
+   "A|22|"
+  ]
+ },
+ "146": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BSA",
+   "1BSB",
+   "1RNB"
+  ],
+  "residues": [
+   "A|57|"
+  ]
+ },
+ "147": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "1B2X"
+  ],
+  "residues": []
+ },
+ "148": {
+  "occupancy": 11,
+  "n_structures_occupied": 11,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE"
+  ],
+  "residues": [
+   "A|80|"
+  ]
+ },
+ "149": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRS",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "150": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1RNB",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|28|"
+  ]
+ },
+ "151": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|58|"
+  ]
+ },
+ "152": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|60|"
+  ]
+ },
+ "153": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|60|"
+  ]
+ },
+ "154": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRI",
+   "2C4B"
+  ],
+  "residues": [
+   "A|43|"
+  ]
+ },
+ "155": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRS",
+   "6PQK"
+  ],
+  "residues": [
+   "A|57|"
+  ]
+ },
+ "156": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2X"
+  ],
+  "residues": []
+ },
+ "157": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRK",
+   "1BRS"
+  ],
+  "residues": [
+   "A|32|"
+  ]
+ },
+ "158": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B21",
+   "1B2X"
+  ],
+  "residues": [
+   "A|32|"
+  ]
+ },
+ "159": {
+  "occupancy": 16,
+  "n_structures_occupied": 16,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSE",
+   "1RNB",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|28|"
+  ]
+ },
+ "160": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1X1Y"
+  ],
+  "residues": []
+ },
+ "161": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|68|"
+  ]
+ },
+ "162": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2X",
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "163": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1A2P",
+   "1BRI",
+   "2C4B"
+  ],
+  "residues": [
+   "A|44|"
+  ]
+ },
+ "164": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "2C4B",
+   "3KCH"
+  ],
+  "residues": [
+   "A|44|"
+  ]
+ },
+ "165": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "166": {
+  "occupancy": 17,
+  "n_structures_occupied": 17,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|97|",
+   "A|108|"
+  ]
+ },
+ "167": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "1BRI",
+   "1BSC"
+  ],
+  "residues": [
+   "A|38|"
+  ]
+ },
+ "168": {
+  "occupancy": 17,
+  "n_structures_occupied": 17,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSE",
+   "1RNB",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|28|"
+  ]
+ },
+ "169": {
+  "occupancy": 17,
+  "n_structures_occupied": 17,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSE",
+   "1RNB",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|28|"
+  ]
+ },
+ "170": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|59|"
+  ]
+ },
+ "171": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "1X1Y"
+  ],
+  "residues": [
+   "A|68|",
+   "A|69|"
+  ]
+ },
+ "172": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2X",
+   "2C4B"
+  ],
+  "residues": [
+   "A|68|"
+  ]
+ },
+ "173": {
+  "occupancy": 1,
+  "n_structures_occupied": 1,
+  "occupying": [
+   "1X1Y"
+  ],
+  "residues": []
+ },
+ "174": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1B2S",
+   "1BRI",
+   "1BRS",
+   "1RNB",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|97|"
+  ]
+ },
+ "175": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRS",
+   "1X1Y",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|57|",
+   "A|59|"
+  ]
+ },
+ "176": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|59|"
+  ]
+ },
+ "177": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B20",
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "178": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "1BSC",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|22|",
+   "A|24|",
+   "A|49|"
+  ]
+ },
+ "179": {
+  "occupancy": 17,
+  "n_structures_occupied": 17,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|97|",
+   "A|108|"
+  ]
+ },
+ "180": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "1BRS"
+  ],
+  "residues": [
+   "A|8|"
+  ]
+ },
+ "181": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B20",
+   "1B2S"
+  ],
+  "residues": [
+   "A|62|"
+  ]
+ },
+ "182": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1BRN",
+   "1BRS",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|65|"
+  ]
+ },
+ "183": {
+  "occupancy": 11,
+  "n_structures_occupied": 11,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BNF",
+   "1BRN",
+   "1BRS",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|57|",
+   "A|66|",
+   "A|67|"
+  ]
+ },
+ "184": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1A2P",
+   "1BRN",
+   "6PQK"
+  ],
+  "residues": [
+   "A|29|"
+  ]
+ },
+ "185": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRN",
+   "2C4B"
+  ],
+  "residues": [
+   "A|29|"
+  ]
+ },
+ "186": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B20",
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "187": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1A2P",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRN",
+   "1BSB",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|61|",
+   "A|63|",
+   "A|65|"
+  ]
+ },
+ "188": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|56|",
+   "A|68|",
+   "A|71|"
+  ]
+ },
+ "189": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRK",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "190": {
+  "occupancy": 7,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRH",
+   "1BRS",
+   "1RNB",
+   "2C4B"
+  ],
+  "residues": [
+   "A|66|",
+   "A|93|"
+  ]
+ },
+ "191": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2X"
+  ],
+  "residues": [
+   "A|22|"
+  ]
+ },
+ "192": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B20",
+   "1B21"
+  ],
+  "residues": [
+   "A|22|"
+  ]
+ },
+ "193": {
+  "occupancy": 17,
+  "n_structures_occupied": 17,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|97|",
+   "A|108|"
+  ]
+ },
+ "194": {
+  "occupancy": 17,
+  "n_structures_occupied": 17,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|97|",
+   "A|108|"
+  ]
+ },
+ "195": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|46|",
+   "A|48|",
+   "A|49|"
+  ]
+ },
+ "196": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1BRN",
+   "1BRS",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|65|"
+  ]
+ },
+ "197": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1BRN",
+   "1BRS",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|65|"
+  ]
+ },
+ "198": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1B2S",
+   "1BSA",
+   "1BSB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "199": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1B2S",
+   "1BSA",
+   "1BSB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "200": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BNF",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|58|",
+   "A|66|"
+  ]
+ },
+ "201": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|57|"
+  ]
+ },
+ "202": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1B2X",
+   "1BRJ",
+   "1BRK",
+   "1BSA",
+   "1BSB",
+   "1X1Y",
+   "3KCH"
+  ],
+  "residues": [
+   "A|15|"
+  ]
+ },
+ "203": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRN",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "204": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B21",
+   "2C4B"
+  ],
+  "residues": [
+   "A|54|"
+  ]
+ },
+ "205": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2X"
+  ],
+  "residues": [
+   "A|98|"
+  ]
+ },
+ "206": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2S",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "207": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRH",
+   "1BRJ",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|12|",
+   "A|110|"
+  ]
+ },
+ "208": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRS",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "209": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|66|",
+   "A|69|"
+  ]
+ },
+ "210": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "211": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "212": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|73|",
+   "A|75|"
+  ]
+ },
+ "213": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2X",
+   "1BRH"
+  ],
+  "residues": []
+ },
+ "214": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BNF",
+   "3KCH"
+  ],
+  "residues": []
+ },
+ "215": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "1X1Y"
+  ],
+  "residues": [
+   "A|98|"
+  ]
+ },
+ "216": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|106|",
+   "A|107|"
+  ]
+ },
+ "217": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRH",
+   "1BRJ",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|12|",
+   "A|110|"
+  ]
+ },
+ "218": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRH",
+   "1BRJ",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1X1Y"
+  ],
+  "residues": [
+   "A|12|"
+  ]
+ },
+ "219": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSE",
+   "1RNB",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|61|",
+   "A|63|",
+   "A|65|"
+  ]
+ },
+ "220": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|56|",
+   "A|68|",
+   "A|71|"
+  ]
+ },
+ "221": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH"
+  ],
+  "residues": [
+   "A|68|",
+   "A|70|",
+   "A|92|"
+  ]
+ },
+ "222": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|24|",
+   "A|29|"
+  ]
+ },
+ "223": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "1X1Y"
+  ],
+  "residues": []
+ },
+ "224": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "6PQK"
+  ],
+  "residues": [
+   "A|105|"
+  ]
+ },
+ "225": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1BRH",
+   "1BSC",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|61|",
+   "A|62|",
+   "A|64|"
+  ]
+ },
+ "226": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRH",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "6PQK"
+  ],
+  "residues": [
+   "A|61|",
+   "A|62|",
+   "A|64|"
+  ]
+ },
+ "227": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSE",
+   "1RNB",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|61|",
+   "A|63|",
+   "A|65|"
+  ]
+ },
+ "228": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSE",
+   "1RNB",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|61|",
+   "A|63|",
+   "A|65|"
+  ]
+ },
+ "229": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|56|",
+   "A|68|",
+   "A|71|"
+  ]
+ },
+ "230": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "1BRS"
+  ],
+  "residues": []
+ },
+ "231": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "1X1Y"
+  ],
+  "residues": [
+   "A|68|"
+  ]
+ },
+ "232": {
+  "occupancy": 10,
+  "n_structures_occupied": 10,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2X",
+   "1BNF",
+   "1BRN",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|47|"
+  ]
+ },
+ "233": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|54|",
+   "A|55|"
+  ]
+ },
+ "234": {
+  "occupancy": 15,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|6|"
+  ]
+ },
+ "235": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1BSA",
+   "1BSB"
+  ],
+  "residues": [
+   "A|107|"
+  ]
+ },
+ "236": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1BRJ",
+   "1BRK",
+   "6PQK"
+  ],
+  "residues": [
+   "A|105|"
+  ]
+ },
+ "237": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1BRJ",
+   "1BRK"
+  ],
+  "residues": []
+ },
+ "238": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1RNB",
+   "6PQK"
+  ],
+  "residues": [
+   "A|66|",
+   "A|69|"
+  ]
+ },
+ "239": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|20|"
+  ]
+ },
+ "240": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "241": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|24|",
+   "A|29|"
+  ]
+ },
+ "242": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|24|",
+   "A|29|"
+  ]
+ },
+ "243": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "244": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRN",
+   "6PQK"
+  ],
+  "residues": [
+   "A|72|"
+  ]
+ },
+ "245": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BSA",
+   "1BSB"
+  ],
+  "residues": [
+   "A|3|"
+  ]
+ },
+ "246": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1X1Y"
+  ],
+  "residues": [
+   "A|107|"
+  ]
+ },
+ "247": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "1X1Y"
+  ],
+  "residues": [
+   "A|107|"
+  ]
+ },
+ "248": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BSA",
+   "1BSB",
+   "2C4B",
+   "3KCH"
+  ],
+  "residues": [
+   "A|106|"
+  ]
+ },
+ "249": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1B2S",
+   "1BRI",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|62|",
+   "A|106|"
+  ]
+ },
+ "250": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1BRI",
+   "1BRS",
+   "1RNB",
+   "2C4B"
+  ],
+  "residues": [
+   "A|106|"
+  ]
+ },
+ "251": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "252": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B20",
+   "1RNB",
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "253": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "254": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1A2P",
+   "1X1Y"
+  ],
+  "residues": []
+ },
+ "255": {
+  "occupancy": 11,
+  "n_structures_occupied": 11,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSE",
+   "1X1Y",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|108|",
+   "A|110|"
+  ]
+ },
+ "256": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B20",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "257": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRN",
+   "1BRS",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "258": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|20|"
+  ]
+ },
+ "259": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRJ",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|21|",
+   "A|24|"
+  ]
+ },
+ "260": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1BRS"
+  ],
+  "residues": []
+ },
+ "261": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1BSC",
+   "1RNB",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|105|",
+   "A|106|"
+  ]
+ },
+ "262": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRK",
+   "1BRS",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|104|"
+  ]
+ },
+ "263": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRK",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|104|"
+  ]
+ },
+ "264": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1BRI",
+   "1BRS",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|107|",
+   "A|108|"
+  ]
+ },
+ "265": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1BRI",
+   "1BRS",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|107|",
+   "A|108|"
+  ]
+ },
+ "266": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "1X1Y"
+  ],
+  "residues": []
+ },
+ "267": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|66|",
+   "A|69|"
+  ]
+ },
+ "268": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|66|",
+   "A|69|"
+  ]
+ },
+ "269": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|56|",
+   "A|68|",
+   "A|71|"
+  ]
+ },
+ "270": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "271": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BSA",
+   "1BSB"
+  ],
+  "residues": []
+ },
+ "272": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1BRN",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|17|",
+   "A|18|"
+  ]
+ },
+ "273": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1BRN",
+   "1RNB",
+   "3KCH"
+  ],
+  "residues": [
+   "A|17|",
+   "A|18|"
+  ]
+ },
+ "274": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B2S",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|20|"
+  ]
+ },
+ "275": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B2S",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|20|"
+  ]
+ },
+ "276": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|23|",
+   "A|48|",
+   "A|50|"
+  ]
+ },
+ "277": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|48|",
+   "A|49|",
+   "A|79|"
+  ]
+ },
+ "278": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1B2S",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "279": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "280": {
+  "occupancy": 17,
+  "n_structures_occupied": 17,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|105|",
+   "A|106|"
+  ]
+ },
+ "281": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B2S",
+   "1BRI",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|108|"
+  ]
+ },
+ "282": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B2S",
+   "1BRI",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|108|"
+  ]
+ },
+ "283": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BSA",
+   "1BSB",
+   "1BSC"
+  ],
+  "residues": [
+   "A|108|"
+  ]
+ },
+ "284": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "285": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "286": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|93|"
+  ]
+ },
+ "287": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1BNF",
+   "1BRS",
+   "1BSC",
+   "1X1Y",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|93|"
+  ]
+ },
+ "288": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRN",
+   "1BSA",
+   "1BSB",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|15|",
+   "A|94|",
+   "A|110|"
+  ]
+ },
+ "289": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRI",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1X1Y"
+  ],
+  "residues": [
+   "A|110|"
+  ]
+ },
+ "290": {
+  "occupancy": 10,
+  "n_structures_occupied": 10,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1BRI",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1X1Y",
+   "2C4B",
+   "3KCH"
+  ],
+  "residues": [
+   "A|110|",
+   "A|111|"
+  ]
+ },
+ "291": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|108|",
+   "A|111|"
+  ]
+ },
+ "292": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "293": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "294": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "295": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|52|"
+  ]
+ },
+ "296": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|52|"
+  ]
+ },
+ "297": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|52|"
+  ]
+ },
+ "298": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|53|",
+   "A|54|",
+   "A|73|"
+  ]
+ },
+ "299": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|23|",
+   "A|48|",
+   "A|50|"
+  ]
+ },
+ "300": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "2C4B"
+  ],
+  "residues": [
+   "A|5|"
+  ]
+ },
+ "301": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|56|",
+   "A|68|",
+   "A|71|"
+  ]
+ },
+ "302": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|56|",
+   "A|68|",
+   "A|71|"
+  ]
+ },
+ "303": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1A2P",
+   "1RNB",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|69|"
+  ]
+ },
+ "304": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRN",
+   "1BSA",
+   "1BSB",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|15|",
+   "A|94|",
+   "A|110|"
+  ]
+ },
+ "305": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|67|",
+   "A|93|"
+  ]
+ },
+ "306": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B20",
+   "1BSC",
+   "1BSE",
+   "2C4B"
+  ],
+  "residues": [
+   "A|67|",
+   "A|69|"
+  ]
+ },
+ "307": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRJ",
+   "1BRK",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|92|"
+  ]
+ },
+ "308": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|72|"
+  ]
+ },
+ "309": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "310": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1BRI",
+   "1BRN",
+   "1BRS",
+   "2C4B"
+  ],
+  "residues": [
+   "A|54|"
+  ]
+ },
+ "311": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1BRI",
+   "1BRN",
+   "1BRS",
+   "2C4B"
+  ],
+  "residues": [
+   "A|54|"
+  ]
+ },
+ "312": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|23|",
+   "A|48|",
+   "A|50|"
+  ]
+ },
+ "313": {
+  "occupancy": 23,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|5|",
+   "A|78|"
+  ]
+ },
+ "314": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1A2P",
+   "1BRS",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|79|"
+  ]
+ },
+ "315": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B2S",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "316": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B2S",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "317": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|12|"
+  ]
+ },
+ "318": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B2S",
+   "1BNF",
+   "1BRN",
+   "2C4B"
+  ],
+  "residues": [
+   "A|12|"
+  ]
+ },
+ "319": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BSE",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|106|"
+  ]
+ },
+ "320": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRK",
+   "1BSC"
+  ],
+  "residues": [
+   "A|108|"
+  ]
+ },
+ "321": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRN",
+   "1BSA",
+   "1BSB",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|15|",
+   "A|94|",
+   "A|110|"
+  ]
+ },
+ "322": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRN",
+   "1BSA",
+   "1BSB",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|15|",
+   "A|94|",
+   "A|110|"
+  ]
+ },
+ "323": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRJ",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|68|",
+   "A|69|",
+   "A|92|",
+   "A|93|"
+  ]
+ },
+ "324": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BSC",
+   "1RNB",
+   "2C4B"
+  ],
+  "residues": [
+   "A|92|"
+  ]
+ },
+ "325": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|20|"
+  ]
+ },
+ "326": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|20|"
+  ]
+ },
+ "327": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "328": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|23|",
+   "A|48|",
+   "A|50|"
+  ]
+ },
+ "329": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1BRI",
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "330": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|2|"
+  ]
+ },
+ "331": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BSA",
+   "1BSB",
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "332": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|106|"
+  ]
+ },
+ "333": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRK",
+   "1BSC"
+  ],
+  "residues": [
+   "A|108|"
+  ]
+ },
+ "334": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRK",
+   "1BSC"
+  ],
+  "residues": [
+   "A|108|"
+  ]
+ },
+ "335": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1B2X",
+   "1BRS",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|65|",
+   "A|69|"
+  ]
+ },
+ "336": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1B2S",
+   "1B2X",
+   "1BRI",
+   "1BRS",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|65|",
+   "A|69|"
+  ]
+ },
+ "337": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRS",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|94|"
+  ]
+ },
+ "338": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|72|",
+   "A|91|"
+  ]
+ },
+ "339": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRN",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|53|",
+   "A|72|"
+  ]
+ },
+ "340": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1B21",
+   "1B2S",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "341": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRJ",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|21|",
+   "A|24|"
+  ]
+ },
+ "342": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1X1Y",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "343": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BSA",
+   "1BSB"
+  ],
+  "residues": []
+ },
+ "344": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BNF",
+   "3KCH"
+  ],
+  "residues": []
+ },
+ "345": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRI",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|32|"
+  ]
+ },
+ "346": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRJ",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "347": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2X",
+   "1BRH",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|48|",
+   "A|79|"
+  ]
+ },
+ "348": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1X1Y",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "349": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRS",
+   "1RNB"
+  ],
+  "residues": [
+   "A|100|"
+  ]
+ },
+ "350": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRS",
+   "1RNB"
+  ],
+  "residues": [
+   "A|100|"
+  ]
+ },
+ "351": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|9|",
+   "A|12|"
+  ]
+ },
+ "352": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1BNF",
+   "1BRS",
+   "1RNB",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|12|",
+   "A|16|"
+  ]
+ },
+ "353": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1RNB",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|17|"
+  ]
+ },
+ "354": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|106|"
+  ]
+ },
+ "355": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|106|"
+  ]
+ },
+ "356": {
+  "occupancy": 11,
+  "n_structures_occupied": 11,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|69|",
+   "A|70|",
+   "A|72|"
+  ]
+ },
+ "357": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|90|"
+  ]
+ },
+ "358": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BRH",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|18|"
+  ]
+ },
+ "359": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BRH",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|18|"
+  ]
+ },
+ "360": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRJ",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|21|",
+   "A|24|"
+  ]
+ },
+ "361": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B20",
+   "1B2X",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "362": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|29|"
+  ]
+ },
+ "363": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2X",
+   "1BRI",
+   "1BRS",
+   "6PQK"
+  ],
+  "residues": [
+   "A|29|"
+  ]
+ },
+ "364": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1BRH",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|29|"
+  ]
+ },
+ "365": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1B20",
+   "1B2X",
+   "1BRH",
+   "1BSA",
+   "1BSB",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|29|"
+  ]
+ },
+ "366": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2X"
+  ],
+  "residues": []
+ },
+ "367": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRK",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "368": {
+  "occupancy": 17,
+  "n_structures_occupied": 17,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|55|",
+   "A|73|"
+  ]
+ },
+ "369": {
+  "occupancy": 17,
+  "n_structures_occupied": 17,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|55|",
+   "A|73|"
+  ]
+ },
+ "370": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|23|",
+   "A|48|",
+   "A|50|"
+  ]
+ },
+ "371": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2X",
+   "1BRH",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|48|"
+  ]
+ },
+ "372": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2X",
+   "1BRH",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|48|"
+  ]
+ },
+ "373": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|100|",
+   "A|101|",
+   "A|105|"
+  ]
+ },
+ "374": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B2S",
+   "1BNF",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|101|",
+   "A|102|",
+   "A|104|"
+  ]
+ },
+ "375": {
+  "occupancy": 16,
+  "n_structures_occupied": 16,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1RNB",
+   "1X1Y",
+   "3KCH"
+  ],
+  "residues": [
+   "A|98|",
+   "A|107|"
+  ]
+ },
+ "376": {
+  "occupancy": 16,
+  "n_structures_occupied": 16,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1RNB",
+   "1X1Y",
+   "3KCH"
+  ],
+  "residues": [
+   "A|98|",
+   "A|107|"
+  ]
+ },
+ "377": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1B2S",
+   "1BRI",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1BSE",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|2|",
+   "A|3|",
+   "A|5|"
+  ]
+ },
+ "378": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1B2S",
+   "1BRI",
+   "1BRN",
+   "1BRS",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|2|",
+   "A|3|",
+   "A|5|"
+  ]
+ },
+ "379": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1BSA",
+   "1BSB",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "380": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1B2S",
+   "1BSA",
+   "1BSB",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|9|"
+  ]
+ },
+ "381": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|52|"
+  ]
+ },
+ "382": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|52|"
+  ]
+ },
+ "383": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BSA",
+   "1BSB",
+   "1BSC"
+  ],
+  "residues": []
+ },
+ "384": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|53|",
+   "A|54|",
+   "A|73|"
+  ]
+ },
+ "385": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|53|",
+   "A|54|",
+   "A|73|"
+  ]
+ },
+ "386": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|53|",
+   "A|54|",
+   "A|73|"
+  ]
+ },
+ "387": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|23|",
+   "A|48|",
+   "A|50|"
+  ]
+ },
+ "388": {
+  "occupancy": 23,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|5|",
+   "A|78|"
+  ]
+ },
+ "389": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B21",
+   "1B2S"
+  ],
+  "residues": []
+ },
+ "390": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1B2S",
+   "1BRH",
+   "1BRI",
+   "1BRK",
+   "1BRN",
+   "1X1Y",
+   "3KCH"
+  ],
+  "residues": [
+   "A|104|"
+  ]
+ },
+ "391": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1BRI",
+   "1X1Y"
+  ],
+  "residues": [
+   "A|104|"
+  ]
+ },
+ "392": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|98|"
+  ]
+ },
+ "393": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1BRJ",
+   "1BRS",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|17|"
+  ]
+ },
+ "394": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B2S",
+   "1BRJ",
+   "1BRS",
+   "2C4B"
+  ],
+  "residues": [
+   "A|17|"
+  ]
+ },
+ "395": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|45|"
+  ]
+ },
+ "396": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BSA",
+   "1BSB",
+   "1BSC"
+  ],
+  "residues": []
+ },
+ "397": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BSA",
+   "1BSB",
+   "1BSC"
+  ],
+  "residues": []
+ },
+ "398": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "6PQK"
+  ],
+  "residues": [
+   "A|28|"
+  ]
+ },
+ "399": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B20",
+   "2C4B"
+  ],
+  "residues": []
+ },
+ "400": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRN",
+   "2C4B"
+  ],
+  "residues": [
+   "A|102|",
+   "A|104|"
+  ]
+ },
+ "401": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|53|",
+   "A|54|",
+   "A|73|"
+  ]
+ },
+ "402": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|23|",
+   "A|48|",
+   "A|50|"
+  ]
+ },
+ "403": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|23|",
+   "A|48|",
+   "A|50|"
+  ]
+ },
+ "404": {
+  "occupancy": 17,
+  "n_structures_occupied": 17,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1BRH",
+   "1BRI",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|77|",
+   "A|84|"
+  ]
+ },
+ "405": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|79|",
+   "A|80|"
+  ]
+ },
+ "406": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1BRN",
+   "6PQK"
+  ],
+  "residues": [
+   "A|85|"
+  ]
+ },
+ "407": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|100|"
+  ]
+ },
+ "408": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1BRI",
+   "1BRK",
+   "1BSA",
+   "1BSB",
+   "3KCH"
+  ],
+  "residues": [
+   "A|8|"
+  ]
+ },
+ "409": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|8|",
+   "A|110|"
+  ]
+ },
+ "410": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BRS"
+  ],
+  "residues": [
+   "A|8|",
+   "A|110|"
+  ]
+ },
+ "411": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRK",
+   "1BSE"
+  ],
+  "residues": []
+ },
+ "412": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "413": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|45|"
+  ]
+ },
+ "414": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|29|"
+  ]
+ },
+ "415": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|53|",
+   "A|54|",
+   "A|73|"
+  ]
+ },
+ "416": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|53|",
+   "A|54|",
+   "A|73|"
+  ]
+ },
+ "417": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "1X1Y"
+  ],
+  "residues": [
+   "A|5|"
+  ]
+ },
+ "418": {
+  "occupancy": 10,
+  "n_structures_occupied": 10,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1BRI",
+   "1BRK",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|86|"
+  ]
+ },
+ "419": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRJ",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1X1Y"
+  ],
+  "residues": [
+   "A|100|",
+   "A|101|",
+   "A|105|"
+  ]
+ },
+ "420": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1X1Y",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|101|"
+  ]
+ },
+ "421": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|8|"
+  ]
+ },
+ "422": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1X1Y",
+   "3KCH"
+  ],
+  "residues": [
+   "A|8|"
+  ]
+ },
+ "423": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRJ",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "2C4B"
+  ],
+  "residues": [
+   "A|3|",
+   "A|5|",
+   "A|6|"
+  ]
+ },
+ "424": {
+  "occupancy": 10,
+  "n_structures_occupied": 10,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1RNB",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|12|"
+  ]
+ },
+ "425": {
+  "occupancy": 10,
+  "n_structures_occupied": 10,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1RNB",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|12|"
+  ]
+ },
+ "426": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1RNB"
+  ],
+  "residues": [
+   "A|92|"
+  ]
+ },
+ "427": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "428": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "429": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRJ",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|21|",
+   "A|24|"
+  ]
+ },
+ "430": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRJ",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|21|",
+   "A|24|"
+  ]
+ },
+ "431": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|45|"
+  ]
+ },
+ "432": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|29|"
+  ]
+ },
+ "433": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRS",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "434": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRS",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "435": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X"
+  ],
+  "residues": [
+   "A|39|"
+  ]
+ },
+ "436": {
+  "occupancy": 17,
+  "n_structures_occupied": 17,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|55|",
+   "A|73|"
+  ]
+ },
+ "437": {
+  "occupancy": 17,
+  "n_structures_occupied": 17,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|55|",
+   "A|73|"
+  ]
+ },
+ "438": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BNF",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSE",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|5|",
+   "A|77|"
+  ]
+ },
+ "439": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|79|",
+   "A|80|"
+  ]
+ },
+ "440": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|79|",
+   "A|80|"
+  ]
+ },
+ "441": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRI",
+   "1BRS",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|86|"
+  ]
+ },
+ "442": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "1BRS"
+  ],
+  "residues": [
+   "A|8|"
+  ]
+ },
+ "443": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|7|",
+   "A|8|"
+  ]
+ },
+ "444": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|70|",
+   "A|72|",
+   "A|90|",
+   "A|92|"
+  ]
+ },
+ "445": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|45|"
+  ]
+ },
+ "446": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|45|"
+  ]
+ },
+ "447": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|29|"
+  ]
+ },
+ "448": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|29|"
+  ]
+ },
+ "449": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1RNB",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|31|"
+  ]
+ },
+ "450": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "1BRS"
+  ],
+  "residues": [
+   "A|31|"
+  ]
+ },
+ "451": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|79|",
+   "A|80|"
+  ]
+ },
+ "452": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|79|",
+   "A|80|"
+  ]
+ },
+ "453": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|85|",
+   "A|100|"
+  ]
+ },
+ "454": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|85|",
+   "A|100|"
+  ]
+ },
+ "455": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|85|",
+   "A|86|",
+   "A|100|"
+  ]
+ },
+ "456": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BSA",
+   "1BSB"
+  ],
+  "residues": []
+ },
+ "457": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B21",
+   "1B2X"
+  ],
+  "residues": []
+ },
+ "458": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|28|",
+   "A|54|"
+  ]
+ },
+ "459": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1BRH",
+   "1BRS",
+   "1BSE",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|102|"
+  ]
+ },
+ "460": {
+  "occupancy": 23,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|5|",
+   "A|78|"
+  ]
+ },
+ "461": {
+  "occupancy": 16,
+  "n_structures_occupied": 16,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BNF",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|5|",
+   "A|77|"
+  ]
+ },
+ "462": {
+  "occupancy": 16,
+  "n_structures_occupied": 16,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BNF",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|5|",
+   "A|77|"
+  ]
+ },
+ "463": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X"
+  ],
+  "residues": []
+ },
+ "464": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "1X1Y"
+  ],
+  "residues": []
+ },
+ "465": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|85|",
+   "A|86|",
+   "A|100|"
+  ]
+ },
+ "466": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|85|",
+   "A|86|",
+   "A|100|"
+  ]
+ },
+ "467": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|98|"
+  ]
+ },
+ "468": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B2S",
+   "1BRK",
+   "1BRS",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|98|"
+  ]
+ },
+ "469": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRJ",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|3|",
+   "A|5|",
+   "A|6|"
+  ]
+ },
+ "470": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRJ",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "2C4B"
+  ],
+  "residues": [
+   "A|3|",
+   "A|5|",
+   "A|6|"
+  ]
+ },
+ "471": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "472": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1BRS",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|38|"
+  ]
+ },
+ "473": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|35|"
+  ]
+ },
+ "474": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1BRH",
+   "1BRS",
+   "1BSE",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|102|"
+  ]
+ },
+ "475": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "1BNF",
+   "1BRI",
+   "1BSC",
+   "1BSE"
+  ],
+  "residues": [
+   "A|83|",
+   "A|84|",
+   "A|87|",
+   "A|102|"
+  ]
+ },
+ "476": {
+  "occupancy": 23,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|5|",
+   "A|78|"
+  ]
+ },
+ "477": {
+  "occupancy": 23,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|5|",
+   "A|78|"
+  ]
+ },
+ "478": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B2S",
+   "1BRN",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "479": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BSA",
+   "1BSB"
+  ],
+  "residues": [
+   "A|82|"
+  ]
+ },
+ "480": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|7|",
+   "A|8|"
+  ]
+ },
+ "481": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|92|"
+  ]
+ },
+ "482": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "2C4B",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|92|"
+  ]
+ },
+ "483": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRI",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|26|",
+   "A|28|"
+  ]
+ },
+ "484": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B2S",
+   "1B2X",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|54|"
+  ]
+ },
+ "485": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|27|"
+  ]
+ },
+ "486": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|55|",
+   "A|57|",
+   "A|59|"
+  ]
+ },
+ "487": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|87|",
+   "A|102|",
+   "A|103|"
+  ]
+ },
+ "488": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1BRI",
+   "1BRK",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|59|",
+   "A|60|"
+  ]
+ },
+ "489": {
+  "occupancy": 18,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|58|",
+   "A|60|",
+   "A|61|",
+   "A|62|"
+  ]
+ },
+ "490": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B2S",
+   "1BRS",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "491": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "492": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|7|",
+   "A|8|"
+  ]
+ },
+ "493": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1X1Y",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "494": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B2X",
+   "1BRH",
+   "1BRK",
+   "1BSA",
+   "1BSB",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|27|",
+   "A|83|"
+  ]
+ },
+ "495": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "6PQK"
+  ],
+  "residues": []
+ },
+ "496": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRS",
+   "6PQK"
+  ],
+  "residues": [
+   "A|5|"
+  ]
+ },
+ "497": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRK"
+  ],
+  "residues": [
+   "A|82|"
+  ]
+ },
+ "498": {
+  "occupancy": 16,
+  "n_structures_occupied": 16,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRN",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|80|",
+   "A|82|"
+  ]
+ },
+ "499": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRN",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|80|",
+   "A|82|"
+  ]
+ },
+ "500": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|70|",
+   "A|72|",
+   "A|90|",
+   "A|92|"
+  ]
+ },
+ "501": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRN",
+   "1BRS",
+   "1BSB",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|28|"
+  ]
+ },
+ "502": {
+  "occupancy": 9,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRN",
+   "1BRS",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|28|"
+  ]
+ },
+ "503": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BRH",
+   "1BRS",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|73|"
+  ]
+ },
+ "504": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|73|",
+   "A|103|"
+  ]
+ },
+ "505": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2S",
+   "1RNB"
+  ],
+  "residues": [
+   "A|62|",
+   "A|103|",
+   "A|104|"
+  ]
+ },
+ "506": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRN",
+   "1RNB"
+  ],
+  "residues": []
+ },
+ "507": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|77|",
+   "A|79|"
+  ]
+ },
+ "508": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRI",
+   "1BRJ",
+   "1BRS",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|77|"
+  ]
+ },
+ "509": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRI",
+   "1BRJ",
+   "1BRS",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|77|"
+  ]
+ },
+ "510": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|70|",
+   "A|72|",
+   "A|90|",
+   "A|92|"
+  ]
+ },
+ "511": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRN",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|54|"
+  ]
+ },
+ "512": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1BRK",
+   "1BSC"
+  ],
+  "residues": [
+   "A|60|"
+  ]
+ },
+ "513": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1BRN",
+   "1BRS",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|62|"
+  ]
+ },
+ "514": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B20",
+   "2ZA4"
+  ],
+  "residues": []
+ },
+ "515": {
+  "occupancy": 19,
+  "n_structures_occupied": 19,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|31|",
+   "A|35|"
+  ]
+ },
+ "516": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1BRI",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|77|",
+   "A|79|"
+  ]
+ },
+ "517": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "6PQK"
+  ],
+  "residues": [
+   "A|77|",
+   "A|79|"
+  ]
+ },
+ "518": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1BRN",
+   "1RNB",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|85|"
+  ]
+ },
+ "519": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1BNF",
+   "1BRN"
+  ],
+  "residues": [
+   "A|83|"
+  ]
+ },
+ "520": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B2S",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|82|"
+  ]
+ },
+ "521": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B2S",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|82|"
+  ]
+ },
+ "522": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|70|",
+   "A|72|",
+   "A|90|",
+   "A|92|"
+  ]
+ },
+ "523": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|70|",
+   "A|72|",
+   "A|90|",
+   "A|92|"
+  ]
+ },
+ "524": {
+  "occupancy": 6,
+  "n_structures_occupied": 6,
+  "occupying": [
+   "1B20",
+   "1B2S",
+   "1BRS",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|57|",
+   "A|59|"
+  ]
+ },
+ "525": {
+  "occupancy": 11,
+  "n_structures_occupied": 11,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "3KCH"
+  ],
+  "residues": [
+   "A|57|",
+   "A|58|",
+   "A|59|"
+  ]
+ },
+ "526": {
+  "occupancy": 10,
+  "n_structures_occupied": 10,
+  "occupying": [
+   "1B2S",
+   "1BRH",
+   "1BRI",
+   "1BRS",
+   "1BSB",
+   "1BSE",
+   "1X1Y",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|27|",
+   "A|73|",
+   "A|83|",
+   "A|103|"
+  ]
+ },
+ "527": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BSE"
+  ],
+  "residues": [
+   "A|27|",
+   "A|103|"
+  ]
+ },
+ "528": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X"
+  ],
+  "residues": [
+   "A|103|"
+  ]
+ },
+ "529": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B2X",
+   "1BRN",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|60|",
+   "A|62|",
+   "A|103|"
+  ]
+ },
+ "530": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B2S",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|85|"
+  ]
+ },
+ "531": {
+  "occupancy": 11,
+  "n_structures_occupied": 10,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1BRI",
+   "1BRK",
+   "1BRS",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|82|",
+   "A|83|"
+  ]
+ },
+ "532": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1BRI",
+   "1BRK",
+   "1BRS",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|82|",
+   "A|83|"
+  ]
+ },
+ "533": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|7|",
+   "A|8|"
+  ]
+ },
+ "534": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|7|",
+   "A|8|"
+  ]
+ },
+ "535": {
+  "occupancy": 10,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1B2S",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|54|",
+   "A|55|"
+  ]
+ },
+ "536": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2X",
+   "1BNF",
+   "1BRK",
+   "1BSC",
+   "1BSE",
+   "2C4B",
+   "3KCH"
+  ],
+  "residues": [
+   "A|60|",
+   "A|103|"
+  ]
+ },
+ "537": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2X",
+   "1BRN"
+  ],
+  "residues": []
+ },
+ "538": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B21",
+   "1BRS",
+   "1X1Y"
+  ],
+  "residues": []
+ },
+ "539": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRJ",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|37|",
+   "A|38|"
+  ]
+ },
+ "540": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B21",
+   "1B2S",
+   "1B2X"
+  ],
+  "residues": []
+ },
+ "541": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1A2P",
+   "1BRS",
+   "1X1Y",
+   "2C4B"
+  ],
+  "residues": [
+   "A|38|"
+  ]
+ },
+ "542": {
+  "occupancy": 4,
+  "n_structures_occupied": 4,
+  "occupying": [
+   "1B21",
+   "1B2X",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|38|"
+  ]
+ },
+ "543": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B21",
+   "1BNF",
+   "1BRJ"
+  ],
+  "residues": []
+ },
+ "544": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRK",
+   "3KCH"
+  ],
+  "residues": [
+   "A|38|"
+  ]
+ },
+ "545": {
+  "occupancy": 11,
+  "n_structures_occupied": 11,
+  "occupying": [
+   "1B2S",
+   "1BNF",
+   "1BRI",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|5|",
+   "A|77|"
+  ]
+ },
+ "546": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BRI",
+   "1BRN",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "3KCH"
+  ],
+  "residues": [
+   "A|85|"
+  ]
+ },
+ "547": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|55|",
+   "A|57|",
+   "A|59|"
+  ]
+ },
+ "548": {
+  "occupancy": 11,
+  "n_structures_occupied": 11,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "3KCH"
+  ],
+  "residues": [
+   "A|57|",
+   "A|58|",
+   "A|59|"
+  ]
+ },
+ "549": {
+  "occupancy": 11,
+  "n_structures_occupied": 11,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "3KCH"
+  ],
+  "residues": [
+   "A|57|",
+   "A|58|",
+   "A|59|"
+  ]
+ },
+ "550": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1BSE",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|60|",
+   "A|62|",
+   "A|103|"
+  ]
+ },
+ "551": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BNF",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|60|",
+   "A|62|",
+   "A|103|"
+  ]
+ },
+ "552": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1B21",
+   "1BSC",
+   "1BSE"
+  ],
+  "residues": [
+   "A|60|",
+   "A|62|"
+  ]
+ },
+ "553": {
+  "occupancy": 2,
+  "n_structures_occupied": 2,
+  "occupying": [
+   "1B2X",
+   "1BSE"
+  ],
+  "residues": [
+   "A|60|",
+   "A|62|"
+  ]
+ },
+ "554": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRI",
+   "1BRS",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|104|"
+  ]
+ },
+ "555": {
+  "occupancy": 5,
+  "n_structures_occupied": 5,
+  "occupying": [
+   "1B20",
+   "1BRI",
+   "1BRS",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|104|"
+  ]
+ },
+ "556": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|35|",
+   "A|41|",
+   "A|42|",
+   "A|78|",
+   "A|81|"
+  ]
+ },
+ "557": {
+  "occupancy": 3,
+  "n_structures_occupied": 3,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21"
+  ],
+  "residues": []
+ },
+ "558": {
+  "occupancy": 7,
+  "n_structures_occupied": 7,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "1B2S",
+   "1BRH",
+   "1BRS",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|38|"
+  ]
+ },
+ "559": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1A2P",
+   "1B21",
+   "1B2S",
+   "1BRH",
+   "1BRS",
+   "1BSE",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|38|"
+  ]
+ },
+ "560": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|31|",
+   "A|35|"
+  ]
+ },
+ "561": {
+  "occupancy": 20,
+  "n_structures_occupied": 20,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|31|",
+   "A|35|"
+  ]
+ },
+ "562": {
+  "occupancy": 13,
+  "n_structures_occupied": 13,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BNF",
+   "1BRI",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|5|",
+   "A|77|"
+  ]
+ },
+ "563": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B2S",
+   "1BNF",
+   "1BRI",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|5|",
+   "A|77|"
+  ]
+ },
+ "564": {
+  "occupancy": 12,
+  "n_structures_occupied": 12,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BRI",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|85|"
+  ]
+ },
+ "565": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1B2S",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|54|",
+   "A|55|"
+  ]
+ },
+ "566": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1B2S",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSC",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "6PQK"
+  ],
+  "residues": [
+   "A|54|",
+   "A|55|"
+  ]
+ },
+ "567": {
+  "occupancy": 15,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|55|",
+   "A|57|",
+   "A|59|"
+  ]
+ },
+ "568": {
+  "occupancy": 19,
+  "n_structures_occupied": 18,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|27|",
+   "A|73|",
+   "A|83|",
+   "A|103|"
+  ]
+ },
+ "569": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1B21",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRJ",
+   "1BRN",
+   "1BSC",
+   "1BSE",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|83|"
+  ]
+ },
+ "570": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRJ",
+   "1BRN",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "2ZA4"
+  ],
+  "residues": [
+   "A|83|"
+  ]
+ },
+ "571": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|35|",
+   "A|37|"
+  ]
+ },
+ "572": {
+  "occupancy": 21,
+  "n_structures_occupied": 21,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|35|",
+   "A|37|"
+  ]
+ },
+ "573": {
+  "occupancy": 10,
+  "n_structures_occupied": 10,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BRI",
+   "1BRN",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|85|"
+  ]
+ },
+ "574": {
+  "occupancy": 9,
+  "n_structures_occupied": 9,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BRI",
+   "1BRN",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "3KCH"
+  ],
+  "residues": [
+   "A|85|"
+  ]
+ },
+ "575": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|55|",
+   "A|57|",
+   "A|59|"
+  ]
+ },
+ "576": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B2S",
+   "1BRH",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|55|",
+   "A|57|",
+   "A|59|"
+  ]
+ },
+ "577": {
+  "occupancy": 8,
+  "n_structures_occupied": 8,
+  "occupying": [
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRK",
+   "1BRN",
+   "1BSC",
+   "2C4B"
+  ],
+  "residues": [
+   "A|27|"
+  ]
+ },
+ "578": {
+  "occupancy": 16,
+  "n_structures_occupied": 16,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|83|"
+  ]
+ },
+ "579": {
+  "occupancy": 17,
+  "n_structures_occupied": 17,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRS",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|83|"
+  ]
+ },
+ "580": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|35|",
+   "A|41|",
+   "A|42|",
+   "A|78|",
+   "A|81|"
+  ]
+ },
+ "581": {
+  "occupancy": 17,
+  "n_structures_occupied": 17,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|27|",
+   "A|73|",
+   "A|83|",
+   "A|103|"
+  ]
+ },
+ "582": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2X",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "2C4B",
+   "2ZA4",
+   "3KCH"
+  ],
+  "residues": [
+   "A|27|",
+   "A|73|",
+   "A|83|",
+   "A|103|"
+  ]
+ },
+ "583": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|35|",
+   "A|37|"
+  ]
+ },
+ "584": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|35|",
+   "A|41|",
+   "A|42|",
+   "A|78|",
+   "A|81|"
+  ]
+ },
+ "585": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|35|",
+   "A|41|",
+   "A|42|",
+   "A|78|",
+   "A|81|"
+  ]
+ },
+ "586": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|31|"
+  ]
+ },
+ "587": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|35|",
+   "A|37|"
+  ]
+ },
+ "588": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|35|",
+   "A|37|"
+  ]
+ },
+ "589": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|35|",
+   "A|41|",
+   "A|42|",
+   "A|78|",
+   "A|81|"
+  ]
+ },
+ "590": {
+  "occupancy": 22,
+  "n_structures_occupied": 22,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRJ",
+   "1BRK",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1BSE",
+   "1RNB",
+   "1X1Y",
+   "2C4B",
+   "2ZA4",
+   "3KCH",
+   "6PQK"
+  ],
+  "residues": [
+   "A|35|",
+   "A|41|",
+   "A|42|",
+   "A|78|",
+   "A|81|"
+  ]
+ },
+ "591": {
+  "occupancy": 14,
+  "n_structures_occupied": 14,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|31|"
+  ]
+ },
+ "592": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|31|"
+  ]
+ },
+ "593": {
+  "occupancy": 15,
+  "n_structures_occupied": 15,
+  "occupying": [
+   "1A2P",
+   "1B20",
+   "1B21",
+   "1B2S",
+   "1B2X",
+   "1BNF",
+   "1BRH",
+   "1BRI",
+   "1BRN",
+   "1BRS",
+   "1BSA",
+   "1BSB",
+   "1BSC",
+   "1X1Y",
+   "6PQK"
+  ],
+  "residues": [
+   "A|31|"
+  ]
+ }
+}

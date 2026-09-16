@@ -31,7 +31,7 @@ WatCon can then be used to create a fasta file from this PDB (if one does not ex
 
 We will use effectively the same input files for our trajectories as shown in the :docs:`Trajectory Analysis <trajectory_analyisis>` tutorial, with the addition of this section:
 
-.. code-block:: txt
+.. code-block:: text
 
    ; WatCon PTP1B_closed_1 Input File 
 
@@ -57,7 +57,7 @@ Since we will be comparing static and dynamic information for PTP1B in the close
 
 For our static structures, we will use the following input file:
 
-.. code-block:: txt
+.. code-block:: text
 
    ; WatCon Sample Input File
    
@@ -127,7 +127,7 @@ Once again, we can call WatCon on the command line, and will need to run it sepa
    $ ... (repeat for other trajectory replicas)
    $ python -m WatCon.WatCon --input input_static.txt --nmae PTP1B_Static_Closed
 
-After running the static and dynamic analysis, there will be nine files in the **watcon_output** folder, eight corresponding to each trajectory and one corresponding to the static structures which will then be used for the next section. There will also be a PDB file saved which contains dummy water atoms at the positions of the clustered water coordinates for the static structures. To compare water density hotspots for trajectories, we need to calculate density histograms (more details on these choices in XXX), which can be done using the WatCon python API. 
+After running the static and dynamic analysis, there will be nine files in the **watcon_output** folder, eight corresponding to each trajectory and one corresponding to the static structures which will then be used for the next section. There will also be a PDB file saved which contains dummy water atoms at the positions of the clustered water coordinates for the static structures. To compare water density hotspots for trajectories, we need to calculate density histograms (more details on these choices in `Brownless, Harrison-Rawn & Kamerlin, JACS Au 2025 <https://pubs.acs.org/doi/10.1021/jacsau.5c00447>`_), which can be done using the WatCon python API. 
 
 .. code-block:: python
    
@@ -149,7 +149,7 @@ Distribution of Metrics
 
 Let's first begin by comparing the distrbutions of calculated metrics between the static and dynamic data. This can be done easily by using a WatCon analysis input file. Here is an example:
 
-.. code-block:: txt
+.. code-block:: text
 
    ; Sample input file for WatCon analysis
 
@@ -206,7 +206,7 @@ Water-Protein Interactions
 
 Let's leverage the unique two-angle calculations to see how the distribution of residue-water interactions differs between the static and dynamic structures. Since we already ensured that angle classification files were written from our initial input file, plotting these results can be done easily by adding this line to the analysis input file.
 
-.. code-block:: txt
+.. code-block:: text
 
    ; Residue-water classification
    classify_waters: on               ; Use outputted .csv files from 2-angle classification to generate scatter/density plots

@@ -11,4 +11,6 @@ We provide a series of common protocols which can require more specific informat
    faq/combining_different_data
    faq/input_vs_python
    faq/organizing_files
+   faq/calculations
+   faq/conservation_options
    faq/frequently_asked_questions

@@ -1,0 +1,60 @@
+Barnase conserved-water study
+============================================================
+
+Structures: 22
+
+Per-structure ConSurf mapping
+entry      waters   coverage identity
+1A2P          148     100.0%  100.0%
+1B20          178      98.8%   99.1%
+1B21          118      99.4%   98.1%
+1B2S          210      98.1%   99.1%
+1B2X          131     100.0%  100.0%
+1BNF           68     100.0%   98.1%
+1BRH           89     100.0%   99.1%
+1BRI           96     100.0%   99.1%
+1BRJ           75     100.0%   99.1%
+1BRK           90     100.0%   99.1%
+1BRN          120     100.0%  100.0%
+1BRS          174     100.0%  100.0%
+1BSA           81     100.0%   99.1%
+1BSB           81     100.0%   99.1%
+1BSC           77     100.0%   99.1%
+1BSE           59     100.0%   99.1%
+1RNB           89      99.4%   98.1%
+1X1Y          184     100.0%  100.0%
+2C4B          286      76.9%   99.1%
+2ZA4          153     100.0%   99.1%
+3KCH           83     100.0%  100.0%
+6PQK          163     100.0%   98.1%
+
+Lowest identity rate across structures: 98.1%
+
+Waters pooled:            2753
+Cluster centres:          594
+Sites with >=1 water:     590
+Sites with conservation:  462
+
+Occupancy distribution (structures in which a site is occupied)
+  in  1 structures:   21 sites
+  in  2 structures:   88 sites
+  in  3 structures:   70 sites
+  in  4 structures:   43 sites
+  in  5 structures:   37 sites
+  in  6 structures:   25 sites
+  in  7 structures:   30 sites
+  in  8 structures:   32 sites
+  in  9 structures:   26 sites
+  in 10 structures:    9 sites
+  in 11 structures:   11 sites
+  in 12 structures:   15 sites
+  in 13 structures:   18 sites
+  in 14 structures:   18 sites
+  in 15 structures:   18 sites
+  in 16 structures:    7 sites
+  in 17 structures:   14 sites
+  in 18 structures:   17 sites
+  in 19 structures:    1 sites
+  in 20 structures:   18 sites
+  in 21 structures:   15 sites
+  in 22 structures:   57 sites

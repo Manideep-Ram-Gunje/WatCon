@@ -1,0 +1,63 @@
+cff-version: 1.2.0
+title: "WatCon-ConSurf: conserved water networks joined to evolutionary conservation"
+message: >-
+  This is a derivative work. If you use it, please cite the original WatCon
+  paper, which is the water-network analysis this builds on. Cite this
+  repository as well only if the ConSurf integration itself matters to your
+  work.
+type: software
+authors:
+  - family-names: Brownless
+    given-names: Alfie-Louise
+    email: abrownless3@gatech.edu
+    affiliation: Georgia Institute of Technology
+  - family-names: Kamerlin
+    given-names: Shina Caroline Lynn
+    affiliation: Georgia Institute of Technology
+  - family-names: Gunje
+    given-names: Manideep Ram
+repository-code: "https://github.com/Manideep-Ram-Gunje/WatCon"
+license: GPL-3.0-only
+abstract: >-
+  WatCon finds water sites that recur across many structures of a protein;
+  ConSurf scores how conserved each residue is across evolution. This package
+  joins the two, reporting structural occupancy and evolutionary conservation as
+  separate columns rather than blending them into one score, and verifies the
+  residue identity of every join so that a numbering mismatch stops the run
+  instead of attaching scores to the wrong residues.
+keywords:
+  - water networks
+  - evolutionary conservation
+  - ConSurf
+  - structural biology
+  - protein tyrosine phosphatases
+references:
+  - type: article
+    title: >-
+      WatCon: A Python Tool for Analysis of Conserved Water Networks Across
+      Protein Families
+    authors:
+      - family-names: Brownless
+        given-names: Alfie-Louise R.
+      - family-names: Harrison-Rawn
+        given-names: Tyler
+      - family-names: Kamerlin
+        given-names: Shina Caroline Lynn
+    journal: JACS Au
+    year: 2025
+    doi: 10.1021/jacsau.5c00447
+preferred-citation:
+  type: article
+  title: >-
+    WatCon: A Python Tool for Analysis of Conserved Water Networks Across
+    Protein Families
+  authors:
+    - family-names: Brownless
+      given-names: Alfie-Louise R.
+    - family-names: Harrison-Rawn
+      given-names: Tyler
+    - family-names: Kamerlin
+      given-names: Shina Caroline Lynn
+  journal: JACS Au
+  year: 2025
+  doi: 10.1021/jacsau.5c00447

@@ -62,7 +62,7 @@ Clone the WatCon repository and change your working directory into WatCon
 
 After you create the WatCon conda environment, you will receive this message:
 
-.. code-block:: txt
+.. code-block:: text
 
    Edit /anaconda3/envs/WatCon/lib/modeller-10.7/modlib/modeller/config.py
    and replace XXXX with your Modeller license key

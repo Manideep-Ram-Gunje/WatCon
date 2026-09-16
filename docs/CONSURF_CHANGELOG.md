@@ -2200,3 +2200,112 @@ refuses correctly: the Zenodo `.gro` is renumbered from 1, so it agrees with
 the 1AAX run at only 16 of 297 residues (5.4%) and the run stops. Which is the
 behaviour this package exists to provide -- it simply could not be reached
 while the chain silently matched nothing.
+
+
+---
+
+## 2026-09-16 - Phase 30: the release audit, and what it found
+
+- **Change:** A full read-only audit of the repository, then everything it
+  raised as blocking or release-quality.
+- **Files:** `find_conserved_networks.py`, `sequence_processing.py`,
+  `generate_dynamic_networks.py`, `generate_static_networks.py`,
+  `pyproject.toml`, `CITATION.cff` (new), `.github/workflows/CI.yaml`,
+  `docs/` (api, user guide, tutorials, ten new module stubs),
+  `experiments/barnase_waters/` (vendored), three new test modules.
+- **Reason:** Before calling the tool complete, find out what was actually
+  pending rather than assuming.
+- **Tests:** `pytest WatCon/tests -q` -> 783 passed, 2 skipped (was 764).
+- **Limits:** The scientific limitations are unchanged and permanent; see
+  README. Two ambiguous Sphinx cross-references remain, both correct.
+- **Decision:** `kmeans` was removed from the documentation, not implemented.
+
+### Two blocking defects
+
+**`kmeans` was a documented API that could not run.** Both `initialize_network`
+docstrings advertised `{'hdbscan', 'dbscan', 'kmeans'}`; only three methods were
+implemented and `kmeans` was not among them. It -- or any typo -- fell through
+every branch and raised `UnboundLocalError: cannot access local variable
+'clustering'`, naming neither the parameter nor the alternatives. **Both**
+dispatch sites had the bug (`cluster_nodes` as well as
+`cluster_coordinates_only`).
+
+It was removed from the docs rather than implemented: k-means needs a *k* this
+API has no parameter for, and cannot express the noise label (-1) every caller
+relies on. Implementing it would have meant inventing a specification, which is
+the same call made for `get_all_water_distances`. Both sites now validate
+against `CLUSTERING_METHODS` and name the alternatives.
+
+**The README's headline evidence link was broken.** It pointed at
+`experiments/barnase_waters/FINDINGS.md`, which lived outside the repository --
+the one broken link in the repo, on the sentence stating the central result. The
+study is now vendored: findings, preregistration, the ConSurf runs, the results
+and the scripts, 626 kB. The 7.6 MB of structures and 1.8 MB of prepared copies
+are not, because the scripts regenerate them exactly from the entry list. Every
+repo-relative link now resolves.
+
+### Packaging
+
+The version read `1+unknown` because `match = ["*"]` accepted any tag, so the
+unrelated `phase3-complete-pka-negative` tag was picked up, failed to parse, and
+the build fell back to the default. Now `match = ["v*"]`, and **v0.9.0** is
+tagged -- pre-1.0 deliberately, since the central result is still correlational
+with burial unresolved.
+
+`authors` listed only the upstream author, attributing the extension to someone
+who did not write it. All three are now named, mirroring the copyright line in
+README and LICENSE, with `maintainers` set separately. Classifiers went from two
+lines to eleven, and `CITATION.cff` makes the **original paper** the preferred
+citation, which is what anyone using this should cite.
+
+### Documentation
+
+Nine modules -- most of this work -- were absent from the API reference:
+`alignment`, `conformers`, `family`, `family_scene`, `family_sites`, `fetch`,
+`scene`, `structure_io`, `view`, plus the `pymol_plugin` package. All are now
+documented and grouped.
+
+`user_guide.rst` contained **zero** mentions of ConSurf. It now links a new
+`faq/conservation_options.rst` covering every setting the extension adds, both
+identity checks, and what each refuses to guess.
+
+**The docs had never been built.** Building them locally found 48 warnings, now
+**3**: an invalid `language = None`, a reference carrying a `.rst` extension,
+two toctrees pointing at paths that do not exist, a stub for a test module
+deleted long ago, three orphaned pages, four malformed docstring lists in the
+`find_connections` family, and 19 code blocks using a Pygments lexer named
+`txt`, which does not exist. The three that remain are two genuinely ambiguous
+cross-references and one cosmetic lexing retry.
+
+Three inherited `(XXX)` placeholders now cite the WatCon paper. The trajectory
+tutorial says plainly that its trajectories are not distributed and points at
+the bundled fixtures instead; the family tutorial now mentions `watcon family`,
+which it never did.
+
+### CI
+
+**The plugin's 28 tests ran in no CI job.** PyMOL is correctly not a dependency,
+so they skipped everywhere while passing locally. A `plugin` job now installs
+PyMOL from conda-forge and runs them under `xvfb`, and **fails if they skip** --
+a skipped run is not a passing run. Python 3.13 joins the matrix, which the new
+classifiers claim. The wheel check now also asserts the newer fixtures ship and
+that the vendored `experiments/` does not leak into the distribution.
+
+### Inherited hygiene
+
+`Bio.pairwise2` -- deprecated, slated for removal -- was the package's last use
+of the old Biopython API, in `seq_similarity`, which was called from nowhere and
+tested by nothing. Ported to `PairwiseAligner` configured identically, verified
+to return the same value on every pair checked, and now covered by tests in a
+module that was previously a 0-byte placeholder.
+
+The bare `except` around Universe construction swallowed everything -- a corrupt
+file, an unreadable format, a typo in a path -- and silently reinterpreted it as
+"this is a single structure". The fallback remains, because topology-only input
+is legitimate, but the reason is now reported.
+
+### What the audit did not change
+
+No scientific result moved. Barnase **193 / 190 / 165 / 57** and the family at
+fifteen **344 / 229 / 58** were re-run from the command line afterwards and are
+unchanged.

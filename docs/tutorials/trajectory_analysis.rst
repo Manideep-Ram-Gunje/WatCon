@@ -4,13 +4,33 @@ Trajectory Analysis
 .. role:: python(code)
    :language: python
 
-We present how WatCon can be used in order to analyze water network structure and important water-protein interactions across a molecular dynamics trajectory. This example taken from (XXX) analyzes the protein tyrosine phosphatase (PTP) PTP1B. This protein notably contains a mobile active site loop, the WPD-loop, identified by the general acid D181. The movement of this loop plays a major role in the catalytic regulation of this enzyme and importantly the movement of this loop fundamentally changes the solvation of the active site. We will use WatCon to investigate the effects of this loop movement.
+We present how WatCon can be used in order to analyze water network structure and important water-protein interactions across a molecular dynamics trajectory. This example, taken from `Brownless, Harrison-Rawn & Kamerlin, JACS Au 2025 <https://pubs.acs.org/doi/10.1021/jacsau.5c00447>`_, analyzes the protein tyrosine phosphatase (PTP) PTP1B. This protein notably contains a mobile active site loop, the WPD-loop, identified by the general acid D181. The movement of this loop plays a major role in the catalytic regulation of this enzyme and importantly the movement of this loop fundamentally changes the solvation of the active site. We will use WatCon to investigate the effects of this loop movement.
+
+
+.. note::
+
+   **The trajectories this tutorial uses are not distributed with the package.**
+   They are 8 x 1.5 microsecond simulations from the WatCon paper; the Zenodo
+   record (`10.5281/zenodo.15213225 <https://doi.org/10.5281/zenodo.15213225>`_)
+   ships the starting structures and ``.mdp`` run parameters, not the output.
+   Read this as the recipe for your own trajectory.
+
+   To exercise the dynamic path on data that *is* bundled, see the fixtures in
+   ``WatCon/data/examples/ptp1b_ensemble/`` and the tests that drive them
+   (``WatCon/tests/test_dynamic_workflow.py``,
+   ``WatCon/tests/test_directed_geometry.py``).
+
+   Two settings matter for anything large: ``shortest_path`` and
+   ``characteristic_path_length`` run all-pairs shortest paths and are on when
+   ``analysis_conditions`` is ``all``. On a 4,851-water system they took 819 s
+   and 45 s against **1.4 s** to build the network itself. Switching them off
+   leaves the network identical.
 
 
 1. Prepare Structures and Trajectories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We conducted 8 x 1.5μs trajectories of PTP1B initiated from the WPD-loop closed and WPD-loop open conformations. See (XXX) for more details on simulation setup. We processed our trajectories prior to this analysis, fixing periodic boundary condition (PBC) and aligning the protein within the box. Our structures contain the same atom-numbering regardless of configuration, and so we do not need to perform a multiple sequence alignment to ensure consistent residue numbering. Furthermore, since we have preprocessed our trajectories, we do not need to align structures, and so we can leave our topology in any MDAnalysis-readable format and skip further steps involving the :mod:`WatCon.sequence_processing` module.
+We conducted 8 x 1.5μs trajectories of PTP1B initiated from the WPD-loop closed and WPD-loop open conformations. See `Brownless, Harrison-Rawn & Kamerlin, JACS Au 2025 <https://pubs.acs.org/doi/10.1021/jacsau.5c00447>`_ for more details on simulation setup. We processed our trajectories prior to this analysis, fixing periodic boundary condition (PBC) and aligning the protein within the box. Our structures contain the same atom-numbering regardless of configuration, and so we do not need to perform a multiple sequence alignment to ensure consistent residue numbering. Furthermore, since we have preprocessed our trajectories, we do not need to align structures, and so we can leave our topology in any MDAnalysis-readable format and skip further steps involving the :mod:`WatCon.sequence_processing` module.
 
 
 2. Create Input Files
@@ -18,7 +38,7 @@ We conducted 8 x 1.5μs trajectories of PTP1B initiated from the WPD-loop closed
 
 In our case, we have 8 separate replicas for each configuration that we are sampling to analyze. We could concatenate all trajectories (making sure to keep all frames aligned) prior to WatCon analysis, or we can run WatCon separately for each trajectory and combine results later. We demonstrate using this method, as it can be preferable due to increased parallelization across trajectories. We can use either input files or the python API directly to do this, but we recommend for large trajectories using input files as the WatCon data will be saved in .pkl files which can be reloaded later for faster analysis. Here is a sample input files for our analysis.
 
-.. code-block:: txt
+.. code-block:: text
 
    ; Input file: Closed PTP1B Unliganded Run 1
 
@@ -214,7 +234,7 @@ We see from these results that graph entropy and density increases subtly with W
 
 We realize that this is a reasonably complex plotting script due to the fact that we wish to compare our computed metrics with previously gathered distance data. We note that if you want to plot only the 1D-histogram of metrics, this can be done easily by using the WatCon built-in post-analysis functionality. Here is an example input file that would accomplish this goal:
 
-.. code-block:: txt
+.. code-block:: text
 
    ; WatCon post-analysis: PTP1B trajectories
    
@@ -231,7 +251,7 @@ Water-Residue Interactions
 
 Now, let's look how our active region residues differentially interact with waters. We can access the :python:`per_residue_interaction` key of our metrics dictionary to produce an image which gives us an indication of both how often active region residues interact with waters and how many waters simultaneously interact with high-scoring residues. We can do this easily by specifying these options in a WatCon post-analysis file:
 
-.. code-block:: txt
+.. code-block:: text
 
    ; WatCon post-analysis: PTP1B trajectories
 

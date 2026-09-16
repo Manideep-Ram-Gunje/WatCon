@@ -38,7 +38,7 @@ Sample Input File
 
 An example of a WatCon input file is provided below. 
 
-.. code-block:: txt
+.. code-block:: text
     
    ; WatCon Sample Input File
    
@@ -128,7 +128,7 @@ Analyzing Calculated Metrics
 To increase ease in combining results across multiple trajectories or multiple static structures, we also allow for supplemental analysis to be conducted via direct python interface or input files following this construction:
 
 
-.. code-block:: txt
+.. code-block:: text
 
     ; Sample input file for WatCon analysis
     

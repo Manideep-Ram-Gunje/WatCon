@@ -12,14 +12,36 @@ name = "watcon-consurf"
 description = "WatCon extended with ConSurf evolutionary conservation: conserved water networks joined to per-residue conservation"
 dynamic = ["version"]
 readme = "README.md"
+# WatCon itself -- the water-network analysis, clustering, MSA machinery and
+# PyMOL projections -- is the work of its original authors. This distribution
+# adds the ConSurf integration on top. Both are named, mirroring the copyright
+# line in README.md and LICENSE, so that listing one does not erase the other.
 authors = [
     { name = "Alfie-Louise Brownless", email = "abrownless3@gatech.edu" },
+    { name = "Shina Caroline Lynn Kamerlin" },
+    { name = "Manideep Ram Gunje", email = "manideepram2006c@gmail.com" },
+]
+maintainers = [
+    { name = "Manideep Ram Gunje", email = "manideepram2006c@gmail.com" },
 ]
 license = { text = "GPL-3.0-only" }
+keywords = [
+    "structural biology", "water networks", "conservation", "ConSurf",
+    "molecular dynamics", "crystallography", "bioinformatics",
+]
 # See https://pypi.org/classifiers/
 classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Chemistry",
 ]
 # Our own code is 3.8-safe, but the dependencies are not: MDAnalysis needs
 # >=3.11, numpy and scipy >=3.12, biopython >=3.10. The inherited ">=3.8" would
@@ -117,7 +139,9 @@ WatCon = [
 ]
 
 [tool.versioningit]
-default-version = "1+unknown"
+# Reached only outside a git checkout (an sdist, say). Inside one the version
+# comes from the nearest v* tag below.
+default-version = "0.0.0+unknown"
 
 [tool.versioningit.format]
 distance = "{base_version}+{distance}.{vcs}{rev}"
@@ -128,8 +152,12 @@ distance-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
 # The method key:
 method = "git"  # <- The method name
 # Parameters to pass to the method:
-match = ["*"]
-default-tag = "1.0.0"
+# Version tags only. With match = ["*"] any tag counted, so the unrelated
+# `phase3-complete-pka-negative` tag was picked up, failed to parse as a
+# version, and the build silently fell back to default-version -- which is why
+# both `WatCon.__version__` and the installed metadata read "1+unknown".
+match = ["v*"]
+default-tag = "0.0.0"
 
 [tool.versioningit.write]
 file = "WatCon/_version.py"

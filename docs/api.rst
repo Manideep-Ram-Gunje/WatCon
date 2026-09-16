@@ -17,7 +17,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   WatCon.tests
+   source/modules/WatCon.tests
 
 Submodules
 ----------
@@ -49,6 +49,9 @@ alignment without MODELLER; ``prepare`` the dataset preparation step; and the
    source/modules/WatCon.residue_index
    source/modules/WatCon.superpose
    source/modules/WatCon.prepare
+   source/modules/WatCon.structure_io
+   source/modules/WatCon.fetch
+   source/modules/WatCon.conformers
    source/modules/WatCon.cli
    source/modules/WatCon.demo
    source/modules/WatCon.consurf
@@ -58,3 +61,36 @@ alignment without MODELLER; ``prepare`` the dataset preparation step; and the
    source/modules/WatCon.consurf.crosscheck
    source/modules/WatCon.consurf.validate
    source/modules/WatCon.consurf.errors
+
+
+Protein families
+----------------
+
+One ConSurf run per protein, several structures each, one shared alignment.
+``alignment`` places every structure on its row **by sequence** and cross-checks
+structures of the same protein against each other; ``family`` pools conservation
+onto alignment columns; ``family_sites`` superposes the family and finds the
+water sites they share; ``family_scene`` draws the result.
+
+.. toctree::
+   :maxdepth: 2
+
+   source/modules/WatCon.alignment
+   source/modules/WatCon.family
+   source/modules/WatCon.family_sites
+   source/modules/WatCon.family_scene
+
+Viewing results
+---------------
+
+``scene`` turns an analysis into plain data -- sites, their conservation and the
+commands that would draw them -- so the command line and the PyMOL plugin cannot
+disagree about what a result looks like.  ``view`` writes that scene as a
+self-contained ``.pml``; ``pymol_plugin`` runs the identical file inside PyMOL.
+
+.. toctree::
+   :maxdepth: 2
+
+   source/modules/WatCon.scene
+   source/modules/WatCon.view
+   source/modules/WatCon.pymol_plugin

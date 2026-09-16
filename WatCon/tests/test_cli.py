@@ -33,7 +33,8 @@ def test_every_advertised_subcommand_exists():
     commands = set()
     for action in actions:
         commands.update(action.choices)
-    assert {"prepare", "run", "validate", "demo"} <= commands
+    assert {"prepare", "run", "validate", "demo",
+            "fetch", "view", "family", "plugin"} <= commands
 
 
 def test_help_exits_cleanly():
@@ -150,3 +151,49 @@ def test_the_console_script_target_is_importable():
 
     module = importlib.import_module("WatCon.cli")
     assert callable(getattr(module, "main", None))
+
+
+# ===========================================================================
+# Argument parsing for the newer subcommands
+#
+# Their modules are tested elsewhere; what was untested is the dispatch -- that
+# `watcon fetch`, `watcon view` and `watcon plugin` parse their arguments and
+# reach the right code. A subcommand can be wired into the parser and still be
+# unreachable, or reachable with the wrong argument names.
+# ===========================================================================
+
+@pytest.mark.parametrize("argv,expected", [
+    (["fetch", "--ids", "1AAX", "7GSA", "--out-dir", "raw"],
+     {"ids": ["1AAX", "7GSA"], "out_dir": "raw"}),
+    (["view", "--prepared", "prepared", "--consurf", "grades.txt"],
+     {"prepared": "prepared", "consurf": "grades.txt"}),
+    (["family", "--members", "m.tsv", "--alignment", "a.pir"],
+     {"members": "m.tsv", "alignment": "a.pir"}),
+])
+def test_the_newer_subcommands_parse_their_arguments(argv, expected):
+    namespace = build_parser().parse_args(argv)
+    for name, value in expected.items():
+        assert getattr(namespace, name) == value, name
+
+
+def test_every_subcommand_has_something_to_run():
+    """A subcommand wired into the parser but bound to nothing is unreachable."""
+    parser = build_parser()
+    choices = {}
+    for action in parser._actions:
+        if hasattr(action, "choices") and action.choices:
+            choices.update(action.choices)
+    for name, subparser in choices.items():
+        # Read the bound handler off the parser's defaults rather than parsing:
+        # several subcommands have required arguments and would exit instead.
+        assert subparser.get_default("func") is not None, name
+
+
+def test_fetch_requires_ids():
+    with pytest.raises(SystemExit):
+        build_parser().parse_args(["fetch"])
+
+
+def test_plugin_install_is_a_flag_not_a_value():
+    namespace = build_parser().parse_args(["plugin", "--install"])
+    assert namespace.install is True

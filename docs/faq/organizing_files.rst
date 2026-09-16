@@ -11,7 +11,7 @@ Directory Structure
 
 The recommended initial structure for a static structure analysis is as follows:
 
-.. code-block:: txt
+.. code-block:: text
 
     WatCon_Analysis_Folder
     ├── pdbs
@@ -23,7 +23,7 @@ The recommended initial structure for a static structure analysis is as follows:
 
 After using WatCon to align structures, the resulting directory structure should look like this:
 
-.. code-block:: txt
+.. code-block:: text
 
     WatCon_Analysis_Folder
     ├── pdbs
@@ -36,7 +36,7 @@ After using WatCon to align structures, the resulting directory structure should
 
 After WatCon analysis, the resulting directory structure will look like this:
 
-.. code-block:: txt
+.. code-block:: text
 
     WatCon_Analysis_Folder
     ├── pdbs

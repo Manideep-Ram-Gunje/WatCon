@@ -27,7 +27,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - uses: actions/checkout@v4
@@ -79,6 +79,58 @@ jobs:
           assert pathlib.Path("ci_demo/preparation.csv").is_file()
           PY
 
+  plugin:
+    # PyMOL is an optional dependency -- `pip install watcon-consurf` must not
+    # drag it in -- so the matrix above cannot cover the plugin, and its 28
+    # tests skipped in every job. This one installs PyMOL from conda-forge and
+    # runs them, which is the only CI protection the plugin has.
+    name: PyMOL plugin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          python-version: "3.11"
+          channels: conda-forge
+          conda-remove-defaults: true
+
+      - name: Install PyMOL and the package
+        shell: bash -el {0}
+        run: |
+          conda install -y -c conda-forge pymol-open-source
+          python -m pip install --upgrade pip
+          python -m pip install ".[test]"
+
+      - name: Confirm PyMOL and Qt are importable
+        shell: bash -el {0}
+        run: |
+          python -c "import pymol; print('pymol', pymol.__file__)"
+          python -c "from pymol.Qt import QtWidgets; print('Qt bindings present')"
+
+      # Qt needs a display even for offscreen widget construction.
+      - name: Run the plugin tests
+        shell: bash -el {0}
+        env:
+          QT_QPA_PLATFORM: offscreen
+          PYMOL_QUIET: "1"
+        run: |
+          xvfb-run -a python -m pytest WatCon/tests/test_plugin.py WatCon/tests/test_plugin_family.py -v --color=yes
+
+      # A skipped run is not a passing run. The whole point of this job is that
+      # these tests execute, so fail if PyMOL was not found and they skipped.
+      - name: Fail if the plugin tests were skipped
+        shell: bash -el {0}
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          xvfb-run -a python -m pytest WatCon/tests/test_plugin.py WatCon/tests/test_plugin_family.py -q --no-header -rs 2>&1 | tee result.txt
+          if grep -q "skipped" result.txt; then
+            echo "Plugin tests skipped -- PyMOL/Qt did not import in this job."
+            exit 1
+          fi
+
   build:
     name: Wheel contents
     runs-on: ubuntu-latest
@@ -112,6 +164,15 @@ jobs:
           assert bundles == 0, "5 MB of raw research bundles leaked into the wheel"
           assert any(n.endswith("entry_points.txt") for n in names), "no console script"
           for module in ("cli.py", "prepare.py", "demo.py", "superpose.py",
-                         "evolutionary.py", "residue_index.py"):
+                         "evolutionary.py", "residue_index.py",
+                         "family.py", "alignment.py", "scene.py",
+                         "structure_io.py", "fetch.py", "conformers.py"):
               assert any(n.endswith("/" + module) for n in names), module
+
+          # The ensemble and family fixtures the newer tests need.
+          assert count("data/examples/ptp1b_ensemble") >= 3, "ensemble fixtures missing"
+          assert count("data/examples/ptp_family") >= 20, "family fixtures missing"
+
+          # The vendored study is repository documentation, not package data.
+          assert count("experiments/") == 0, "experiments/ leaked into the wheel"
           PY

@@ -394,6 +394,7 @@ class WaterNetwork:
         -------
         list of tuples
             Each connection is represented as a tuple with the following elements:
+
             - connections[0] : int  
               Index of the first atom.
             - connections[1] : int  
@@ -499,6 +500,7 @@ class WaterNetwork:
         -------
         list of tuples
             Each connection is represented as a tuple with the following elements:
+
             - connections[0] : int  
               Index of the first atom.
             - connections[1] : int  
@@ -1613,7 +1615,7 @@ def initialize_network(structure_directory, topology_file=None, trajectory_file=
         If True, returns the computed network. Default is True.
     cluster_coordinates : bool, optional
         If True, performs clustering analysis on the network. Default is False.
-    clustering_method : {'hdbscan', 'dbscan', 'kmeans'}, optional
+    clustering_method : {'hdbscan', 'dbscan', 'optics'}, optional
         Clustering method to use if clustering is enabled. Default is 'hdbscan'.
     cluster_water_only : bool, optional
         If True, clusters only water molecules, excluding protein atoms. Default is True.

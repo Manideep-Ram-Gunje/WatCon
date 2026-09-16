@@ -15,7 +15,7 @@ Frequently Asked Questions
 
 .. dropdown:: Why am I getting conservation scores of 0 for all of my structures?
 
-   This is likely due to a misalignment with your clusters and your structures. Refer to the :doc:`Combining Data <combining_different_data.rst>` section for details on how to do this correctly. 
+   This is likely due to a misalignment with your clusters and your structures. Refer to the :doc:`Combining Data <combining_different_data>` section for details on how to do this correctly. 
 
 .. dropdown:: How can I transfer my cluster coordinates onto a different set of related structures?
 

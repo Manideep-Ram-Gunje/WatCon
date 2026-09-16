@@ -263,7 +263,11 @@ Stated plainly, because they matter more than the headline:
 
 ## Documentation
 
+- [The barnase study](experiments/barnase_waters/) — the evidence for the
+  headline result, with the scripts that reproduce it
 - [Getting ConSurf data](docs/consurf_data.rst) — the manual step, in detail
+- [Conservation options](docs/faq/conservation_options.rst) — every setting the
+  extension adds, and what each one refuses to guess
 - [Conservation tutorial](docs/tutorials/consurf_conservation.rst)
 - [Design and decisions](docs/CONSURF_INTEGRATION.md)
 - [Change log](docs/CONSURF_CHANGELOG.md)
@@ -273,7 +277,7 @@ Stated plainly, because they matter more than the headline:
 
 ```bash
 pip install -e ".[test]"
-python -m pytest WatCon/tests -q      # 764 tests
+python -m pytest WatCon/tests -q      # 783 tests
 ```
 
 ## License

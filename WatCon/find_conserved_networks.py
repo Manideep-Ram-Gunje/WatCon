@@ -140,6 +140,13 @@ def get_coordinates_from_pdb(pdb_file):
 
     return centers
 
+#: The clustering methods this module implements. Checked before dispatch so
+#: an unknown name -- a typo, or the 'kmeans' the entry points used to
+#: advertise -- fails with a message naming the alternatives instead of
+#: UnboundLocalError.
+CLUSTERING_METHODS = ("hdbscan", "dbscan", "optics")
+
+
 def cluster_nodes(combined_graph, cluster='hdbscan', min_samples=10):
     """
     Cluster node positions from a combined NetworkX graph.
@@ -148,8 +155,9 @@ def cluster_nodes(combined_graph, cluster='hdbscan', min_samples=10):
     ----------
     combined_graph : networkx.Graph
         A combined graph used for clustering.
-    cluster : str
-        Clustering method, can be 'optics', 'dbscan', or 'hdbscan'.
+    cluster : {'hdbscan', 'dbscan', 'optics'}
+        Clustering method.  Anything else raises ValueError naming the
+        accepted values.
     min_samples : int
         Minimum number of samples required for a cluster.
 
@@ -161,6 +169,19 @@ def cluster_nodes(combined_graph, cluster='hdbscan', min_samples=10):
     """
     node_positions = nx.get_node_attributes(combined_graph, 'pos')
     positions = [pos for (node, pos) in node_positions.items()]
+    # An unrecognised name used to fall through every branch and then raise
+    # UnboundLocalError on `clustering.labels_`, naming neither the parameter
+    # nor the accepted values. 'kmeans' reached that path too: both
+    # initialize_network docstrings advertised it, but it was never
+    # implemented here and cannot be as written -- k-means needs a k this API
+    # has no parameter for, and cannot express the noise label (-1) the
+    # callers rely on. The advertisement was removed, not a spec invented.
+    if cluster not in CLUSTERING_METHODS:
+        raise ValueError(
+            "Unknown clustering method %r. Choose one of: %s."
+            % (cluster, ", ".join(sorted(CLUSTERING_METHODS)))
+        )
+
     if cluster == 'optics':
         print('Using OPTICS clustering')
         clustering = OPTICS(max_eps=1.0, metric='euclidean', min_samples=min_samples).fit(positions)
@@ -203,8 +224,9 @@ def cluster_coordinates_only(coordinate_list, cluster='hdbscan', min_samples=10,
     ----------
     coordinate_list : list of array-like
         A combined list of all coordinates to be clustered.
-    cluster : str
-        Clustering method, can be 'optics', 'dbscan', or 'hdbscan'.
+    cluster : {'hdbscan', 'dbscan', 'optics'}
+        Clustering method.  Anything else raises ValueError naming the
+        accepted values.
     min_samples : int
         Minimum number of samples required for a cluster.
     source : list[str] or str, optional
@@ -258,6 +280,19 @@ def cluster_coordinates_only(coordinate_list, cluster='hdbscan', min_samples=10,
     #scaler = MinMaxScaler()
     #scaler.fit(coordinate_list)
     #coordinate_norm = scaler.transform(coordinate_list)
+
+    # An unrecognised name used to fall through every branch and then raise
+    # UnboundLocalError on `clustering.labels_`, naming neither the parameter
+    # nor the accepted values. 'kmeans' reached that path too: both
+    # initialize_network docstrings advertised it, but it was never
+    # implemented here and cannot be as written -- k-means needs a k this API
+    # has no parameter for, and cannot express the noise label (-1) the
+    # callers rely on. The advertisement was removed, not a spec invented.
+    if cluster not in CLUSTERING_METHODS:
+        raise ValueError(
+            "Unknown clustering method %r. Choose one of: %s."
+            % (cluster, ", ".join(sorted(CLUSTERING_METHODS)))
+        )
 
     if cluster == 'optics':
         print('Using OPTICS clustering')

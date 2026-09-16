@@ -1,0 +1,542 @@
+{
+ "A|3|": {
+  "score": 0.565,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|4|": {
+  "score": 0.023,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|5|": {
+  "score": -0.221,
+  "grade": 6,
+  "buried_exposed": "e"
+ },
+ "A|6|": {
+  "score": 0.15,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|7|": {
+  "score": 0.116,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|8|": {
+  "score": 0.25,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|9|": {
+  "score": 0.854,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|10|": {
+  "score": -0.988,
+  "grade": 9,
+  "buried_exposed": "b"
+ },
+ "A|11|": {
+  "score": -0.422,
+  "grade": 6,
+  "buried_exposed": "b"
+ },
+ "A|12|": {
+  "score": 1.409,
+  "grade": 3,
+  "buried_exposed": "e"
+ },
+ "A|13|": {
+  "score": -0.828,
+  "grade": 8,
+  "buried_exposed": "b"
+ },
+ "A|14|": {
+  "score": -0.173,
+  "grade": 6,
+  "buried_exposed": "b"
+ },
+ "A|15|": {
+  "score": 0.875,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|16|": {
+  "score": 1.122,
+  "grade": 3,
+  "buried_exposed": "e"
+ },
+ "A|17|": {
+  "score": 0.111,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|18|": {
+  "score": 1.19,
+  "grade": 3,
+  "buried_exposed": "e"
+ },
+ "A|19|": {
+  "score": 1.446,
+  "grade": 3,
+  "buried_exposed": "e"
+ },
+ "A|20|": {
+  "score": -1.225,
+  "grade": 9,
+  "buried_exposed": "b"
+ },
+ "A|21|": {
+  "score": -1.25,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|22|": {
+  "score": 1.837,
+  "grade": 2,
+  "buried_exposed": "e"
+ },
+ "A|23|": {
+  "score": -0.502,
+  "grade": 7,
+  "buried_exposed": "e"
+ },
+ "A|24|": {
+  "score": -0.391,
+  "grade": 6,
+  "buried_exposed": "b"
+ },
+ "A|25|": {
+  "score": -0.424,
+  "grade": 7,
+  "buried_exposed": "b"
+ },
+ "A|26|": {
+  "score": -0.81,
+  "grade": 8,
+  "buried_exposed": "e"
+ },
+ "A|27|": {
+  "score": -1.084,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|28|": {
+  "score": 1.767,
+  "grade": 2,
+  "buried_exposed": "e"
+ },
+ "A|29|": {
+  "score": -0.072,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|30|": {
+  "score": -1.195,
+  "grade": 9,
+  "buried_exposed": "b"
+ },
+ "A|31|": {
+  "score": 1.208,
+  "grade": 3,
+  "buried_exposed": "e"
+ },
+ "A|32|": {
+  "score": 2.161,
+  "grade": 1,
+  "buried_exposed": "e"
+ },
+ "A|33|": {
+  "score": 0.45,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|34|": {
+  "score": -1.061,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|35|": {
+  "score": -1.064,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|36|": {
+  "score": 2.55,
+  "grade": 1,
+  "buried_exposed": "e"
+ },
+ "A|37|": {
+  "score": 1.414,
+  "grade": 3,
+  "buried_exposed": "e"
+ },
+ "A|38|": {
+  "score": 0.22,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|39|": {
+  "score": 0.394,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|40|": {
+  "score": -0.79,
+  "grade": 8,
+  "buried_exposed": "e"
+ },
+ "A|41|": {
+  "score": -0.628,
+  "grade": 7,
+  "buried_exposed": "e"
+ },
+ "A|42|": {
+  "score": -0.747,
+  "grade": 8,
+  "buried_exposed": "b"
+ },
+ "A|43|": {
+  "score": 0.318,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|44|": {
+  "score": 0.766,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|45|": {
+  "score": 0.347,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|46|": {
+  "score": -0.142,
+  "grade": 6,
+  "buried_exposed": "b"
+ },
+ "A|47|": {
+  "score": -0.157,
+  "grade": 6,
+  "buried_exposed": "e"
+ },
+ "A|48|": {
+  "score": -0.113,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|49|": {
+  "score": 0.34,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|50|": {
+  "score": -0.694,
+  "grade": 7,
+  "buried_exposed": "b"
+ },
+ "A|51|": {
+  "score": -1.004,
+  "grade": 9,
+  "buried_exposed": "b"
+ },
+ "A|52|": {
+  "score": -1.072,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|53|": {
+  "score": -1.187,
+  "grade": 9,
+  "buried_exposed": "b"
+ },
+ "A|54|": {
+  "score": -1.087,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|55|": {
+  "score": 1.173,
+  "grade": 3,
+  "buried_exposed": "e"
+ },
+ "A|56|": {
+  "score": -0.959,
+  "grade": 8,
+  "buried_exposed": "b"
+ },
+ "A|57|": {
+  "score": 1.096,
+  "grade": 3,
+  "buried_exposed": "e"
+ },
+ "A|58|": {
+  "score": -1.225,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|59|": {
+  "score": 0.296,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|60|": {
+  "score": -0.63,
+  "grade": 7,
+  "buried_exposed": "e"
+ },
+ "A|61|": {
+  "score": 2.562,
+  "grade": 1,
+  "buried_exposed": "e"
+ },
+ "A|62|": {
+  "score": 2.075,
+  "grade": 2,
+  "buried_exposed": "e"
+ },
+ "A|63|": {
+  "score": -1.054,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|64|": {
+  "score": -1.159,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|65|": {
+  "score": 2.709,
+  "grade": 1,
+  "buried_exposed": "e"
+ },
+ "A|66|": {
+  "score": 0.89,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|67|": {
+  "score": 2.671,
+  "grade": 1,
+  "buried_exposed": "e"
+ },
+ "A|68|": {
+  "score": 0.332,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|69|": {
+  "score": -0.473,
+  "grade": 7,
+  "buried_exposed": "e"
+ },
+ "A|70|": {
+  "score": 1.107,
+  "grade": 3,
+  "buried_exposed": "e"
+ },
+ "A|71|": {
+  "score": -0.691,
+  "grade": 7,
+  "buried_exposed": "b"
+ },
+ "A|72|": {
+  "score": 1.342,
+  "grade": 3,
+  "buried_exposed": "e"
+ },
+ "A|73|": {
+  "score": -1.209,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|74|": {
+  "score": -0.953,
+  "grade": 8,
+  "buried_exposed": "b"
+ },
+ "A|75|": {
+  "score": -1.248,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|76|": {
+  "score": -0.557,
+  "grade": 7,
+  "buried_exposed": "b"
+ },
+ "A|77|": {
+  "score": -0.648,
+  "grade": 7,
+  "buried_exposed": "e"
+ },
+ "A|78|": {
+  "score": -0.785,
+  "grade": 8,
+  "buried_exposed": "b"
+ },
+ "A|79|": {
+  "score": 1.482,
+  "grade": 3,
+  "buried_exposed": "e"
+ },
+ "A|80|": {
+  "score": -0.243,
+  "grade": 6,
+  "buried_exposed": "e"
+ },
+ "A|81|": {
+  "score": 0.18,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|82|": {
+  "score": 0.615,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|83|": {
+  "score": -1.22,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|84|": {
+  "score": 0.171,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|85|": {
+  "score": 0.183,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|86|": {
+  "score": -0.214,
+  "grade": 6,
+  "buried_exposed": "e"
+ },
+ "A|87|": {
+  "score": -1.269,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|88|": {
+  "score": -0.259,
+  "grade": 6,
+  "buried_exposed": "b"
+ },
+ "A|89|": {
+  "score": -0.104,
+  "grade": 5,
+  "buried_exposed": "b"
+ },
+ "A|90|": {
+  "score": -0.479,
+  "grade": 7,
+  "buried_exposed": "b"
+ },
+ "A|91|": {
+  "score": -1.031,
+  "grade": 9,
+  "buried_exposed": "b"
+ },
+ "A|92|": {
+  "score": -0.053,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|93|": {
+  "score": -0.649,
+  "grade": 7,
+  "buried_exposed": "e"
+ },
+ "A|94|": {
+  "score": -0.507,
+  "grade": 7,
+  "buried_exposed": "e"
+ },
+ "A|95|": {
+  "score": 0.199,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|96|": {
+  "score": -0.672,
+  "grade": 7,
+  "buried_exposed": "b"
+ },
+ "A|97|": {
+  "score": -0.19,
+  "grade": 6,
+  "buried_exposed": "b"
+ },
+ "A|98|": {
+  "score": -0.096,
+  "grade": 5,
+  "buried_exposed": "b"
+ },
+ "A|99|": {
+  "score": -1.02,
+  "grade": 9,
+  "buried_exposed": "b"
+ },
+ "A|100|": {
+  "score": 1.187,
+  "grade": 3,
+  "buried_exposed": "e"
+ },
+ "A|101|": {
+  "score": -1.039,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|102|": {
+  "score": -1.152,
+  "grade": 9,
+  "buried_exposed": "e"
+ },
+ "A|103|": {
+  "score": -1.226,
+  "grade": 9,
+  "buried_exposed": "b"
+ },
+ "A|104|": {
+  "score": 0.708,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|105|": {
+  "score": 0.096,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|106|": {
+  "score": -0.702,
+  "grade": 7,
+  "buried_exposed": "e"
+ },
+ "A|107|": {
+  "score": 0.666,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|108|": {
+  "score": 0.409,
+  "grade": 4,
+  "buried_exposed": "e"
+ },
+ "A|109|": {
+  "score": -0.135,
+  "grade": 5,
+  "buried_exposed": "e"
+ },
+ "A|110|": {
+  "score": -0.272,
+  "grade": 6,
+  "buried_exposed": "e"
+ }
+}

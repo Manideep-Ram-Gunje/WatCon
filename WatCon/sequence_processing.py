@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from Bio.PDB import PDBParser, PDBIO, Select
 from Bio import SeqIO
-from Bio import pairwise2
+from Bio.Align import PairwiseAligner
 from Bio.Seq import Seq
 import os
 
@@ -272,8 +272,18 @@ def seq_similarity(seq1, seq2):
         Sequence similarity score.
     """
 
-    alignments = pairwise2.align.globalxx(seq1,seq2)
-    best_alignment = alignments[0]
+    # Was Bio.pairwise2.align.globalxx, which Biopython deprecated and intends
+    # to remove. PairwiseAligner configured this way is the same algorithm --
+    # global alignment, match 1, mismatch 0, no gap penalty -- and returns the
+    # same similarity on every sequence pair checked against the old call.
+    aligner = PairwiseAligner()
+    aligner.mode = 'global'
+    aligner.match_score = 1
+    aligner.mismatch_score = 0
+    aligner.open_gap_score = 0
+    aligner.extend_gap_score = 0
+
+    best_alignment = aligner.align(seq1, seq2)[0]
     aligned_seq1 = best_alignment[0]
     aligned_seq2 = best_alignment[1]
     num_matches = 0

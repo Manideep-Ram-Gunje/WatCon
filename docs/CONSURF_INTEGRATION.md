@@ -658,6 +658,10 @@ mean inventing a specification.
   coverage is a three-frame crystal ensemble and one MD frame.
 - `2F56`/`2F5M` were excluded rather than renumbered; the renumbered sensitivity
   check has not been run.
+- The **burial confound** is unresolved and is the one experiment that would
+  turn the central correlation into something causal.
+- Live RCSB fetching is covered only by opt-in tests
+  (`WATCON_NETWORK_TESTS=1`), so it is not exercised in CI.
 
 ---
 

@@ -7,6 +7,25 @@ Family Analysis
 Generally, one may wish to use WatCon to study water network structure across a family of protein. In the previous tutorials, we studied the protein tyrosine phosphatase (PTP) PTP1B. We will now expand our analysis to include all non-receptor classical PTPs. Since PTP1B is much more well-studied than many of these other PTPs, there are a plethora of crystal structures available for that structure and generally quite few crystal structures available for the other PTPs. As a result, we will compare the water networks of all of our PTPs to the clustered water networks calculated in the :doc:`prior tutorial <static_vs_dynamic>` of the WPD-loop closed conformation of PTP1B.
 
 
+.. note::
+
+   **There are two ways to do family analysis in this package.** This tutorial
+   describes the original one: align the structures yourself, then run WatCon
+   over the aligned set.
+
+   The ConSurf extension adds a second, :doc:`described here
+   <consurf_conservation>` and run with a single command::
+
+       watcon family --members members.tsv --alignment alignment.pir
+
+   It takes one ConSurf run per protein, places every structure on the shared
+   alignment **by sequence** rather than by residue number, cross-checks
+   structures of the same protein against each other, superposes the family
+   without MODELLER, and reports the water sites they share alongside the
+   evolutionary conservation of the residues lining them. Measured on fifteen
+   protein tyrosine phosphatases and twenty-four structures.
+
+
 1. Preparing Structure Files
 ----------------------------
 
@@ -28,7 +47,7 @@ Calculating Conservation Scores
 
 We will leverage WatCon's ability to compare networks across structures to compare the networks among each structure with the PTP1B closed WPD-loop summary clusters. Generally, WatCon has a built in method for plotting commonality that can be called by specifying the following lines in an analysis input file:
 
-.. code-block:: txt
+.. code-block:: text
 
    cluster_filebase: STATIC_CLOSED    ; Name of pdb file containing clusters to compare to
    calculate_commonality: hist        ; Produce commonality plot either as a 'bar' bar graph or 'hist' histogram
@@ -134,7 +153,7 @@ Projecting Conservation of Water Positions and Interactions
 
 Although determining overall conservation scores are useful for understanding broadly how water positions in different structures are conserved, it can often be more useful to understand which water molecules are most highly conserved. This idea can be addressed easily using WatCon. If focusing on clusters already aligned to the current set of structures, analysis input files can be used, adding the following lines:
 
-.. code-block:: txt
+.. code-block:: text
 
    cluster_filebase: STATIC_CLOSED  ; Name of pdb file containing clusters to compare to
    color_by_conservation: 'all'     ; Produce .pml file coloring either 'centers', 'connections' or 'all' by conservation

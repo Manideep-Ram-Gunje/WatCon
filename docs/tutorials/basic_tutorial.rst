@@ -115,11 +115,12 @@ We provide several built-in post-analysis features which can be implemented with
 * **cluster_pdbs**: WatCon can be used to cluster water positions across multiple structures. If doing so, the positions of these clustered positions will be saved in PDB format and can be visualized using your favorite molecular visualization software. We recommend to visualize the cluster centers simultaneously to a protein structure to more easily see the relative locations of the cluster centers. Since the cluster centers were calculated with respect to the inputted aligned PDBs, the cluster centers can be loaded alongside any topology file from this collection without fear of misalignment.
 
 .. note::
-Cluster positions from independent WatCon analyses can be viewed together, but care in alignment of independent structures needs to be taken. Further description on different ways to projectcluster centers onto non-aligned structures is given in the :doc:`User Guide <../faq/combining_different_data>`.
+
+   Cluster positions from independent WatCon analyses can be viewed together, but care in alignment of independent structures needs to be taken. Further description on different ways to project cluster centers onto non-aligned structures is given in the :doc:`User Guide <../faq/combining_different_data>`.
 
 * **msa_classifications**: If using the two-angle water position classification (explained further in the :doc:`User Guide <../faq/calculations>`), corresponding .csv files will be saved in the **msa_classifications** directory. These files contain the following header:
 
-.. code-block:: txt
+.. code-block:: text
    Frame Index/PDB ID,Resid,MSA_Resid,Index_1,Index_2,Protein_Atom,Classification,Protein_Coords,Water_Coords,Angle_1,Angle_2
 
 Where the column names are:

@@ -1,0 +1,62 @@
+Barnase conserved water sites vs evolutionary conservation
+========================================================================
+Pre-registered in PREREGISTRATION.md, committed before this ran.
+
+Structures: 22   ConSurf runs: 1 (conservation is a sequence property)
+ConSurf convention: MORE NEGATIVE = MORE CONSERVED, so H1
+predicts a NEGATIVE correlation with occupancy.
+
+Sites with conservation data: 462
+
+PRIMARY, AS PRE-REGISTERED -- Spearman(occupancy, evo_min_score)
+  rho = -0.5012   p = 9.38e-31   n = 462
+  -> H1 SUPPORTED
+
+  Its shuffled null does NOT centre on zero:
+    null mean -0.2264, sd 0.0836  (an unbiased null would be ~0)
+    z vs null = -3.29, empirical p = 0.000
+  The minimum of a larger set is mechanically lower, and
+  high-occupancy sites are lined by more residues, so this
+  statistic is inflated. The raw rho OVERSTATES the effect.
+    Spearman(occupancy, n_lining_residues) = +0.5548
+    Spearman(n_lining_residues, min_score) = -0.5527
+
+SIZE-INDEPENDENT (added after the control above; not pre-registered)
+  Spearman(occupancy, MEAN score over lining residues)
+  rho = -0.3754   p = 6.59e-17   n = 462
+  null mean +0.0331, sd 0.0913  -- centres on zero, as it should
+  z vs null = -4.47, empirical p = 0.000
+  -> H1 SUPPORTED
+  THIS IS THE NUMBER TO QUOTE.
+
+SECONDARY, AS PRE-REGISTERED -- recurrent vs singleton sites
+  sites occupied in exactly 1 structure: 21
+  of those, with a scored lining residue: 1
+  -> UNDERPOWERED. Not a defect: singleton waters mostly have
+     no protein residue in contact at all, which is itself a
+     finding. The pre-registered comparison cannot be run.
+
+  POST HOC substitute (labelled as such): <=3 vs >=50% of structures
+    low-occupancy  n= 92 median mean-score +0.401
+    high-occupancy n=199 median mean-score -0.072
+    Mann-Whitney p = 1.64e-09, rank-biserial r = -0.440
+
+CONTROL -- resolution <= 1.8 A
+  7 of 22 structures: 1A2P, 1B20, 1B2X, 1BRN, 2C4B, 2ZA4, 6PQK
+  mean-score rho = -0.3317, p = 8.72e-13, n = 441
+
+CONTROL -- wild-type-like only (no identity mismatches)
+  6 of 22 structures: 1A2P, 1B2X, 1BRN, 1BRS, 1X1Y, 3KCH
+  mean-score rho = -0.3376, p = 8.15e-13, n = 426
+
+CONFOUND -- burial (declared in advance, NOT controlled for)
+  buried  n= 27 median score -0.694
+  exposed n= 81 median score +0.180
+  Buried residues are both more conserved AND more likely to
+  hold ordered water. This design cannot separate the two, so
+  no causal claim is made.
+
+========================================================================
+VERDICT (on the size-independent statistic): H1 SUPPORTED
+Effect: rho = -0.375, outside a null centred on +0.033 (z = -4.47).
+Correlational, one protein, burial not disentangled.

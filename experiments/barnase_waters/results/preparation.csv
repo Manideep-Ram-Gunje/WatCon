@@ -1,0 +1,25 @@
+pdb_id,chain,seq_identity,n_protein_atoms,n_waters,n_ca_matched,rmsd,status
+1A2P,A,1.0,880,148,108,0.0,ok
+1B20,A,0.991,873,178,108,0.3,ok
+1B21,A,0.981,864,118,108,0.386,ok
+1B2S,A,0.991,873,210,108,0.508,ok
+1B2X,A,1.0,869,131,108,0.252,ok
+1BNF,A,0.981,847,68,108,1.059,ok
+1BRH,A,0.991,838,89,108,0.169,ok
+1BRI,B,0.991,847,96,108,0.324,ok
+1BRJ,A,0.991,827,75,108,0.175,ok
+1BRK,A,0.991,855,90,108,0.29,ok
+1BRN,L,1.0,868,120,108,0.448,ok
+1BRS,A,1.0,864,174,108,0.464,ok
+1BSA,A,0.981,838,81,107,0.157,ok
+1BSB,A,0.991,846,81,108,0.17,ok
+1BSC,A,0.991,845,77,108,0.183,ok
+1BSE,A,0.991,853,59,108,0.242,ok
+1RNB,A,0.981,869,89,108,0.444,ok
+1X1Y,A,1.0,864,184,108,0.45,ok
+2C4B,A,0.991,1244,286,108,0.392,ok
+2F56,,0.019,0,0,0,,rejected: identity 0.02 by residue number; chain A matches at 1.00 if renumbered by +2
+2F5M,,0.019,0,0,0,,rejected: identity 0.02 by residue number; chain A matches at 1.00 if renumbered by +2
+2ZA4,A,0.991,860,153,108,0.393,ok
+3KCH,A,1.0,869,83,108,0.279,ok
+6PQK,A,0.981,971,163,108,0.628,ok

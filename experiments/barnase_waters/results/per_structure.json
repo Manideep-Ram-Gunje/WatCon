@@ -1,0 +1,112 @@
+{
+ "1A2P": {
+  "identity_rate": 1.0,
+  "identity_mismatched": 0,
+  "n_waters": 148
+ },
+ "1B20": {
+  "identity_rate": 0.9907407407407407,
+  "identity_mismatched": 1,
+  "n_waters": 178
+ },
+ "1B21": {
+  "identity_rate": 0.9814814814814815,
+  "identity_mismatched": 2,
+  "n_waters": 118
+ },
+ "1B2S": {
+  "identity_rate": 0.9907407407407407,
+  "identity_mismatched": 1,
+  "n_waters": 210
+ },
+ "1B2X": {
+  "identity_rate": 1.0,
+  "identity_mismatched": 0,
+  "n_waters": 131
+ },
+ "1BNF": {
+  "identity_rate": 0.9814814814814815,
+  "identity_mismatched": 2,
+  "n_waters": 68
+ },
+ "1BRH": {
+  "identity_rate": 0.9907407407407407,
+  "identity_mismatched": 1,
+  "n_waters": 89
+ },
+ "1BRI": {
+  "identity_rate": 0.9907407407407407,
+  "identity_mismatched": 1,
+  "n_waters": 96
+ },
+ "1BRJ": {
+  "identity_rate": 0.9907407407407407,
+  "identity_mismatched": 1,
+  "n_waters": 75
+ },
+ "1BRK": {
+  "identity_rate": 0.9907407407407407,
+  "identity_mismatched": 1,
+  "n_waters": 90
+ },
+ "1BRN": {
+  "identity_rate": 1.0,
+  "identity_mismatched": 0,
+  "n_waters": 120
+ },
+ "1BRS": {
+  "identity_rate": 1.0,
+  "identity_mismatched": 0,
+  "n_waters": 174
+ },
+ "1BSA": {
+  "identity_rate": 0.9906542056074766,
+  "identity_mismatched": 1,
+  "n_waters": 81
+ },
+ "1BSB": {
+  "identity_rate": 0.9907407407407407,
+  "identity_mismatched": 1,
+  "n_waters": 81
+ },
+ "1BSC": {
+  "identity_rate": 0.9907407407407407,
+  "identity_mismatched": 1,
+  "n_waters": 77
+ },
+ "1BSE": {
+  "identity_rate": 0.9907407407407407,
+  "identity_mismatched": 1,
+  "n_waters": 59
+ },
+ "1RNB": {
+  "identity_rate": 0.9814814814814815,
+  "identity_mismatched": 2,
+  "n_waters": 89
+ },
+ "1X1Y": {
+  "identity_rate": 1.0,
+  "identity_mismatched": 0,
+  "n_waters": 184
+ },
+ "2C4B": {
+  "identity_rate": 0.9907407407407407,
+  "identity_mismatched": 1,
+  "n_waters": 286
+ },
+ "2ZA4": {
+  "identity_rate": 0.9907407407407407,
+  "identity_mismatched": 1,
+  "n_waters": 153
+ },
+ "3KCH": {
+  "identity_rate": 1.0,
+  "identity_mismatched": 0,
+  "n_waters": 83
+ },
+ "6PQK": {
+  "identity_rate": 0.9814814814814815,
+  "identity_mismatched": 2,
+  "n_waters": 163
+ }
+}
