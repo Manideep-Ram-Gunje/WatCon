@@ -1569,3 +1569,54 @@ are cluster numbers from one run.
   (13), including an independent re-derivation of every choice from the PDB text
   of the real 5HDE fixture, the barnase Asp54 tie case, and water positions.
 
+---
+
+## 2026-09-16 - Phase 20: the family path runs on a real family
+
+- **What:** `WatCon/family.py` -- `build_family_conservation` checks, places and
+  pools a protein family: one ConSurf run per protein, several structures per
+  protein, one alignment. The family scaffold (Phase 5d) had never run on real
+  multi-protein data; now it has, on five PTPs and ten structures.
+
+### What it does, in order
+
+1. Every structure is checked against its own protein's ConSurf run with
+   `enforce_identity`; a numbering mismatch stops the run.
+2. Every structure is placed on the alignment by sequence, and structures of one
+   protein are cross-checked against each other (`WatCon.alignment`, Phase 18).
+3. Conservation is pooled onto alignment columns with
+   `conservation_by_msa_column`. The result keeps a per-structure audit trail:
+   identity, the residues that disagree with the ConSurf query, row identity,
+   residues the row cannot place, and conflicts.
+
+### Verified on PTPN1, PTPN6, PTPN7, PTPN12 and PTPN22
+
+| check | result |
+|---|---|
+| identity with own ConSurf run, all ten structures | 0.993-1.000 |
+| residues disagreeing with the ConSurf query | only those the PDB entries declare: 215 (1AAX query C215S), 453 (4GRZ query C453S), 72 (3O4U S72D), 61 (5J8R K61R), 231 (5HDE CSP231), 195 (3BRH query D195A) |
+| alignment conflicts | PTPN7 {124, 125, 241} only -- the 3O4U slides |
+| columns covered by all five proteins | 248 of 337 |
+| unanimously conserved (every run grade 8-9) | 64 of 248 |
+| P-loop His, Cys nucleophile, P-loop Arg, WPD Asp, Q-loop Gln | grade 9 in all five runs, score spread 0.06-0.15 |
+| Tyr46 (pTyr recognition loop) | not unanimous: PTPN12's run grades it 7 |
+
+### The runs are independent, and they agree
+
+Their 150-sequence homologue sets overlap at Jaccard <= 0.01 (one sequence is
+common to all five), yet their scores correlate at rho = 0.91-0.96 over shared
+columns. Unanimity across these runs is therefore corroboration by five separate
+samples, not one alignment counted five times. This is the finding that exposed
+the false 0.37 floor corrected earlier today.
+
+Identical counts (337 / 248 / 64, median spread 0.365) come out whether the
+family is built from the CA-only fixtures or from fully prepared structures,
+which checks that the fixtures are faithful.
+
+- **Tests:** **677** passed, 2 skipped. New `tests/test_family.py`
+  (14), on the repository's own real-data fixtures.
+- **Next:** family-level water sites. Residues must be keyed by protein and
+  alignment column there: `conservation_of_clusters` de-duplicates lining
+  residues by `(chain, resid, icode)`, which across different proteins would
+  merge unrelated residues that happen to share a number.
+
