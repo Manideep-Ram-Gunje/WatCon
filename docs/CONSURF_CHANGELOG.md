@@ -1620,3 +1620,80 @@ which checks that the fixtures are faithful.
   residues by `(chain, resid, icode)`, which across different proteins would
   merge unrelated residues that happen to share a number.
 
+---
+
+## 2026-09-16 - Phase 21: water sites shared across a protein family
+
+- **What:** `WatCon/family_sites.py` superposes a family into one frame using CA
+  atoms of shared alignment columns, clusters the pooled waters, and describes
+  each site **per protein and per alignment column**. The first thing the
+  integration was built to ask, finally asked on real data.
+
+### Three things that had to be right
+
+**One frame.** `prepare` and `superpose` both correspond by residue number and
+both say they assume one protein. Here CA atoms of shared alignment columns are
+paired and fitted, trimming iteratively to columns within 2 A. Measured against
+2F71: core fits of **0.65-0.90 A** over 178-268 columns for the ten prepared
+structures, and 0.45-0.58 A for the trimmed fixtures. The active site follows at
+0.47-0.93 A without being fitted directly.
+
+**The WPD loop moves.** 0.9-1.3 A from the reference in closed structures,
+**3.1-8.2 A** in open ones. Occupancy is therefore reported per state.
+
+**Residues must not merge across proteins.** `conservation_of_clusters`
+de-duplicates lining residues by `(chain, resid, icode)`, which across proteins
+would join PTP1B's Asp181 to whatever PTPN6 numbers 181. Sites here key every
+lining residue by protein and column. One column, five residue numbers:
+
+| column | PTPN1 | PTPN6 | PTPN7 | PTPN12 | PTPN22 |
+|---|---|---|---|---|---|
+| WPD general acid | 181 | 419 | 236 | 199 | **195** |
+| nucleophile | 215 | **453** | 270 | 231 | **227** |
+| Q-loop Gln | 262 | 500 | 314 | 278 | 274 |
+
+Corroborated independently: the nucleophile column lands on exactly the residues
+the PDB entries declare mutated (PTPN6 C453S, PTPN22 C227S), and the WPD column
+on PTPN22's engineered D195A.
+
+### The result, on ten structures and 2,414 waters
+
+309 clusters, 308 occupied sites. **One site is occupied in all five proteins and
+lined by the WPD-Asp, nucleophile and Q-loop-Gln columns** -- the catalytic water,
+found with no knowledge of the chemistry, in eight of the ten structures (five
+closed, three open). It survives the mutant check: dropping the three C-to-S
+structures (which removes PTPN22 entirely, having no wild-type structure) leaves
+the same site in PTPN1, PTPN12 and PTPN7.
+
+### A null I ran, rejected, and am recording anyway
+
+First test: are 22 sites-occupied-in-all-five more than chance? Regrouping the
+ten structures into five arbitrary pairs gives a mean of 45.8 -- the real
+grouping does **worse**. That null is confounded: pairing two structures of the
+same protein pairs near-identical structures, so each protein contributes about
+one independent sample while a random pair contributes two. The comparison says
+nothing about biology and is not evidence either way.
+
+### The test that does work
+
+Within one dataset, comparing sites to each other, so the redundancy cancels:
+
+| sites with a graded lining column (289) | mean proteins occupied | occupied in all five |
+|---|---|---|
+| lined by a unanimously conserved column (81) | **3.43** | **16 (20 percent)** |
+| lined only by other columns (208) | 2.66 | 6 (3 percent) |
+
+Mann-Whitney p = 7.6e-8; shuffling the conserved labels gives +0.00 +/- 0.15
+against an observed difference of +0.77, p = 0.0005; Fisher odds 8.3
+(p = 7.3e-6) for occupancy in all five.
+
+**Water positions lined by residues that all five ConSurf runs independently
+call conserved are held by more proteins of the family.** The standing caveat
+applies unchanged: conserved residues are also more buried, and burial is not
+disentangled, so part of this may be a burial effect.
+
+- **Fixtures:** four new trimmed active-site structures (2F71, 4GRZ, 1ZC0, 3BRH;
+  5HDE already had one), 44-48 kB each, so CI reproduces the catalytic-water
+  result from repository data in seconds.
+- **Tests:** **690** passed, 2 skipped. New `tests/test_family_sites.py` (13).
+

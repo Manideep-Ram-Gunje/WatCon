@@ -6,6 +6,7 @@ Real data for the family path and its tests.
 |---|---|---|
 | `5HDE_A_csp_site.pdb` | 5HDE chain A trimmed to 12 A around CSP231, with waters | RCSB 5HDE |
 | `<ID>_A_ca.pdb` | CA atoms of chain A, native numbering, coordinates unchanged | RCSB 2F71, 8U1E, 4GRZ, 4HJP, 1ZC0, 3O4U, 5HDE, 5J8R, 3BRH, 3OLR |
+| `<ID>_A_site.pdb` | the closed structure of each protein, trimmed to 12 A around its own catalytic nucleophile, waters kept, ligands dropped | RCSB 2F71, 4GRZ, 1ZC0, 3BRH (5HDE's equivalent is `5HDE_A_csp_site.pdb`) |
 | `ptp_family_alignment.pir` | the ten corresponding rows of the authors' family alignment, verbatim | Brownless, Harrison-Rawn & Kamerlin, *JACS Au* 2025; Zenodo 10.5281/zenodo.15213225 (CC-BY-4.0), `PTPs_combined/alignment.txt` |
 
 The alignment rows correspond to the authors' renumbered structures, not these
