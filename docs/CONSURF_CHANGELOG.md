@@ -1772,3 +1772,39 @@ enabled while its members are disabled.
 - **Tests:** **706** passed, 2 skipped. New `tests/test_family_scene.py` (7),
   the last of which runs PyMOL headlessly and is skipped where PyMOL is absent.
 
+---
+
+## 2026-09-16 - Phase 24: a Family tab in the PyMOL plugin
+
+- **What:** the plugin window now has two tabs. **One protein** is the original
+  path, untouched. **Family** runs exactly what `watcon family` runs.
+
+The Family tab holds a members table (one protein per row: name, structures
+folder, ConSurf file, optional reference), an alignment picker, an optional
+frame reference, optional state labels, and the three cutoffs. Results appear as
+an audit panel and a site table -- site, proteins holding it, waters, states,
+conserved columns, and the lining residues **in each protein's own numbering**.
+Selecting a row flies the camera to that site.
+
+The same three rules as the single-protein tab: the analysis runs on a
+`QThread`, only the main thread touches `cmd`, and the session is drawn by
+running the very `.pml` the command line writes.
+
+### Refusing input before starting a worker
+
+A family run takes minutes, so the tab checks what it can immediately: fewer
+than two proteins is not a family, a missing alignment, a folder that is not
+there, a reference that is not among a protein's structures, and a malformed
+state label. Each raises before any thread starts, with the message naming the
+row. The deeper checks stay where they belong -- a ConSurf run that does not
+describe its structures, or an alignment row that does not match, still stop the
+analysis itself.
+
+- **Tests:** **718** passed, 2 skipped. New `tests/test_plugin_family.py` (12),
+  PyMOL-gated like the rest of the plugin tests: tab structure, every refusal
+  above, the table filling and filtering, and a completion that draws the real
+  five-protein session and reports the audit -- including the engineered C215S
+  and the excluded 3O4U slides.
+- **Unaffected:** the 16 single-protein plugin tests pass unchanged, which is
+  what the restructuring had to preserve.
+

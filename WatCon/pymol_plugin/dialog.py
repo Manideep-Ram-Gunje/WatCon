@@ -17,6 +17,12 @@ place: the worker returns a ``Scene``, the main thread displays it.
 writes.** Not by replaying the command list separately -- by writing the file and
 ``@``-ing it. So the plugin and the command line cannot produce different
 pictures; they execute the identical bytes.
+
+The window has two tabs. **One protein** is the original: many structures of one
+sequence, one ConSurf run. **Family** is several proteins, one ConSurf run each,
+placed on a shared alignment -- the same code ``watcon family`` runs, including
+the identity checks that stop a mismatched run and the alignment cross-checks
+that catch a misaligned row.
 """
 
 from __future__ import annotations
@@ -119,6 +125,42 @@ class _Worker(QtCore.QThread):
             self.failed.emit(traceback.format_exc())
 
 
+class _FamilyWorker(QtCore.QThread):
+    """Runs the whole family analysis off the GUI thread."""
+
+    progressed = QtCore.Signal(float, str)
+    completed = QtCore.Signal(object, object, str)
+    failed = QtCore.Signal(str)
+
+    def __init__(self, options, parent=None):
+        super().__init__(parent)
+        self.options = options
+
+    def run(self):                          # noqa: D102 - QThread entry point
+        try:
+            from WatCon.family import build_family_conservation
+            from WatCon.family_scene import write_family_session
+            from WatCon.family_sites import build_family_sites, write_family_report
+
+            options = self.options
+            self.progressed.emit(0.1, "Checking every structure against its ConSurf run...")
+            family = build_family_conservation(options["proteins"], options["alignment"])
+
+            self.progressed.emit(0.45, "Superposing and clustering waters...")
+            sites = build_family_sites(
+                options["proteins"], family, reference=options["reference"],
+                out_dir=os.path.join(options["out_dir"], "superposed"),
+                states=options["states"], min_cluster_samples=options["min_cluster_samples"],
+                site_radius=options["site_radius"], max_distance=options["max_distance"])
+
+            self.progressed.emit(0.9, "Writing the report and the session...")
+            write_family_report(sites, os.path.join(options["out_dir"], "family_sites.csv"))
+            session = write_family_session(sites, out_dir=options["out_dir"])
+            self.completed.emit(family, sites, session)
+        except Exception:                   # noqa: BLE001 - report, never crash
+            self.failed.emit(traceback.format_exc())
+
+
 class WatConDialog(QtWidgets.QDialog):
     """Pick structures and parameters, run, and inspect the sites."""
 
@@ -134,10 +176,335 @@ class WatConDialog(QtWidgets.QDialog):
 
     def _build(self):
         layout = QtWidgets.QVBoxLayout(self)
-        layout.addWidget(self._input_box())
-        layout.addWidget(self._parameter_box())
+        self.tabs = QtWidgets.QTabWidget()
+        self.tabs.addTab(self._single_protein_tab(), "One protein")
+        self.tabs.addTab(self._family_tab(), "Family")
+        self.tabs.currentChanged.connect(self._tab_changed)
+        layout.addWidget(self.tabs, 1)
         layout.addWidget(self._run_box())
-        layout.addWidget(self._results_box(), 1)
+
+    def _single_protein_tab(self):
+        """Many structures of one protein, one ConSurf run."""
+        page = QtWidgets.QWidget()
+        column = QtWidgets.QVBoxLayout(page)
+        column.setContentsMargins(0, 6, 0, 0)
+        column.addWidget(self._input_box())
+        column.addWidget(self._parameter_box())
+        column.addWidget(self._results_box(), 1)
+        return page
+
+    def _family_tab(self):
+        """Several proteins, one ConSurf run each, on a shared alignment."""
+        page = QtWidgets.QWidget()
+        column = QtWidgets.QVBoxLayout(page)
+        column.setContentsMargins(0, 6, 0, 0)
+
+        members = QtWidgets.QGroupBox("Members -- one protein per row")
+        rows = QtWidgets.QVBoxLayout(members)
+        self.members_table = QtWidgets.QTableWidget(0, 4)
+        self.members_table.setHorizontalHeaderLabels(
+            ["Protein", "Structures folder", "ConSurf file", "Reference"])
+        self.members_table.horizontalHeader().setStretchLastSection(True)
+        self.members_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.members_table.setToolTip(
+            "Structures must be whole chains, numbered as the ConSurf run is.\n"
+            "A structure trimmed to a pocket cannot be placed on the alignment.")
+        rows.addWidget(self.members_table)
+
+        buttons = QtWidgets.QHBoxLayout()
+        add = QtWidgets.QPushButton("Add member...")
+        add.clicked.connect(self._add_member)
+        remove = QtWidgets.QPushButton("Remove selected")
+        remove.clicked.connect(self._remove_member)
+        buttons.addWidget(add)
+        buttons.addWidget(remove)
+        buttons.addStretch(1)
+        rows.addLayout(buttons)
+        column.addWidget(members)
+
+        form = QtWidgets.QGroupBox("Alignment and frame")
+        fields = QtWidgets.QFormLayout(form)
+        self.alignment_edit = QtWidgets.QLineEdit()
+        self.alignment_edit.setPlaceholderText("alignment covering every structure (PIR or FASTA)")
+        browse = QtWidgets.QPushButton("Browse...")
+        browse.clicked.connect(self._pick_alignment)
+        fields.addRow("Alignment", self._row(self.alignment_edit, browse))
+
+        self.family_reference_edit = QtWidgets.QLineEdit()
+        self.family_reference_edit.setPlaceholderText(
+            "PDB id to place everything on (default: the first member's reference)")
+        fields.addRow("Frame reference", self.family_reference_edit)
+
+        self.states_edit = QtWidgets.QLineEdit()
+        self.states_edit.setPlaceholderText("3OLR=open 8U1E=open 2F71=closed")
+        self.states_edit.setToolTip(
+            "Optional labels. Occupancy is reported per label, which matters when a\n"
+            "loop moves: the PTP WPD loop sits 3-8 A apart between open and closed.")
+        fields.addRow("States", self.states_edit)
+
+        self.family_radius_spin = self._spin(0.5, 5.0, 1.5, 0.1,
+                                             "A water occupies a site within this distance.")
+        self.family_samples_spin = QtWidgets.QSpinBox()
+        self.family_samples_spin.setRange(2, 500)
+        self.family_samples_spin.setValue(3)
+        self.family_hbond_spin = self._spin(2.0, 5.0, 3.3, 0.1,
+                                            "Donor-acceptor distance for a hydrogen bond.")
+        grid = QtWidgets.QHBoxLayout()
+        for label, widget in (("Site radius (A)", self.family_radius_spin),
+                              ("Min waters / site", self.family_samples_spin),
+                              ("H-bond cutoff (A)", self.family_hbond_spin)):
+            grid.addWidget(QtWidgets.QLabel(label))
+            grid.addWidget(widget)
+        grid.addStretch(1)
+        holder = QtWidgets.QWidget()
+        holder.setLayout(grid)
+        fields.addRow("", holder)
+        column.addWidget(form)
+
+        results = QtWidgets.QGroupBox("Family")
+        stack = QtWidgets.QVBoxLayout(results)
+        self.family_summary = QtWidgets.QLabel("No results yet.")
+        self.family_summary.setWordWrap(True)
+        stack.addWidget(self.family_summary)
+
+        self.audit = QtWidgets.QPlainTextEdit()
+        self.audit.setReadOnly(True)
+        self.audit.setMaximumHeight(120)
+        self.audit.setPlaceholderText(
+            "Per-structure checks appear here: identity with its own ConSurf run, "
+            "residues that disagree, and residues excluded where a protein's own "
+            "structures disagreed about an alignment column.")
+        stack.addWidget(self.audit)
+
+        self.family_table = QtWidgets.QTableWidget(0, 6)
+        self.family_table.setHorizontalHeaderLabels(
+            ["Site", "Proteins", "Waters", "States", "Conserved columns", "Residues by protein"])
+        self.family_table.setSortingEnabled(True)
+        self.family_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.family_table.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.family_table.horizontalHeader().setStretchLastSection(True)
+        self.family_table.itemSelectionChanged.connect(self._focus_family_site)
+        stack.addWidget(self.family_table, 1)
+
+        self.shared_only = QtWidgets.QCheckBox("Only sites every protein holds")
+        self.shared_only.setChecked(True)
+        self.shared_only.stateChanged.connect(self._fill_family_table)
+        stack.addWidget(self.shared_only)
+        column.addWidget(results, 1)
+        return page
+
+    def _tab_changed(self, index):
+        self.run_button.setText("Run" if index == 0 else "Run family")
+
+    # -- family input --------------------------------------------------------
+
+    def _add_member(self):
+        directory = QtWidgets.QFileDialog.getExistingDirectory(
+            self, "Folder of whole-chain structures for one protein")
+        if not directory:
+            return
+        consurf, _ = QtWidgets.QFileDialog.getOpenFileName(
+            self, "ConSurf grades file for that protein", directory,
+            "ConSurf grades (*grades*.txt);;Text files (*.txt);;All files (*)")
+        if not consurf:
+            return
+        row = self.members_table.rowCount()
+        self.members_table.insertRow(row)
+        for column, value in enumerate((os.path.basename(directory.rstrip("/\\")),
+                                        directory, consurf, "")):
+            self.members_table.setItem(row, column, QtWidgets.QTableWidgetItem(value))
+        self.members_table.resizeColumnsToContents()
+        self._say("Added %s. Edit the name or set a reference structure by "
+                  "double-clicking a cell." % os.path.basename(directory))
+
+    def _remove_member(self):
+        rows = sorted({i.row() for i in self.members_table.selectedIndexes()}, reverse=True)
+        for row in rows:
+            self.members_table.removeRow(row)
+
+    def _pick_alignment(self):
+        chosen, _ = QtWidgets.QFileDialog.getOpenFileName(
+            self, "Alignment", self.alignment_edit.text() or "",
+            "Alignment (*.pir *.ali *.fa *.fasta *.aln);;All files (*)")
+        if chosen:
+            self.alignment_edit.setText(chosen)
+
+    def _family_options(self):
+        from WatCon.family import FamilyProtein, FamilyStructure
+        from WatCon.residue_index import list_structure_files
+
+        alignment = self.alignment_edit.text().strip()
+        if self.members_table.rowCount() < 2:
+            raise ValueError("Add at least two proteins -- a family needs more than one.")
+        if not alignment or not os.path.isfile(alignment):
+            raise ValueError("Choose an alignment covering every structure.")
+
+        proteins = []
+        for row in range(self.members_table.rowCount()):
+            def cell(column):
+                item = self.members_table.item(row, column)
+                return item.text().strip() if item else ""
+
+            name, directory, consurf, reference = (cell(0), cell(1), cell(2), cell(3))
+            if not name:
+                raise ValueError("Row %d has no protein name." % (row + 1))
+            if not os.path.isdir(directory):
+                raise ValueError("%s: no such folder: %s" % (name, directory))
+            if not os.path.isfile(consurf):
+                raise ValueError("%s: no such ConSurf file: %s" % (name, consurf))
+            names, _skipped = list_structure_files(directory)
+            if not names:
+                raise ValueError("%s: no structures in %s" % (name, directory))
+            structures = [FamilyStructure(os.path.splitext(f)[0], os.path.join(directory, f))
+                          for f in names]
+            if reference and reference not in [s.pdb_id for s in structures]:
+                raise ValueError("%s: reference %s is not among %s"
+                                 % (name, reference, ", ".join(s.pdb_id for s in structures)))
+            proteins.append(FamilyProtein(name=name, consurf_path=consurf,
+                                          structures=structures, reference=reference or None))
+
+        states = {}
+        for item in self.states_edit.text().split():
+            if "=" not in item:
+                raise ValueError("States look like 3OLR=open, not %r" % item)
+            pdb_id, label = item.split("=", 1)
+            states[pdb_id.strip().upper()] = label.strip()
+
+        reference = self.family_reference_edit.text().strip() or (
+            proteins[0].reference or proteins[0].structures[0].pdb_id)
+        return {
+            "proteins": proteins,
+            "alignment": alignment,
+            "reference": reference,
+            "states": states,
+            "site_radius": self.family_radius_spin.value(),
+            "min_cluster_samples": self.family_samples_spin.value(),
+            "max_distance": self.family_hbond_spin.value(),
+            "out_dir": os.path.join(os.path.dirname(proteins[0].structures[0].path),
+                                    "watcon_family"),
+        }
+
+    def _run_family(self):
+        try:
+            options = self._family_options()
+        except ValueError as error:
+            self._say(str(error))
+            return
+
+        self.run_button.setEnabled(False)
+        self.progress.setValue(0)
+        self._say("Starting the family analysis...")
+        self._worker = _FamilyWorker(options, self)
+        self._worker.progressed.connect(self._on_progress)
+        self._worker.completed.connect(self._on_family_completed)
+        self._worker.failed.connect(self._on_failed)
+        self._worker.finished.connect(lambda: self.run_button.setEnabled(True))
+        self._worker.start()
+
+    def _on_family_completed(self, family, sites, session):
+        self._family = family
+        self._sites = sites
+        self.progress.setValue(100)
+
+        lines = []
+        for report in family.structures:
+            lines.append("%-10s %-6s identity %s  coverage %3.0f%%  row %.3f"
+                         % (report.protein, report.pdb_id,
+                            "n/a" if report.identity is None else "%.3f" % report.identity,
+                            100 * report.coverage_fraction, report.row_identity))
+            for key, structure_residue, consurf_residue in report.identity_mismatches:
+                lines.append("           differs at %s%s: structure %s, ConSurf %s"
+                             % (key[0], key[1], structure_residue, consurf_residue))
+        for protein, positions in sorted(family.conflicts().items()):
+            lines.append("%-10s residues excluded, its structures disagreed on the column: %s"
+                         % (protein, ", ".join(str(p[0]) for p in positions)))
+        for fit in sites.fits:
+            lines.append("%-10s %-6s frame %3d columns, RMSD %.2f A"
+                         % (fit.protein, fit.pdb_id, fit.n_core_columns, fit.core_rmsd))
+        self.audit.setPlainText("\n".join(lines))
+
+        self._fill_family_table()
+        try:
+            cmd.delete("all")
+            cmd.do("@%s" % session.replace("\\", "/"))
+        except Exception as error:          # noqa: BLE001
+            self._say("Built the analysis, but PyMOL could not display it: %s" % error)
+            return
+        self._say("Done. %s  Written to %s"
+                  % (self.family_summary.text(), os.path.dirname(session)))
+
+    def _fill_family_table(self):
+        sites = getattr(self, "_sites", None)
+        self.family_table.setSortingEnabled(False)
+        self.family_table.setRowCount(0)
+        if sites is None:
+            self.family_table.setSortingEnabled(True)
+            return
+
+        summary = sites.summary()
+        self.family_summary.setText(
+            "%d sites over %d waters, %d in two or more proteins, %d in every protein, "
+            "%d lined by a column the whole family calls conserved"
+            % (summary["n_sites_occupied"], summary["n_waters"],
+               summary["n_sites_in_two_or_more_proteins"],
+               summary["n_sites_in_every_protein"], summary["n_family_conserved_sites"]))
+
+        n_proteins = len({f.protein for f in sites.fits})
+        chosen = [s for s in sites.sites
+                  if not self.shared_only.isChecked() or s.n_proteins_occupied == n_proteins]
+        chosen.sort(key=lambda s: (-s.n_proteins_occupied, -s.occupancy))
+        self.family_table.setRowCount(len(chosen))
+        for row, site in enumerate(chosen):
+            residues = "; ".join(
+                "%s %s" % (protein, "+".join(str(r) for r, _i in positions[:4]))
+                for protein, positions in sorted(site.residues.items()))
+            states = ", ".join("%s %d" % (k, v) for k, v in sorted(site.per_state_occupancy.items()))
+            values = [site.site_id, site.n_proteins_occupied, site.occupancy,
+                      states, len(site.unanimous_columns), residues]
+            for column, value in enumerate(values):
+                if isinstance(value, int):
+                    item = QtWidgets.QTableWidgetItem()
+                    item.setData(QtCore.Qt.DisplayRole, value)
+                else:
+                    item = QtWidgets.QTableWidgetItem(str(value))
+                if column == 0:
+                    item.setData(QtCore.Qt.UserRole, int(site.site_id))
+                self.family_table.setItem(row, column, item)
+        self.family_table.setSortingEnabled(True)
+        self.family_table.resizeColumnsToContents()
+
+    def _focus_family_site(self):
+        sites = getattr(self, "_sites", None)
+        model = self.family_table.selectionModel()
+        rows = model.selectedRows() if model else []
+        if not rows or sites is None:
+            return
+        item = self.family_table.item(rows[0].row(), 0)
+        if item is None:
+            return
+        site_id = item.data(QtCore.Qt.UserRole)
+        site = next((s for s in sites.sites if int(s.site_id) == int(site_id)), None)
+        if site is None:
+            return
+        try:
+            loaded = cmd.get_names("objects")
+        except Exception:                   # noqa: BLE001
+            loaded = []
+        if "sites" not in loaded:
+            self._say("Site %s is in the table, but the session is not loaded -- "
+                      "press Run family to draw it." % site_id)
+            return
+        try:
+            cmd.enable("sites")
+            cmd.zoom("sites and resi %d" % int(site_id), 8.0)
+            cmd.deselect()
+        except Exception as error:          # noqa: BLE001
+            self._say("Could not focus site %s: %s" % (site_id, error))
+            return
+        self._say("Site %s -- held by %d protein(s), %d waters. Lining residues: %s"
+                  % (site_id, site.n_proteins_occupied, site.occupancy,
+                     "; ".join("%s %s" % (p, "+".join(str(r) for r, _i in v))
+                               for p, v in sorted(site.residues.items()))))
 
     def _input_box(self):
         box = QtWidgets.QGroupBox("Input")
@@ -417,6 +784,9 @@ class WatConDialog(QtWidgets.QDialog):
     def _run(self):
         if self._worker is not None and self._worker.isRunning():
             self._say("Already running.")
+            return
+        if self.tabs.currentIndex() == 1:
+            self._run_family()
             return
         try:
             options = self._options()
