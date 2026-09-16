@@ -1,0 +1,2 @@
+structure,n_residues,first_resid,chains,published_correct,published_wrong_in_range,published_wrong_wrapped,published_out_of_range,published_fraction_correct,ours_wrong
+1AAX,297,2,1,0,296,0,1,0.0,0

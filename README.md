@@ -265,6 +265,8 @@ Stated plainly, because they matter more than the headline:
 
 - [The barnase study](experiments/barnase_waters/) — the evidence for the
   headline result, with the scripts that reproduce it
+- [The PTP1B and family benchmark](experiments/benchmark/) — findings, method
+  and numbers for the 253-structure and fifteen-protein results
 - [Getting ConSurf data](docs/consurf_data.rst) — the manual step, in detail
 - [Conservation options](docs/faq/conservation_options.rst) — every setting the
   extension adds, and what each one refuses to guess

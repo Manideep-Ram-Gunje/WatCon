@@ -2374,3 +2374,35 @@ Shipping the data would put 5 MB of raw research bundles into every install, and
 CI asserts they stay out. Dropping `WatCon/tests` from the wheel would remove a
 user's ability to verify their own installation, which for a scientific tool is
 worth keeping. Skipping with an explanation costs nothing and hides nothing.
+
+
+---
+
+## 2026-09-16 - Phase 32: the benchmark evidence, without the benchmark data
+
+- **Change:** Vendored the small, useful part of the PTP1B and family study:
+  findings, method, numbers and scripts. 273 kB.
+- **Files:** `experiments/benchmark/` (new), `README.md`.
+- **Reason:** Phase 30 vendored the barnase study and left this one outside, so
+  the 253-structure and fifteen-protein claims still had no readable evidence in
+  the repository.
+- **Tests:** 792 passed, 2 skipped; `experiments/` confirmed absent from the wheel.
+- **Limits:** `build_ensemble_fixtures.py` needs data that is not committed; it
+  is here for provenance, and says so.
+- **Decision:** Commit what cannot be regenerated; leave what can.
+
+The full working tree is about **1.1 GB** -- 287 PTP1B entries, their prepared
+copies, the family structures, the Zenodo MD system, and fifteen ConSurf bundles
+at ~32 MB each. None of it is ours to redistribute and all of it is
+retrievable: RCSB serves the structures, Zenodo the MD system, and ConSurf the
+runs, whose settings are in `data/consurf_raw/MANIFEST.md`.
+
+So the repository now carries the part a reader cannot regenerate -- FINDINGS,
+PHASE_A_MAPPING, PREREGISTRATION, the benchmark JSON and mapping CSVs -- and not
+the part they can. Run logs were left out as noise (228 kB of them).
+
+`scripts/build_family15.py` is new: it fetches the twenty-four entries, lays
+them out per protein, and writes both members files, so the fifteen-protein
+result is reproducible from a clean clone. The members files generated during
+the work could not be committed as they stood -- they held absolute Windows
+paths with mixed separators, which would have been useless to anyone else.
