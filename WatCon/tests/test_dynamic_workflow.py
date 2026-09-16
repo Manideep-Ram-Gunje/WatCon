@@ -199,3 +199,68 @@ class _FakeAtom:
     def __init__(self, index, position):
         self.index = index
         self.position = position
+
+
+# ===========================================================================
+# The ConSurf join, through the dynamic path, on real data
+# ===========================================================================
+
+#: The MD system is PTP1B renumbered from 1. Measured, not assumed: +1 gives
+#: identity 1.000 over 295 residues, every other offset below 0.09.
+MD_OFFSET = 1
+
+
+def _renumbered_md_site(tmp_path):
+    """A copy carrying the declared offset and chain, with its provenance."""
+    source = os.path.join(ENSEMBLE, "md_active_site_h.pdb")
+    work = tmp_path / "structures"
+    work.mkdir(exist_ok=True)
+    target = work / "md_site_renumbered.pdb"
+    with open(str(target), "w", encoding="utf-8", newline="\n") as handle:
+        handle.write("REMARK   Renumbered by %+d and chain set to A, both declared,\n"
+                     "REMARK   to match the 1AAX ConSurf run. The offset was measured:\n"
+                     "REMARK   identity 1.000 over 295 residues on the full MD system.\n"
+                     % MD_OFFSET)
+        for line in open(source, encoding="utf-8"):
+            if line.startswith(("ATOM", "HETATM")):
+                line = (line[:21] + "A"
+                        + "%4d" % (int(line[22:26]) + MD_OFFSET) + line[26:])
+            handle.write(line)
+    return str(work)
+
+
+def test_conservation_reaches_the_network_built_from_a_trajectory(tmp_path):
+    """End to end: a ConSurf run attached to a network built by the dynamic path.
+
+    This is what the chain bug broke silently -- every atom came back unscored
+    while the run reported success. The assertion is therefore that *every*
+    protein atom carries a grade, not merely that some do.
+    """
+    import shutil
+
+    work = _renumbered_md_site(tmp_path)
+    consurf = tmp_path / "consurf"
+    consurf.mkdir()
+    shutil.copyfile(
+        os.path.join(PACKAGE, "data", "consurf", "fixtures", "1AAX_A.grades.txt"),
+        str(consurf / "md_site_renumbered_consurf_grades.txt"))
+
+    _metrics, networks, _coords = gdn.initialize_network(
+        topology_file="md_site_renumbered.pdb",
+        trajectory_file="md_site_renumbered.pdb",
+        structure_directory=work, network_type="water-protein", water_name="WAT",
+        msa_indexing=False, return_network=True, num_workers=1, max_distance=3.0,
+        analysis_conditions=CHEAP, consurf_directory=str(consurf), consurf_strict=True)
+
+    network = networks[0]
+    graded = [a for a in network.protein_atoms if a.evolutionary is not None]
+    assert len(graded) == len(network.protein_atoms) > 0
+
+    # The WPD loop is the general acid, and every run grades it 9. Recovering it
+    # here means the join landed on the right residues, not merely on some.
+    by_resid = {int(a.resid): a.evolutionary.grade for a in graded}
+    assert by_resid[181] == 9          # Asp181, the general acid
+    assert by_resid[179] == 9          # Trp179, the loop it sits on
+
+    # Conservation rolled up onto the waters that contact those residues.
+    assert any(w.evolutionary is not None for w in network.water_molecules)

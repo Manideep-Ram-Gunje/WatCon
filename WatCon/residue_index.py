@@ -55,6 +55,8 @@ __all__ = [
     "residues_from_pdb_file",
     "residues_from_universe",
     "atom_identity",
+    "PROTONATION_VARIANTS",
+    "standard_residue_name",
     "build_fasta_sequence",
     "check_sequence_consistency",
     "legacy_indexing_report",
@@ -103,6 +105,35 @@ AMINO_ACID_3TO1: Dict[str, str] = {
 #: Deliberately a curated list of polymer modifications, not "any HETATM whose
 #: name looks like an amino acid": a free TYR ligand must stay a ligand, and a
 #: fused chromophore such as 7O7W's PIA must stay excluded.
+#: Force-field names for a standard residue in a particular protonation state.
+#: Amber writes HID/HIE/HIP for the three histidines, CYM for a deprotonated
+#: cysteine, ASH/GLH/LYN for neutral Asp/Glu/Lys and CYX for a disulphide
+#: cysteine; CHARMM writes HSD/HSE/HSP. These are the *same* amino acid as their
+#: parent, so an identity check must not report HID against HIS as a difference.
+#:
+#: Kept separate from :data:`MODIFIED_RESIDUES`, which is about residues that
+#: are chemically different -- CSP really is not CYS, and reporting 5HDE's
+#: phosphocysteine as a difference is the correct behaviour.
+PROTONATION_VARIANTS: Dict[str, str] = {
+    "HID": "HIS", "HIE": "HIS", "HIP": "HIS",
+    "HISD": "HIS", "HISE": "HIS", "HISP": "HIS",
+    "HSD": "HIS", "HSE": "HIS", "HSP": "HIS",
+    "CYM": "CYS", "CYX": "CYS",
+    "ASH": "ASP", "AS4": "ASP",
+    "GLH": "GLU", "GL4": "GLU",
+    "LYN": "LYS", "ARN": "ARG",
+}
+
+
+def standard_residue_name(resname: str) -> str:
+    """The residue name with any protonation-state spelling removed.
+
+    ``HID`` -> ``HIS``; anything else is returned stripped and upper-cased.
+    """
+    text = str(resname or "").strip().upper()
+    return PROTONATION_VARIANTS.get(text, text)
+
+
 MODIFIED_RESIDUES: Dict[str, str] = {
     # cysteine
     "CSP": "C", "CME": "C", "CSO": "C", "OCS": "C", "CSD": "C", "CAS": "C",
@@ -402,18 +433,39 @@ def residues_from_universe(
     return residues
 
 
-def _universe_chain_id(residue) -> str:
-    """Best available chain identifier for an MDAnalysis residue.
+#: Segment names MDAnalysis invents when a file names no segment. ``SYST`` is
+#: what ``SYSTEM`` becomes in a PDB, whose segid column holds four characters.
+_DEFAULT_SEGIDS = frozenset({"SYSTEM", "SYST"})
 
-    PDB topologies expose ``chainID``; others only ``segid``.  Falls back to the
-    empty string, which matches how a blank PDB chain column is read.
+
+def _universe_chain_id(residue) -> str:
+    """Best available chain identifier for an MDAnalysis residue or atom.
+
+    ``chainID`` is an **atom**-level attribute in MDAnalysis, so reading it off
+    a residue always returned ``None`` and this fell through to ``segid``. For
+    a file straight from the PDB that happens to give the right answer, because
+    MDAnalysis fills segid from the chain column -- which is why it went
+    unnoticed. For a PDB *written* by MDAnalysis the segid is the invented
+    ``SYST`` while the real chain sits in ``chainID``, so identity lookups were
+    keyed ``('SYST', 215, None)`` against a map holding ``('A', 215, None)``:
+    every residue came back unscored, and nothing said so.
+
+    Falls back to the empty string, which matches a blank PDB chain column.
     """
-    for attribute in ("chainID", "segid"):
-        value = getattr(residue, attribute, None)
-        if value is None:
-            continue
+    value = getattr(residue, "chainID", None)
+    if value is None:
+        atoms = getattr(residue, "atoms", None)
+        if atoms is not None and len(atoms):
+            value = getattr(atoms[0], "chainID", None)
+    if value is not None:
         text = str(value).strip()
-        if text and text != "SYSTEM":
+        if text:
+            return text
+
+    value = getattr(residue, "segid", None)
+    if value is not None:
+        text = str(value).strip()
+        if text and text.upper() not in _DEFAULT_SEGIDS:
             return text
     return ""
 

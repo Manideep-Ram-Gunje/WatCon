@@ -2070,3 +2070,76 @@ and `.mdp` files -- starting structures and run parameters, not output. Nothing
 in the research tree holds a `.xtc`, `.trr`, `.dcd` or `.nc`, and none of the
 256 PTP1B entries is a multi-model deposition. The directed path is therefore
 exercised on one real frame, which is honest and covers the geometry.
+
+
+---
+
+## 2026-09-16 - Phase 28: two ways the ConSurf join attached nothing quietly
+
+- **Change:** Fixed chain resolution and protonation-state comparison, the two
+  halves of the identity key that could fail without saying so.
+- **Files:** `WatCon/residue_index.py`, `WatCon/evolutionary.py`,
+  `WatCon/tests/test_chain_identity.py` (new),
+  `WatCon/tests/test_dynamic_workflow.py`.
+- **Reason:** Found by attaching the 1AAX run to the MD system through the
+  dynamic path: **0 of 127** active-site atoms carried a grade, and the run
+  reported success.
+- **Tests:** `pytest WatCon/tests -q` -> 762 passed, 2 skipped.
+- **Limits:** A file with no chain information at all still yields the empty
+  chain, which is correct but means such input needs `consurf_chain_map`.
+- **Decision:** Protonation variants are normalised; chemical modifications are
+  not. CSP really is not CYS.
+
+### The chain came from the wrong attribute
+
+`_universe_chain_id` tried `chainID` and then `segid`. But **`chainID` is an
+atom-level attribute in MDAnalysis**, so reading it off a residue always
+returned `None` and every call fell through to `segid`.
+
+That is right by luck for a file straight from the PDB, where MDAnalysis fills
+segid from the chain column -- which is why it survived the barnase study, the
+253-structure PTP1B run and the fifteen-protein family, all of which read RCSB
+files. For a PDB *written* by MDAnalysis the segid is the invented `SYST` while
+the real chain sits in `chainID`, so lookups were keyed `('SYST', 215, None)`
+against a map holding `('A', 215, None)`. Every residue came back unscored.
+
+| file | column 22 | segid | chainID | resolved, before | after |
+|---|---|---|---|---|---|
+| RCSB 2F71 | A | A | A | A | A |
+| prepared 1AAX | A | A | A | A | A |
+| MDAnalysis-written | X | SYST | X | **SYST** | X |
+
+The invariant now tested is that the two readers agree: WatCon reads structures
+both as text (for residue identity) and through MDAnalysis (for networks), and
+the join is keyed on the chain both produce. When they disagree, nothing
+matches and nothing complains.
+
+### A protonation state is not a sequence difference
+
+`_compare_identity` compared three-letter names, so a force field's `HID`,
+`HIE` or `HIP` read as a disagreement with a crystal structure's `HIS`. The MD
+system has eleven such residues. Names are now normalised through
+`PROTONATION_VARIANTS` (Amber's HID/HIE/HIP/CYM/CYX/ASH/GLH/LYN and CHARMM's
+HSD/HSE/HSP) before comparison.
+
+Deliberately separate from `MODIFIED_RESIDUES`: those are chemically different
+residues, and reporting 5HDE's phosphocysteine as `CYS>CSP` is correct.
+
+### Before and after, on the MD active site
+
+Renumbered by the declared +1 offset and joined to the 1AAX run:
+
+| | before | after |
+|---|---|---|
+| identity | 0.9545 | **0.9773** |
+| differences reported | `A214 HID>HIS`, `A215 CYS>SER` | `A215 CYS>SER` |
+| protein atoms graded | **0 of 127** | **127 of 127** |
+| waters carrying conservation | 0 of 6 | 5 of 6 |
+
+The one remaining difference is real: 1AAX is the C215S trap and the MD system
+models an actual cysteine. With the join working, the active site comes back
+carrying the WPD loop at grade 9 -- Trp179, Pro180, **Asp181**, the general
+acid -- which is the biochemistry the run should recover and could not before.
+
+No published number moves: every result in this repository was measured on RCSB
+files, where the old path happened to give the right chain.

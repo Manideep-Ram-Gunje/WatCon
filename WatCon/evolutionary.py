@@ -74,7 +74,7 @@ from .consurf import (
     LookupStatus,
     parse_consurf,
 )
-from .residue_index import ResidueKey
+from .residue_index import ResidueKey, standard_residue_name
 
 __all__ = [
     "ConservationError",
@@ -527,6 +527,12 @@ class ConservationMap:
         attached.  Returns None -- rather than guessing or raising -- when the
         object carries no residue name at all, so callers that pass bare
         coordinates degrade to "not checked" instead of "everything mismatched".
+
+        Protonation-state spellings are normalised first: a force field writes
+        HID, HIE or HIP where a crystal structure writes HIS, and reporting that
+        as a sequence difference would be wrong -- it is the same amino acid.
+        Chemical modifications are deliberately *not* normalised, so 5HDE's
+        phosphocysteine still reads CYS against CSP.
         """
         conservation = self._by_residue.get(key)
         if conservation is None:
@@ -534,7 +540,8 @@ class ConservationMap:
 
         resname = getattr(residue, "resname", None)
         if resname and conservation.residue_name:
-            return resname.strip().upper(), conservation.residue_name.strip().upper()
+            return (standard_residue_name(resname),
+                    standard_residue_name(conservation.residue_name))
 
         one_letter = getattr(residue, "one_letter", None)
         if one_letter and conservation.amino_acid:
