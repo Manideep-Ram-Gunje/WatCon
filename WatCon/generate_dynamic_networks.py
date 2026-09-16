@@ -22,6 +22,7 @@ import WatCon.conformers as conformers_module
 import WatCon.evolutionary as evolutionary
 from WatCon.visualize_structures import project_clusters
 import WatCon.residue_analysis as residue_analysis
+import WatCon.structure_io as structure_io
 
 class WaterAtom:
     """
@@ -269,7 +270,7 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
                             evolutionary=evolutionary)
             self.protein_atoms.append(mol)
 
-    def add_water(self, index, o, h1, h2, residue_number):
+    def add_water(self, index, o, residue_number, h1=None, h2=None):
         """
         Add water molecule
 
@@ -293,8 +294,15 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
         None
         """
         o = WaterAtom(o.index+1, 'O', residue_number, *o.position)
-        h1 = WaterAtom(h1.index+1, 'H1',residue_number, *h1.position)
-        h2 = WaterAtom(h2.index+1, 'H2',residue_number, *h2.position)
+
+        # Crystallographic waters are an oxygen and nothing else. The signature
+        # used to demand h1 and h2 positionally, so any hydrogen-free water --
+        # every water in every X-ray structure -- raised TypeError here. The
+        # static builder has always accepted them; this now matches it.
+        if h1 is not None:
+            h1 = WaterAtom(h1.index+1, 'H1',residue_number, *h1.position)
+            h2 = WaterAtom(h2.index+1, 'H2',residue_number, *h2.position)
+
         water = WaterMolecule(index, o, h1, h2, residue_number)
         self.water_molecules.append(water)
 
@@ -326,6 +334,17 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
         #Create empty set for active site atoms
         active_region_atoms = []
 
+        # A selection that matched nothing reaches distance_array as an empty
+        # array and comes back as "configuration.shape must be (3,) or (n, 3),
+        # got (0,)", which says nothing about the selection that caused it. The
+        # usual cause is a residue number: an MD system renumbered from 1 does
+        # not answer to the crystal structure's numbering.
+        if len(reference) == 0:
+            raise ValueError(
+                "active_region_reference selected no atoms. Check the residue "
+                "numbering of this system -- a renumbered model will not answer "
+                "to the numbering of the structure the reference was written for."
+            )
 
         if active_region_COM is False:
             #Find coordinates for refrence point
@@ -1723,16 +1742,23 @@ def extract_objects_per_frame(pdb_file, trajectory_file, frame_idx, network_type
         # See the static builder: mol.atoms is the whole residue, and would
         # bring back filtered alternate positions.
         mol_atoms = (mol.atoms & ag_wat) if _conformers_filtered else mol.atoms
-        if len(mol_atoms) > 3:
-            valid_atoms = [f for f in mol_atoms if ('H' in f.name or 'O' in f.name)]
-        else:
-            valid_atoms = mol_atoms
+        oxygen = [atom for atom in mol_atoms if 'O' in atom.name]
+        hydrogens = [atom for atom in mol_atoms if 'O' not in atom.name]
 
-        
-        ats = [atom for atom in valid_atoms]
+        if not oxygen:
+            continue
+
+        # Same guard as the static builder: a duplicated oxygen would otherwise
+        # become a second water at nearly the same position.
+        if len(oxygen) > 1:
+            print(f'Detected multiple oxygen atoms per one water molecule in structure {pdb_file}, using only the first instance.\nThis may cause unpredictable behavior. Check for duplicates in residue {mol.resid}!')
+            oxygen = [oxygen[0]]
+
         #Water molecules are objects which contain H1, H2, O atoms
-
-        water_network.add_water(mol.resid, *ats, mol.resid)
+        if directed and len(hydrogens) >= 2:
+            water_network.add_water(mol.resid, oxygen[0], mol.resid, *hydrogens[:2])
+        else:
+            water_network.add_water(mol.resid, oxygen[0], mol.resid)
     #Either find connections among only oxygens in waters or add hydrogens as well
     if directed:
         water_network.generate_directed_network(u.dimensions, msa_indexing, active_region_residue, active_region_COM=active_region_COM, active_region_radius=active_region_radius, 
@@ -2075,6 +2101,14 @@ def initialize_network(topology_file, trajectory_file, structure_directory='.', 
             'clustering_coefficient': 'on',
             'shortest_path': 'on'
         }
+
+    # A ragged multi-model PDB is accepted by MDAnalysis -- the topology comes
+    # from the first model alone -- and only fails once a later frame is read,
+    # minutes into the run, with an error naming an array shape. Refuse it here,
+    # where the cause can still be explained. See structure_io for why an
+    # ensemble of crystal structures belongs in the static path.
+    if multi_model_pdb:
+        structure_io.require_constant_atom_count(pdb_file)
 
     #Create universe object just once to get number of frames
     try:

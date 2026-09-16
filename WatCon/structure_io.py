@@ -181,3 +181,73 @@ def as_pdb_directory(input_dir, work_dir, verbose=True):
             % (input_dir, failed[0][1] if failed else "unknown")
         )
     return work_dir, converted, failed
+
+
+class VaryingAtomCount(ValueError):
+    """Raised when a multi-model PDB cannot be read as a trajectory."""
+
+
+def model_atom_counts(path):
+    """Atoms per ``MODEL`` in a PDB file, in file order.
+
+    A plain text scan rather than an MDAnalysis read: this is asked *before*
+    building a Universe, precisely to find out whether building one is sensible.
+    Returns an empty list for a file with no ``MODEL`` records.
+    """
+    counts = []
+    current = None
+
+    with open(path, "r", encoding="utf-8", errors="replace") as handle:
+        for line in handle:
+            if line.startswith("MODEL"):
+                current = 0
+            elif line.startswith("ENDMDL"):
+                if current is not None:
+                    counts.append(current)
+                current = None
+            elif current is not None and line.startswith(("ATOM", "HETATM")):
+                current += 1
+
+    if current is not None:          # MODEL never closed by ENDMDL
+        counts.append(current)
+    return counts
+
+
+def require_constant_atom_count(path):
+    """Refuse a multi-model PDB whose models do not all hold the same atoms.
+
+    MDAnalysis builds the Universe from the first model alone, so a ragged file
+    is accepted, reports a frame count, and only fails once some later frame is
+    actually read -- by which point the caller is minutes into a run and the
+    error names a shape, not a cause.
+
+    This is the normal shape of an ensemble assembled from crystal structures:
+    every entry resolves a different number of waters, so the models cannot
+    align. Such a set is what :mod:`WatCon.generate_static_networks` is for; it
+    reads each structure separately and has no constant-topology requirement.
+
+    Returns the atom count when the file is usable.
+    """
+    counts = model_atom_counts(path)
+    if len(counts) < 2:
+        return counts[0] if counts else None
+
+    distinct = sorted(set(counts))
+    if len(distinct) == 1:
+        return distinct[0]
+
+    first = counts[0]
+    offender = next(i for i, n in enumerate(counts) if n != first)
+    raise VaryingAtomCount(
+        "%s cannot be read as a trajectory: its models do not all contain the "
+        "same atoms (model 1 has %d, model %d has %d; %d distinct counts across "
+        "%d models). MDAnalysis builds the topology from the first model and "
+        "requires every later frame to match it.\n"
+        "An ensemble of crystal structures normally looks like this, because "
+        "each entry resolves a different number of waters. Analyse it with the "
+        "static path instead, which reads each structure on its own:\n"
+        "    watcon run --input input.txt      (structure_directory, not "
+        "trajectory_file)\n"
+        "    WatCon.generate_static_networks.initialize_network(...)"
+        % (path, first, offender + 1, counts[offender], len(distinct), len(counts))
+    )

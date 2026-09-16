@@ -647,11 +647,15 @@ mean inventing a specification.
   (Phases 20-24, widened in Phase 26): fifteen PTPs, twenty-four structures, on
   fifteen real ConSurf runs. What remains open there is the burial confound,
   shared with the single-protein study.
-- The **dynamic (trajectory) path has never been run on real input.** It is the
-  largest untested area in the package.
 - The study is **one protein**, correlational, with burial unresolved.
-- The directed static path now executes and produces a directed graph, but its
-  hydrogen-bond geometry is still covered by no test.
+- ~~The directed static path now executes and produces a directed graph, but its
+  hydrogen-bond geometry is still covered by no test.~~ **Done** (Phase 27):
+  `tests/test_directed_geometry.py` runs it on real hydrogens from the MD
+  system, including the angle and distance criteria.
+- ~~The **dynamic (trajectory) path has never been run on real input.**~~
+  **Done** (Phase 27), which found four defects. It has still never been run on
+  an actual molecular dynamics trajectory, because none exists to run: the
+  coverage is a three-frame crystal ensemble and one MD frame.
 - `2F56`/`2F5M` were excluded rather than renumbered; the renumbered sensitivity
   check has not been run.
 

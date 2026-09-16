@@ -248,6 +248,13 @@ def cluster_coordinates_only(coordinate_list, cluster='hdbscan', min_samples=10,
         )
     coordinate_list = coordinate_list.reshape(-1, 3)
 
+    # Both initialize_network entry points default eps to None and pass it
+    # straight through, so any caller that clusters without naming eps reached
+    # sklearn with None and raised InvalidParameterError. None means "whatever
+    # this algorithm's own default is", which is what it always read as.
+    if eps is None:
+        eps = 0.5 if cluster == 'dbscan' else 0.0
+
     #scaler = MinMaxScaler()
     #scaler.fit(coordinate_list)
     #coordinate_norm = scaler.transform(coordinate_list)

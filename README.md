@@ -251,6 +251,15 @@ Stated plainly, because they matter more than the headline:
 - Alternate conformers: positions tied for most populated are all kept, so
   WatCon's own edge counts stay inflated for structures modelling many equally
   occupied positions.
+- The **trajectory path has not been run on real molecular dynamics**, because
+  no trajectory was available: it is covered by a three-frame crystal ensemble
+  and a single MD frame. An ensemble of crystal structures is *not* a
+  trajectory — each entry resolves different waters — and the tool now refuses
+  one with a message pointing at the static path.
+- Two graph metrics, `shortest_path` and `characteristic_path_length`, run
+  all-pairs shortest paths and are on by default. On a 4,851-water system they
+  took 819 s and 45 s against **1.4 s** to build the network itself. Turn them
+  off for anything large; the network is unchanged.
 
 ## Documentation
 
@@ -264,7 +273,7 @@ Stated plainly, because they matter more than the headline:
 
 ```bash
 pip install -e ".[test]"
-python -m pytest WatCon/tests -q      # 733 tests
+python -m pytest WatCon/tests -q      # 754 tests
 ```
 
 ## License

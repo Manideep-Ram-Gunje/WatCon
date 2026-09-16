@@ -1971,3 +1971,102 @@ The mechanism worked without change; it simply had more to catch.
 
 The authors' dataset labels 2QEP "PTPN2". The entry is **PTPRN2** (Q92932); real
 PTPN2 is P17706. Recorded in the fixture README so the mislabel is not inherited.
+
+
+---
+
+## 2026-09-16 - Phase 27: the dynamic path runs on real input
+
+- **Change:** Ran `generate_dynamic_networks.initialize_network` on real data
+  for the first time. Four defects found and fixed; the directed path gained
+  its first tests.
+- **Files:** `WatCon/generate_dynamic_networks.py`,
+  `WatCon/find_conserved_networks.py`, `WatCon/structure_io.py`,
+  `WatCon/data/examples/ptp1b_ensemble/` (new),
+  `WatCon/tests/test_dynamic_workflow.py`,
+  `WatCon/tests/test_directed_geometry.py` (both new),
+  `experiments/benchmark/scripts/build_ensemble_fixtures.py` (new).
+- **Reason:** It was the largest untested area in the package -- a whole entry
+  point that had never executed outside a docstring.
+- **Tests:** `pytest WatCon/tests -q` -> 754 passed, 2 skipped.
+- **Limits:** No molecular dynamics was run and none is shipped. The trajectory
+  work is a crystal ensemble and a single MD frame, and is described as such.
+- **Decision:** A ragged ensemble is refused rather than accommodated. Padding
+  or truncating waters to a common count would have fabricated occupancy.
+
+### The four defects
+
+**Crystallographic waters could not be read at all.** `WaterNetwork.add_water`
+took `h1` and `h2` positionally, so a water with no hydrogens -- every water in
+every X-ray structure -- raised `TypeError: add_water() missing 2 required
+positional arguments`. The static builder had accepted them since it was
+written; the dynamic one never could. Its signature now matches the static one,
+and the caller names the oxygen and the hydrogens instead of splatting the
+residue, which also brings across the duplicate-oxygen guard.
+
+**Clustering without naming `eps` crashed.** Both entry points default `eps` to
+`None` and pass it straight through to sklearn, which requires a float:
+`InvalidParameterError: 'cluster_selection_epsilon' ... Got None instead`.
+Shared with the static path, which had simply never been called without it.
+`None` now reads as "this algorithm's own default" in the one place that talks
+to sklearn.
+
+**An active-site reference that matched nothing reported an array shape.**
+`distance_array(): configuration.shape must be (3,) or (n, 3), got (0,)` --
+nothing about the selection that caused it. The usual cause is residue
+numbering, which is exactly the trap the MD system sets: renumbered from 1, so
+PTP1B's Cys215 is resid 214 and `resid 215` silently selects nothing.
+
+**A ragged multi-model PDB failed three frames in.** MDAnalysis builds the
+topology from the first model, so the Universe is created, a frame count is
+reported, and only a later frame raises. `structure_io.require_constant_atom_count`
+now scans the models before any work is done and refuses with a message naming
+the models that differ and pointing at the static path.
+
+### Where the time actually goes
+
+Profiling one frame of the full MD system, 957 s total:
+
+| | seconds | share |
+|---|---|---|
+| `get_shortest_path` (all-pairs) | 819 | 86% |
+| `get_CPL` (all-pairs) | 45 | 5% |
+| **building the network** | **1.4** | **0.1%** |
+
+Both are on when `analysis_conditions='all'`. Switching them off gives the
+**identical** network -- 4,851 waters, 5,800 edges -- in **1.0 s** instead of
+757 s. The dynamic path is not slow; two default-on graph metrics are quadratic
+in the number of nodes and dominate everything else. Documented rather than
+changed by default, since the defaults decide what a user's analysis contains.
+
+### Oxygen-only against directed, same frame
+
+First measurement of the two side by side, on the full MD system:
+
+| | edges | WAT-WAT | WAT-PROT |
+|---|---|---|---|
+| oxygen-only, 3.0 A | 5,800 | 5,566 | 234 |
+| directed, 2.5 A, angle 150 | 7,710 | 7,458 | 275 |
+| directed, 1.8 A, angle 150 | 1,233 | 1,221 | 12 |
+
+The directed network holds *more* edges than the oxygen-only one at a shorter
+cutoff, which is the expected consequence of directionality: a water pair joined
+by one proximity edge can carry two hydrogen bonds, one each way.
+
+### What could not be done, and why
+
+**The planned ensemble trajectory from the 253 PTP1B structures cannot exist.**
+A trajectory requires a constant atom count and the structures resolve 230-246
+atoms each around the active site. MDAnalysis refuses the file, correctly.
+Padding the water count would fabricate occupancy; truncating to a common set
+leaves no waters at all, since no water is common to all. A crystal ensemble
+belongs in the static path, which reads each structure separately and has no
+such requirement -- so the tool now says exactly that instead of failing
+halfway. The CI fixture keeps a 9-water-per-model subset purely to exercise the
+code path, labelled in its README as carrying no scientific claim.
+
+**No trajectory exists to run.** Zenodo ships `WT_PTP1B_Apo_Closed.gro`/`.top`
+and `.mdp` files -- starting structures and run parameters, not output. Nothing
+in the research tree holds a `.xtc`, `.trr`, `.dcd` or `.nc`, and none of the
+256 PTP1B entries is a multi-model deposition. The directed path is therefore
+exercised on one real frame, which is honest and covers the geometry.
