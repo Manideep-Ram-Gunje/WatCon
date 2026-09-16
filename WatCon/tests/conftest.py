@@ -119,15 +119,114 @@ def _has(module: str) -> bool:
 
 _MDANALYSIS_AVAILABLE = _has("MDAnalysis")
 
-collect_ignore = [] if _MDANALYSIS_AVAILABLE else list(_REQUIRES_MDANALYSIS)
+# ---------------------------------------------------------------------------
+# Data that a distribution deliberately does not carry
+# ---------------------------------------------------------------------------
+#
+# The suite ships inside the wheel, so `pytest --pyargs WatCon.tests` is a thing
+# a user can type.  Two sets of inputs are not in the wheel, on purpose:
+#
+#   * `data/consurf/exploratory/` -- 5 MB of raw ConSurf result bundles, kept in
+#     the repository for provenance and excluded by MANIFEST.in.  The CI wheel
+#     check asserts they are absent.
+#   * `tests/inputs/` and `tests/water_dir/` -- raw structures used by the
+#     older core tests.
+#
+# Run from an installed copy, the modules needing them produced 89 collection
+# errors and 41 failures, which reads as a broken package rather than as
+# "these tests need the repository".  They are now not collected there, and the
+# header says so -- the same treatment MDAnalysis already gets above.
+
+_EXPLORATORY_AVAILABLE = EXPLORATORY.is_dir() and any(EXPLORATORY.glob("*.tar.gz"))
+_HERE = Path(__file__).resolve().parent
+_INPUTS_AVAILABLE = (_HERE / "inputs").is_dir()
+_WATER_DIR_AVAILABLE = (_HERE / "water_dir").is_dir()
+
+#: Need the raw ConSurf bundles for their annotated-PDB oracle.
+_REQUIRES_EXPLORATORY = [
+    "test_consurf_crosscheck.py",
+    "test_core_mapping.py",
+    "test_end_to_end.py",
+    "test_evolutionary.py",
+    "test_evolutionary_clusters.py",
+    "test_identity_check.py",
+    "test_residue_index.py",
+    "test_superpose.py",
+]
+
+#: Need the raw structures under tests/inputs/.
+_REQUIRES_INPUTS = [
+    "test_core_mapping.py",
+    "test_evolutionary.py",
+    "test_residue_index.py",
+]
+
+#: Need tests/water_dir/, a structure directory the older core tests analyse.
+_REQUIRES_WATER_DIR = [
+    "test_directed_networks.py",
+    "test_general.py",
+]
+
+
+def _uncollectable():
+    missing = []
+    if not _MDANALYSIS_AVAILABLE:
+        missing += _REQUIRES_MDANALYSIS
+    if not _EXPLORATORY_AVAILABLE:
+        missing += _REQUIRES_EXPLORATORY
+    if not _INPUTS_AVAILABLE:
+        missing += _REQUIRES_INPUTS
+    if not _WATER_DIR_AVAILABLE:
+        missing += _REQUIRES_WATER_DIR
+    return sorted(set(missing))
+
+
+collect_ignore = _uncollectable()
+
+# `pytest_report_header` below is only called for a conftest at the rootdir, so
+# running `pytest --pyargs WatCon.tests` from elsewhere -- which is exactly the
+# installed case these skips exist for -- would drop modules silently. A warning
+# surfaces in the summary wherever the suite is run from, and silence is the one
+# outcome this file already says it does not want.
+if collect_ignore:
+    import warnings as _warnings
+
+    _warnings.warn(
+        "WatCon: not collecting %d test module(s) -- %s. %s"
+        % (len(collect_ignore), ", ".join(collect_ignore),
+           "Run the suite from a repository checkout to cover them."),
+        UserWarning,
+        stacklevel=2,
+    )
 
 
 def pytest_report_header(config):
     """Say out loud which modules are not being collected, and why."""
+    lines = []
     if _MDANALYSIS_AVAILABLE:
-        return "WatCon: MDAnalysis present -- collecting all test modules"
-    return (
-        "WatCon: MDAnalysis NOT installed -- skipping "
-        + ", ".join(_REQUIRES_MDANALYSIS)
-        + " (core network tests are therefore UNVERIFIED here)"
-    )
+        lines.append("WatCon: MDAnalysis present -- core network tests collected")
+    else:
+        lines.append(
+            "WatCon: MDAnalysis NOT installed -- skipping "
+            + ", ".join(_REQUIRES_MDANALYSIS)
+            + " (core network tests are therefore UNVERIFIED here)"
+        )
+
+    if _EXPLORATORY_AVAILABLE and _INPUTS_AVAILABLE and _WATER_DIR_AVAILABLE:
+        lines.append("WatCon: repository test data present -- full suite collected")
+    else:
+        absent = []
+        if not _EXPLORATORY_AVAILABLE:
+            absent.append("data/consurf/exploratory")
+        if not _INPUTS_AVAILABLE:
+            absent.append("tests/inputs")
+        if not _WATER_DIR_AVAILABLE:
+            absent.append("tests/water_dir")
+        lines.append(
+            "WatCon: running from an installed copy -- %s not distributed, so "
+            "%d module(s) are not collected. Run the suite from a repository "
+            "checkout to cover them."
+            % (", ".join(absent),
+               len(set(_REQUIRES_EXPLORATORY + _REQUIRES_INPUTS + _REQUIRES_WATER_DIR)))
+        )
+    return lines

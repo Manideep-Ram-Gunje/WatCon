@@ -277,8 +277,14 @@ Stated plainly, because they matter more than the headline:
 
 ```bash
 pip install -e ".[test]"
-python -m pytest WatCon/tests -q      # 783 tests
+python -m pytest WatCon/tests -q      # 792 tests
 ```
+
+Run it from a **repository checkout**. The suite also ships inside the wheel, so
+`pytest --pyargs WatCon.tests` works on an installed copy, but ten modules need
+inputs a distribution deliberately does not carry -- the raw ConSurf bundles and
+the older core tests' structures. Those are not collected there, and a warning
+says which.
 
 ## License
 

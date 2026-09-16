@@ -2309,3 +2309,68 @@ is legitimate, but the reason is now reported.
 No scientific result moved. Barnase **193 / 190 / 165 / 57** and the family at
 fifteen **344 / 229 / 58** were re-run from the command line afterwards and are
 unchanged.
+
+
+---
+
+## 2026-09-16 - Phase 31: the shipped test suite could not pass when installed
+
+- **Change:** `conftest.py` declines to collect modules whose inputs a
+  distribution does not carry, and says which and why.
+- **Files:** `WatCon/tests/conftest.py`,
+  `WatCon/tests/test_suite_integrity.py` (new), `README.md`.
+- **Reason:** Found by the clean-venv check at the end of Phase 30, which the
+  audit had only ever run on three selected modules rather than the whole suite.
+- **Tests:** repository **792 passed, 2 skipped**; installed wheel
+  **566 passed, 28 skipped, 0 failed, 0 errors**.
+- **Limits:** Ten modules are genuinely not covered from an installed copy. The
+  warning says so rather than implying the suite is complete there.
+- **Decision:** Skip and announce, rather than ship the data or drop the tests.
+
+### The problem
+
+The suite ships inside the wheel, so `pytest --pyargs WatCon.tests` is something
+a user can type. Typed against an installed copy it gave **89 collection errors
+and 41 failures** -- which reads as a badly broken package.
+
+None of it was a package defect. Three sets of inputs are deliberately absent
+from a distribution:
+
+* `data/consurf/exploratory/` -- 5 MB of raw ConSurf bundles, excluded by
+  `MANIFEST.in`, and the CI wheel check *asserts* they do not ship;
+* `tests/inputs/` and `tests/water_dir/` -- raw structures for the older core
+  tests, never in the package-data globs.
+
+So the failures were the suite asking for the repository while running outside
+it. The package itself was fine, which is exactly why this was worth fixing:
+the only thing broken was the impression.
+
+### The fix
+
+`conftest.py` already had this machinery for MDAnalysis -- `collect_ignore` plus
+a header that announces what is being skipped, on the stated principle that
+"silently dropping a module would hide real failures". It now covers missing
+data the same way, for ten modules.
+
+One wrinkle: `pytest_report_header` is only called for a conftest at the
+rootdir, so `--pyargs WatCon.tests` from elsewhere -- precisely the installed
+case -- would have skipped them **silently**, which is what that comment says it
+does not want. A `UserWarning` is emitted instead, and surfaces wherever the
+suite is run from:
+
+```
+UserWarning: WatCon: not collecting 10 test module(s) -- test_consurf_crosscheck.py,
+... Run the suite from a repository checkout to cover them.
+```
+
+`test_suite_integrity.py` keeps the lists honest: every guarded module and data
+directory must exist, or a rename would quietly un-guard it. Its own
+checkout-only assertions are themselves skipped when installed -- without that
+they would have recreated the failures this phase removes.
+
+### Why not the alternatives
+
+Shipping the data would put 5 MB of raw research bundles into every install, and
+CI asserts they stay out. Dropping `WatCon/tests` from the wheel would remove a
+user's ability to verify their own installation, which for a scientific tool is
+worth keeping. Skipping with an explanation costs nothing and hides nothing.
