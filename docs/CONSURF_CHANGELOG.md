@@ -1747,3 +1747,28 @@ failing inside the clustering.
   which spends more lines on the members file's failure modes than on the happy
   path, because that file is where a first attempt goes wrong.
 
+---
+
+## 2026-09-16 - Phase 23: a PyMOL session for the family
+
+- **What:** `WatCon/family_scene.py` writes a session showing the whole family in
+  one frame with the water sites it shares, and `watcon family` now produces it
+  alongside the CSV.
+
+Each protein's structures are loaded and coloured as one protein, the sites are
+drawn as waters sized by how many proteins hold one, and the sites **every**
+protein holds are shown in firebrick on opening -- that being the picture the
+family analysis exists to make. Occupancy and conservation stay in separate PDB
+columns, occupancy and B-factor, as in the single-protein session, and a
+B-factor of 0 still means no data rather than low conservation.
+
+The three traps from the single-protein session are guarded by tests rather than
+remembered: a `.pml` that colours without loading, a semicolon inside a `#`
+comment (PyMOL splits on it and runs the prose as Python), and a group left
+enabled while its members are disabled.
+
+- **Verified:** the fixtures' session opens headlessly with no errors, and so
+  does the real ten-structure one.
+- **Tests:** **706** passed, 2 skipped. New `tests/test_family_scene.py` (7),
+  the last of which runs PyMOL headlessly and is skipped where PyMOL is absent.
+

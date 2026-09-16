@@ -243,10 +243,17 @@ def cmd_family(args) -> int:
 
         report_path = os.path.join(args.out_dir, "family_sites.csv")
         write_family_report(sites, report_path)
+
+        from .family_scene import write_family_session
+
+        session = write_family_session(sites, out_dir=args.out_dir)
         print()
         print("  %s   one row per site" % report_path)
         print("  %s   structures in the family frame"
               % os.path.join(args.out_dir, "superposed"))
+        print("  %s   open this" % session)
+        print()
+        print("    pymol %s" % session)
         print()
         print("Occupancy and conservation are separate columns in that CSV, and")
         print("every grade is attributed to the protein that assigned it.")
