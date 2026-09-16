@@ -176,3 +176,16 @@ jobs:
           # The vendored study is repository documentation, not package data.
           assert count("experiments/") == 0, "experiments/ leaked into the wheel"
           PY
+
+      # Every other job runs the suite from a checkout, so none of them can see
+      # what an *installed* copy does. That blind spot hid 89 collection errors
+      # and 41 failures from `pytest --pyargs WatCon.tests`, because ten modules
+      # need inputs a distribution deliberately does not carry. Install the
+      # wheel somewhere with no source tree and run what actually shipped.
+      - name: Run the shipped test suite from an installed wheel
+        run: |
+          python -m venv /tmp/installed
+          /tmp/installed/bin/python -m pip install --upgrade pip
+          /tmp/installed/bin/python -m pip install "$(ls dist/*.whl)" pytest
+          cd /tmp
+          /tmp/installed/bin/python -m pytest --pyargs WatCon.tests -q
