@@ -273,7 +273,7 @@ Stated plainly, because they matter more than the headline:
 
 ```bash
 pip install -e ".[test]"
-python -m pytest WatCon/tests -q      # 762 tests
+python -m pytest WatCon/tests -q      # 764 tests
 ```
 
 ## License

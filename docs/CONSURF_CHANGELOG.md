@@ -2143,3 +2143,60 @@ acid -- which is the biochemistry the run should recover and could not before.
 
 No published number moves: every result in this repository was measured on RCSB
 files, where the old path happened to give the right chain.
+
+
+---
+
+## 2026-09-16 - Phase 29: a run that scores nothing now says so
+
+- **Change:** Three follow-ups from Phase 28: a regression it introduced, a
+  latent crash it uncovered, and the last silent case in the same family.
+- **Files:** `WatCon/generate_dynamic_networks.py`,
+  `WatCon/generate_static_networks.py`, `WatCon/evolutionary.py`,
+  `WatCon/tests/test_chain_identity.py`.
+- **Reason:** Chasing the chain bug to the end -- every way the join can attach
+  nothing should be visible.
+- **Tests:** `pytest WatCon/tests -q` -> 764 passed, 2 skipped.
+- **Limits:** Zero coverage still warns rather than raising; a run covering one
+  chain of a multi-chain structure has low coverage and is legitimate.
+- **Decision:** Warn, not raise. Raising would break the legitimate case.
+
+### A regression, found by continuing to run the thing
+
+Phase 27 made the dynamic water loop match the static one, which means a
+non-directed run no longer keeps water hydrogens even when the file has them.
+That is correct, and it broke `select_active_region`, which read
+`mol.H1.coordinates` unconditionally: `AttributeError: 'NoneType' object has no
+attribute 'coordinates'`. The static builder has always guarded this; the
+dynamic one now does too. Only reachable with an active-region selection on a
+hydrogen-bearing system, which is why the Phase 27 tests did not see it.
+
+### A directed network with no hydrogens to work from
+
+Both builders read `mol.H1.coordinates` unguarded in the directed connection
+finder, so asking for a directed network on a crystal structure raised
+`AttributeError` on the first water. Pre-existing and shared. Now a sentence:
+how many waters have no hydrogens, the first one's residue, and the two ways
+forward -- add hydrogens, or leave `include_hydrogens` off.
+
+### The last silent case
+
+Supplying a ConSurf run whose chain does not match the structure's produced
+**0 of 894** scored atoms and reported success, because coverage is
+deliberately reported rather than enforced -- and reported into a metrics dict
+nobody reads. The design is right: a run covering one chain of a multi-chain
+structure legitimately has low coverage. But coverage of *zero* is never
+legitimate, and now prints:
+
+```
+Warning: ConSurf data was supplied for system.gro but matched none of its
+residues, so nothing is scored. The structure has chain(s) (blank) and the
+ConSurf run describes chain(s) A. If those differ, pass consurf_chain_map to
+say which is which, for example {'A': ''} for a file that carries no chain.
+```
+
+With `consurf_chain_map` supplied, the existing identity check takes over and
+refuses correctly: the Zenodo `.gro` is renumbered from 1, so it agrees with
+the 1AAX run at only 16 of 297 residues (5.4%) and the run stops. Which is the
+behaviour this package exists to provide -- it simply could not be reached
+while the chain silently matched nothing.

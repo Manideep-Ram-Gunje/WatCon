@@ -376,7 +376,15 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
 
         for mol in self.water_molecules:
             #Include atoms within a distance cutoff
-            water_positions = np.array([mol.O.coordinates, mol.H1.coordinates, mol.H2.coordinates])
+            # The oxygen-only path carries no hydrogens -- both because X-ray
+            # waters have none, and because a non-directed run does not keep
+            # them even when the file does. The static builder has always
+            # guarded this; the dynamic one assumed three atoms.
+            if mol.H1 is not None:
+                water_positions = np.array([mol.O.coordinates, mol.H1.coordinates, mol.H2.coordinates])
+            else:
+                water_positions = np.array([mol.O.coordinates])
+
             dist = np.min(distances.distance_array(water_positions, reference_positions))
             if dist <= active_region_radius:          
                 #print(mol.resid, mol.O.index)
@@ -551,6 +559,20 @@ class WaterNetwork:  #For water-protein analysis -- extrapolate to other solvent
         water_O_coords = []
         water_O_indices = []
         water_O_names = []
+
+        # A directed network is built from H -> O directionality, so it cannot
+        # be made from oxygens alone. Crystal structures almost never model
+        # hydrogens; say so plainly rather than raising AttributeError on the
+        # first water.
+        missing = [mol.resid for mol in waters if mol.H1 is None]
+        if missing:
+            raise ValueError(
+                "A directed network needs water hydrogens, and %d of %d waters "
+                "have none (first: residue %s). Crystal structures rarely model "
+                "hydrogens -- either add them, or build the oxygen-only network "
+                "by leaving include_hydrogens off."
+                % (len(missing), len(waters), missing[0])
+            )
 
         for mol in waters:
 
@@ -1994,6 +2016,15 @@ def initialize_network(topology_file, trajectory_file, structure_directory='.', 
         # prefixed 'evo' to stay clear of WatCon's structural water metrics.
         if conservation_map is not None:
             coverage = conservation_map.coverage(network.protein_atoms)
+
+            # Coverage of zero is the one case that is never legitimate: the
+            # user asked for conservation and got none. Reported, not raised,
+            # to keep the documented contract -- but said out loud.
+            unmatched = evolutionary.describe_unmatched_coverage(
+                coverage, conservation_map, label=str(topology_file)
+            )
+            if unmatched:
+                print("Warning: %s" % unmatched)
 
             # Coverage says how MUCH was matched; identity says whether what was
             # matched is the same protein, numbered the same way.  A numbering

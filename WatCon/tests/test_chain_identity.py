@@ -129,6 +129,38 @@ def test_a_chemical_modification_is_left_alone():
     assert standard_residue_name("SER") == "SER"
 
 
+def test_a_run_that_matches_nothing_says_so(tmp_path):
+    """Coverage of zero is the one case that is never legitimate.
+
+    Low coverage can be perfectly correct -- a run covering one chain of a
+    multi-chain structure. Zero cannot: the caller asked for conservation and
+    received none. It stays a report rather than an exception, per the
+    documented contract, but it is no longer silent.
+    """
+    from WatCon.evolutionary import describe_unmatched_coverage
+
+    conservation = ConservationMap.build(parse_consurf(GRADES, strict=True))
+    residues = residues_from_pdb_file(MD_SITE)        # chain X, ConSurf run is A
+    coverage = conservation.coverage(residues)
+    assert coverage.matched == 0
+
+    message = describe_unmatched_coverage(coverage, conservation, label="md site")
+    assert message is not None
+    assert "matched none" in message
+    assert "consurf_chain_map" in message
+    assert "chain(s) X" in message and "chain(s) A" in message
+
+
+def test_a_run_that_matches_is_not_warned_about(tmp_path):
+    conservation = ConservationMap.build(parse_consurf(GRADES, strict=True))
+    residues = residues_from_pdb_file(os.path.join(FAMILY, "2F71_A_ca.pdb"), chain="A")
+    coverage = conservation.coverage(residues)
+
+    from WatCon.evolutionary import describe_unmatched_coverage
+    assert coverage.matched > 0
+    assert describe_unmatched_coverage(coverage, conservation) is None
+
+
 def test_the_md_system_agrees_with_its_own_sequence(tmp_path):
     """The whole point, end to end.
 

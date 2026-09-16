@@ -88,6 +88,7 @@ __all__ = [
     "CoverageReport",
     "DEFAULT_IDENTITY_THRESHOLD",
     "enforce_identity",
+    "describe_unmatched_coverage",
     "aggregate_water",
     "aggregate_site",
     "water_residue_contacts",
@@ -553,6 +554,40 @@ class ConservationMap:
 # ---------------------------------------------------------------------------
 # Identity enforcement
 # ---------------------------------------------------------------------------
+
+
+def describe_unmatched_coverage(
+    coverage: "CoverageReport",
+    conservation: "ConservationMap",
+    label: str = "structure",
+) -> Optional[str]:
+    """A sentence naming why a ConSurf run matched nothing, or None if it did.
+
+    Coverage is deliberately *reported* rather than enforced -- a run that
+    legitimately covers one chain of a multi-chain structure has low coverage
+    and is perfectly correct. But coverage of **zero** is never legitimate: the
+    user asked for conservation and received none, and until this was said out
+    loud the run reported success with every residue unscored.
+
+    The usual cause is chain labelling, so the message names both sides of the
+    key and points at ``consurf_chain_map``.
+    """
+    if coverage.matched:
+        return None
+
+    structure_chains = sorted(
+        ("(blank)" if not c else c) for c in (coverage.per_chain or {})
+    )
+    run_chains = sorted(("(blank)" if not c else c) for c in conservation.chains())
+
+    return (
+        "ConSurf data was supplied for %s but matched none of its residues, so "
+        "nothing is scored. The structure has chain(s) %s and the ConSurf run "
+        "describes chain(s) %s. If those differ, pass consurf_chain_map to say "
+        "which is which, for example {'A': ''} for a file that carries no chain."
+        % (label, ", ".join(structure_chains) or "none",
+           ", ".join(run_chains) or "none")
+    )
 
 def enforce_identity(
     coverage: CoverageReport,

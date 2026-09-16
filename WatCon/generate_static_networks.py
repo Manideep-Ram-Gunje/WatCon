@@ -531,6 +531,20 @@ class WaterNetwork:
         water_O_indices = []
         water_O_names = []
 
+        # A directed network is built from H -> O directionality, so it cannot
+        # be made from oxygens alone. Crystal structures almost never model
+        # hydrogens; say so plainly rather than raising AttributeError on the
+        # first water.
+        missing = [mol.resid for mol in waters if mol.H1 is None]
+        if missing:
+            raise ValueError(
+                "A directed network needs water hydrogens, and %d of %d waters "
+                "have none (first: residue %s). Crystal structures rarely model "
+                "hydrogens -- either add them, or build the oxygen-only network "
+                "by leaving include_hydrogens off."
+                % (len(missing), len(waters), missing[0])
+            )
+
         for mol in waters:
 
             #Select status
@@ -1808,6 +1822,15 @@ def initialize_network(structure_directory, topology_file=None, trajectory_file=
         # prefixed 'evo' to stay clear of WatCon's structural water metrics.
         if conservation_map is not None:
             coverage = conservation_map.coverage(network.protein_atoms)
+
+            # Coverage of zero is the one case that is never legitimate: the
+            # user asked for conservation and got none. Reported, not raised,
+            # to keep the documented contract -- but said out loud.
+            unmatched = evolutionary.describe_unmatched_coverage(
+                coverage, conservation_map, label=str(pdb_file)
+            )
+            if unmatched:
+                print("Warning: %s" % unmatched)
 
             # Coverage says how MUCH was matched; identity says whether what was
             # matched is the same protein, numbered the same way.  A numbering
