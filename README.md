@@ -164,16 +164,27 @@ run, placed on a shared alignment:
 watcon family --members members.tsv --alignment alignment.pir
 ```
 
-On five protein tyrosine phosphatases (PTPN1, 6, 7, 12, 22; ten structures), it
-puts them in one frame at 0.65–0.90 Å and finds **a water position held by all
-five, lined by the residues each protein uses for catalysis** — the WPD
-aspartate, the nucleophile and the Q-loop glutamine. It survives dropping the
-substrate-trapping mutants.
+On **fifteen** protein tyrosine phosphatases (twenty-four structures, one
+ConSurf run each), it puts them in a single frame at 0.65–0.97 Å.
 
-Across the 308 sites, those lined by a residue **every** ConSurf run calls
-conserved are held by more proteins than the rest: 3.43 against 2.66 on average
-(p = 7.6 × 10⁻⁸), and 20% against 3% for sites held by all five. Burial is still
-not disentangled, so part of that may be a burial effect.
+Across the 556 occupied sites, those lined by a residue **every** ConSurf run
+calls conserved are held by far more proteins than the rest: **7.34 against
+4.08** on average, p = 1.0 × 10⁻²⁴. The separation is much sharper than it was
+at five proteins (3.43 vs 2.66, p = 7.6 × 10⁻⁸).
+
+The conservation statement holds up too. Going from five runs to fifteen leaves
+the fraction of universally covered alignment columns that *every* run calls
+conserved essentially unchanged — 25.8% (64/248) to 25.3% (58/229) — although
+unanimity across fifteen independently normalised runs is a far stricter bar.
+
+What does **not** survive is universality. At five proteins, 22 water sites were
+held by all five, including the catalytic one. At fifteen, exactly one site is
+held by all fifteen, and it is a buried structural water. The catalytic waters
+are still found and still conserved-lined — the WPD aspartate, the Q-loop
+glutamine and the P-loop arginine, all grade 9 — but none is universal across a
+family spanning open and closed states, ten catalytically dead entries and a
+pseudophosphatase. Burial is still not disentangled, so part of the headline may
+be a burial effect.
 
 Site numbers are cluster labels from one run, not residue numbers, so they are
 not quoted here. Residues with alternate conformations use the most populated
@@ -232,8 +243,11 @@ Stated plainly, because they matter more than the headline:
   ρ ≈ 0.37 for the latter; that figure came from pairing the two runs by
   position across different numbering, so half the pairs were different amino
   acids. There is no 0.37 floor.
-- The family result is **five proteins**, and its conserved-versus-other
-  comparison shares the burial confound above.
+- The family result is **fifteen proteins**, all protein tyrosine phosphatases,
+  and its conserved-versus-other comparison shares the burial confound above.
+- One of the fifteen, PTPRN2, is a **pseudophosphatase**. It is kept because
+  excluding it changes the conservation result not at all (58 unanimous columns
+  either way); both versions are reported in the change log.
 - Alternate conformers: positions tied for most populated are all kept, so
   WatCon's own edge counts stay inflated for structures modelling many equally
   occupied positions.
@@ -250,7 +264,7 @@ Stated plainly, because they matter more than the headline:
 
 ```bash
 pip install -e ".[test]"
-python -m pytest WatCon/tests -q      # 476 tests
+python -m pytest WatCon/tests -q      # 733 tests
 ```
 
 ## License

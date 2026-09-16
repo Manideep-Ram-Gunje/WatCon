@@ -1856,3 +1856,118 @@ README gains a family section stating the result **with** the burial caveat. The
 limits list drops the stale family entry and gains the two real ones: five
 proteins, and tied alternate conformers leaving edge counts inflated.
 
+
+
+---
+
+## 2026-09-16 - Phase 26: the family at fifteen
+
+- **Change:** Ten more ConSurf runs folded in, taking the family from five
+  proteins to fifteen and from ten structures to twenty-four.
+- **Files:** `WatCon/data/consurf/fixtures/` (10 grades + 10 CA extracts),
+  `WatCon/data/examples/ptp_family/` (14 CA extracts, alignment 10 -> 24 rows,
+  README), `WatCon/tests/test_family_fifteen.py` (new),
+  `WatCon/tests/test_alignment_mapping.py`, `docs/`.
+- **Reason:** The family result rested on five closely related classical PTPs.
+  `unanimous_conserved` is a verdict-counting statistic, so it gets strictly
+  harder with each protein added -- which means five proteins could not
+  distinguish a real signal from a small, homogeneous sample.
+- **Tests:** `pytest WatCon/tests -q` -> 733 passed, 2 skipped.
+- **Limits:** Burial is still not disentangled. The sites analysis is still
+  crystallographic waters only, and open/closed states are pooled.
+- **Decision:** PTPRN2 kept in the family, with the result reported both ways.
+
+### Verification of the ten new runs
+
+All read directly from the bundles. Every run parses in strict mode; all fifteen
+are webserver dialect, Bayesian, 150 homologues, chain A -- identical settings,
+which is what makes them poolable at all.
+
+Grades against ConSurf's own annotated PDB: **4,289 / 4,289** agree across the
+fifteen, zero mismatches, zero blanks, zero missing. Each CA extract reproduces
+its full bundle's cross-check exactly, so the ~25 kB fixture is not a weaker
+check than the 33 MB bundle.
+
+Each run reproduces its row of the authors' alignment **exactly**, residue for
+residue, all ten at identity 1.0000 over their full length. Placement is
+therefore not in question, and no new alignment was needed: the published file
+already contained all twenty-four rows.
+
+Located in each run's own sequence, without being told where to look, the PTP
+P-loop comes back with near-identical grade profiles: `99998999` in nine of ten,
+the single 8 being the one variable position. The tenth is PTPRN2.
+
+### The authors' structures cannot carry these runs
+
+Their copies are renumbered from 1 over *resolved* residues, so crystal gaps
+collapse and no single offset recovers the sequence: the best constant offset
+gives identity 1.000 for only 4S0G and 1WCH, and 0.452-0.961 for the rest. At
+offset 0, which is what the tool actually uses, identity is ~0.000, so
+`enforce_identity` refuses all ten. Fourteen raw RCSB entries were fetched
+instead. Against those, every structure passes, and **every difference the check
+reports is a declared engineered substitution** -- the C->S traps, PTPN9's C->A,
+the D->A general-acid mutants, 5J8R's phosphocysteine. No false alarms in
+twenty-four structures.
+
+### What fifteen proteins say
+
+Conservation: **344 columns, 229 covered by all fifteen, 58 unanimously
+conserved**. The five-protein family gave 337 / 248 / 64. Tripling the number of
+independently normalised runs moved the unanimous fraction from 25.8% to 25.3%.
+That is the central result of this phase: the statistic does not decay as the
+sample grows, so the five-protein number was not an artefact of a small family.
+
+Water sites: 612 clusters over 5,913 waters, 556 occupied, 505 in two or more
+proteins, **117 lined by a unanimously conserved column**. Those 117 are held by
+a mean of **7.34 of 15 proteins against 4.08** for the other 439
+(Mann-Whitney one-sided p = **1.0e-24**; at five proteins it was 3.43 vs 2.66,
+p = 7.6e-8). The separation strengthens substantially with more proteins.
+
+### What fifteen proteins take away
+
+At five proteins, 22 sites were held by all five, including the catalytic water.
+At fifteen, **one** site is held by all fifteen -- and it is a buried structural
+water lined by PTP1B 56/57/67, not the catalytic one.
+
+The catalytic sites are still found and still conserved-lined: the WPD aspartate
+D181 (7-8 proteins), the Q-loop Q262 (8), the P-loop R221 (6), all grade 9. But
+no catalytic water position is universal across fifteen proteins spanning open
+and closed WPD-loop states, ten catalytically dead entries and a
+pseudophosphatase. The earlier "held by all five" was true of five closely
+related classical PTPs and does not generalise. It is restated here rather than
+quietly dropped.
+
+### PTPRN2, and what conservation actually measures
+
+2QEP is a pseudophosphatase: its P-loop reads `CSDGAGR` where the family reads
+`CSAGIGR`, which is why IA-2beta has no catalytic activity. Including a dead
+enzyme in a family analysis of catalytic water is a scientific choice, so it was
+run both ways:
+
+| | 15 proteins | 14, PTPRN2 excluded |
+|---|---|---|
+| columns | 344 | 344 |
+| covered by all | 229 | 230 |
+| unanimously conserved | **58** | **58** |
+| sites held by every protein | 1 | 4 |
+| conserved-lined mean / other | 7.34 / 4.08 | 7.24 / 4.00 |
+| p | 1.0e-24 | 4.5e-25 |
+
+The pseudophosphatase changes the conservation result not at all and costs three
+universal sites. It is kept, because it is the clearest case in the set of the
+distinction the tool exists to make: at PTP1B's A217 the family has alanine and
+PTPRN2 has **aspartate** -- a different residue, in a protein that cannot
+catalyse -- and every run including PTPRN2's own grades that column **9**,
+because it is invariant among PTPRN2 orthologues too. A tool reporting identity
+would call the position divergent. ConSurf calls it constrained. Six of the
+seven P-loop columns are graded 9 by all fifteen runs; the exception is the one
+genuinely variable position, where PTPRN2's 7 is the minimum.
+
+### Two smaller findings
+
+Adding 2OC3 to PTPN18 exposed one residue (A44) its two structures place in
+different alignment columns, so it is excluded, as PTPN7's three already were.
+The mechanism worked without change; it simply had more to catch.
+
+The authors' dataset labels 2QEP "PTPN2". The entry is **PTPRN2** (Q92932); real
+PTPN2 is P17706. Recorded in the fixture README so the mislabel is not inherited.

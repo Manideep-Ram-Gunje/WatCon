@@ -644,8 +644,11 @@ mean inventing a specification.
 ### 15.6 What remains unverified
 
 - ~~The family scaffold is exercised on two runs of one sequence.~~ **Done**
-  (Phases 20-24): five PTPs, ten structures, on real ConSurf runs. What remains
-  open there is the burial confound, shared with the single-protein study.
+  (Phases 20-24, widened in Phase 26): fifteen PTPs, twenty-four structures, on
+  fifteen real ConSurf runs. What remains open there is the burial confound,
+  shared with the single-protein study.
+- The **dynamic (trajectory) path has never been run on real input.** It is the
+  largest untested area in the package.
 - The study is **one protein**, correlational, with burial unresolved.
 - The directed static path now executes and produces a directed graph, but its
   hydrogen-bond geometry is still covered by no test.
@@ -713,7 +716,7 @@ records and write its own. It imports PyMOL not at all.
 | Barnase | 6 structures, 1 ConSurf run | 193 sites, 165 scored, 57 conserved. Asserted by the test suite, so a regression breaks a test rather than a paper. |
 | **PTP1B** | **253 structures, 1 ConSurf run, ~2 min** | 295 sites, 278 scored, 92 conserved. Finds the catalytic water positions -- the P-loop/Gln262 site occupied in 213/253 structures, and the WPD-loop sites at Asp181 -- with no knowledge of the chemistry. |
 
-| **PTP family** | **5 proteins, 10 structures, 5 ConSurf runs** | 337 alignment columns, 248 covered by all five, 64 unanimously conserved. One water position held by all five proteins, lined by the WPD-Asp, nucleophile and Q-loop-Gln columns. Sites lined by a unanimously conserved column are held by 3.43 proteins on average against 2.66 (p = 7.6e-8). |
+| **PTP family** | **15 proteins, 24 structures, 15 ConSurf runs** | 344 alignment columns, 229 covered by all fifteen, 58 unanimously conserved -- 25.3% against 25.8% at five proteins, so the statistic does not decay as runs are added. 556 occupied water sites; those lined by a unanimously conserved column are held by 7.34 proteins on average against 4.08 (p = 1.0e-24). Six of the seven P-loop columns are graded 9 by all fifteen runs. Only one site is held by all fifteen, and it is structural, not catalytic. |
 
 The PTP1B run needed **no code changes**, which is what the robustness, mmCIF and
 scene work was for. The family run needed three: modified residues read as

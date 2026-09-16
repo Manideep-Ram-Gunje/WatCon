@@ -134,8 +134,11 @@ MSA_images/
 aligned_pdbs/
 aligned_pdbs_with_water/
 
-# Outputs of the ConSurf-era commands, when run inside a clone
-watcon_demo/
-ci_demo/
-prepared/
-consurf/
+# Outputs of the ConSurf-era commands, when run inside a clone.
+# Anchored to the repository root: unanchored, `consurf/` also matched the
+# `WatCon/consurf/` package and the `WatCon/data/consurf/` fixtures, so real
+# files had to be force-added and new ones would have gone missing silently.
+/watcon_demo/
+/ci_demo/
+/prepared/
+/consurf/

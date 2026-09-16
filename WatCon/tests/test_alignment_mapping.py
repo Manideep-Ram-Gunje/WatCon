@@ -1,8 +1,10 @@
-"""Placing the ten real PTP structures on the authors' family alignment.
+"""Placing real PTP structures on the authors' family alignment.
 
 The fixtures are real: CA atoms of chain A from the RCSB entries (native
-numbering) and the ten corresponding rows of the alignment published with
-WatCon (Zenodo 10.5281/zenodo.15213225, CC-BY-4.0).
+numbering) and the alignment published with WatCon (Zenodo
+10.5281/zenodo.15213225, CC-BY-4.0), all twenty-four rows of it. The tests here
+exercise the five proteins that have a structure pair, because the defects worth
+catching only show up when two structures of one protein disagree.
 
 That alignment has two defects, kept deliberately because the mapper must catch
 them rather than reproduce them:
@@ -84,8 +86,9 @@ def consensus(mappings):
 # Reading
 # ===========================================================================
 
-def test_reads_the_ten_rows_at_one_length(rows):
-    assert len(rows) == 10
+def test_reads_every_row_at_one_length(rows):
+    """One row per structure in the family: fifteen proteins, twenty-four rows."""
+    assert len(rows) == 24
     assert {len(s) for s in rows.values()} == {347}
 
 
