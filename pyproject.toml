@@ -16,10 +16,14 @@ readme = "README.md"
 # PyMOL projections -- is the work of its original authors. This distribution
 # adds the ConSurf integration on top. Both are named, mirroring the copyright
 # line in README.md and LICENSE, so that listing one does not erase the other.
+# Names only, deliberately. PEP 621 routes a person with an email into
+# `Author-email` and one without into `Author`, so mixing the two split this
+# list across two metadata fields and made whoever lacked an address look like
+# the sole author. Contact goes through `maintainers` below.
 authors = [
-    { name = "Alfie-Louise Brownless", email = "abrownless3@gatech.edu" },
+    { name = "Alfie-Louise Brownless" },
     { name = "Shina Caroline Lynn Kamerlin" },
-    { name = "Manideep Ram Gunje", email = "manideepram2006c@gmail.com" },
+    { name = "Manideep Ram Gunje" },
 ]
 maintainers = [
     { name = "Manideep Ram Gunje", email = "manideepram2006c@gmail.com" },
