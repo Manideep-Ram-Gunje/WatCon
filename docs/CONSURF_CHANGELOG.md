@@ -1808,3 +1808,51 @@ analysis itself.
 - **Unaffected:** the 16 single-protein plugin tests pass unchanged, which is
   what the restructuring had to preserve.
 
+---
+
+## 2026-09-16 - Phase 25: the Phase A figure, measured properly this time
+
+- **What:** the PTP mapping figure in `experiments/benchmark` is now derived the
+  right way, and a claim made in **Phase 16 of this changelog is withdrawn**.
+
+### What Phase 16 said, and why it was wrong
+
+Phase 16 recorded that Phase A's "99.0 percent" for the authors' PTP set was
+"produced by our own reader skipping CSP230, not measured behaviour of published
+WatCon". The first half was right about the *derivation*; the conclusion was not.
+
+`compare_mapping.py` counted a residue as correct when `resid - 1 == ordinal`,
+over a residue walk that skipped HETATM records -- so 5HDE's walk had a hole at
+CSP230 and every later residue failed. That arithmetic measured our own reader.
+
+Measured against ground truth instead -- the column each residue actually
+occupies, from aligning every structure to its own row by sequence (identity
+1.000 for all 24 rows), with modified residues read:
+
+| dataset | residues | correct | wrong | IndexError |
+|---|---|---|---|---|
+| PTPs combined | 6,856 | **6,785 (98.96 percent)** | 70 | 1 |
+
+**The defect is real.** Every error is in 5HDE, and the cause is the authors'
+alignment omitting CSP230: the column list is one short, residues 231 onward get
+the previous residue's column, and the last residue raises `IndexError`. The
+count is the same 6,785 as originally reported, now reached for the right reason.
+
+The companion column was the weak part: `ours_is_correct` handed `ResidueIndex`
+a stand-in `range(n)` and asked whether it returned what it was given. That tests
+the identity-to-ordinal lookup, not agreement with a real alignment. Our mapping
+places 5HDE's other 299 residues correctly and gives CSP231 **no** column rather
+than a wrong one, which `tests/test_alignment_mapping.py` checks against the real
+rows.
+
+`experiments/benchmark/PHASE_A_MAPPING.md` and `FINDINGS.md` carry the correction.
+
+### Documentation
+
+README and `CONSURF_INTEGRATION.md` no longer say the family path has never run:
+the capability table gains `watcon family`, cross-protein superposition and
+family water sites, the "Validated on" table gains the five-protein row, and the
+README gains a family section stating the result **with** the burial caveat. The
+limits list drops the stale family entry and gains the two real ones: five
+proteins, and tied alternate conformers leaving edge counts inflated.
+

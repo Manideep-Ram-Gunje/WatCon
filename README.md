@@ -106,6 +106,7 @@ watcon prepare  --input-dir raw/ --out-dir prepared/ --reference 1AAX
 watcon run      --input input.txt --analysis analysis.txt
 watcon validate --consurf my_run_consurf_grades.txt
 watcon view     --prepared prepared/ --consurf grades.txt
+watcon family   --members members.tsv --alignment alignment.pir
 watcon plugin   --install
 watcon demo
 ```
@@ -153,6 +154,26 @@ It found those with no knowledge of PTP1B's chemistry. But conservation does
 ten sites are buried structural waters, and the catalytic ones only accumulate
 by depth 50 (19/50, against 4/50 by occupancy alone). Conservation re-ranks
 toward the active site; it is not a shortcut to it.
+
+### A family of proteins
+
+The same machinery runs across *different* proteins, each with its own ConSurf
+run, placed on a shared alignment:
+
+```bash
+watcon family --members members.tsv --alignment alignment.pir
+```
+
+On five protein tyrosine phosphatases (PTPN1, 6, 7, 12, 22; ten structures), it
+puts them in one frame at 0.65–0.90 Å and finds **a water position held by all
+five, lined by the residues each protein uses for catalysis** — the WPD
+aspartate, the nucleophile and the Q-loop glutamine. It survives dropping the
+substrate-trapping mutants.
+
+Across the 308 sites, those lined by a residue **every** ConSurf run calls
+conserved are held by more proteins than the rest: 3.43 against 2.66 on average
+(p = 7.6 × 10⁻⁸), and 20% against 3% for sites held by all five. Burial is still
+not disentangled, so part of that may be a burial effect.
 
 Site numbers are cluster labels from one run, not residue numbers, so they are
 not quoted here. Residues with alternate conformations use the most populated
@@ -211,9 +232,11 @@ Stated plainly, because they matter more than the headline:
   ρ ≈ 0.37 for the latter; that figure came from pairing the two runs by
   position across different numbering, so half the pairs were different amino
   acids. There is no 0.37 floor.
-- The multi-protein family path (`conservation_by_msa_column`) is built and
-  tested, but has never been run on a real family — the join is tested, the
-  biology is not.
+- The family result is **five proteins**, and its conserved-versus-other
+  comparison shares the burial confound above.
+- Alternate conformers: positions tied for most populated are all kept, so
+  WatCon's own edge counts stay inflated for structures modelling many equally
+  occupied positions.
 
 ## Documentation
 

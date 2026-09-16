@@ -643,8 +643,9 @@ mean inventing a specification.
 
 ### 15.6 What remains unverified
 
-- The family scaffold is exercised on two runs of **one** sequence. No real
-  multi-protein family has been run — the join is tested, the biology is not.
+- ~~The family scaffold is exercised on two runs of one sequence.~~ **Done**
+  (Phases 20-24): five PTPs, ten structures, on real ConSurf runs. What remains
+  open there is the burial confound, shared with the single-protein study.
 - The study is **one protein**, correlational, with burial unresolved.
 - The directed static path now executes and produces a directed graph, but its
   hydrogen-bond geometry is still covered by no test.
@@ -672,6 +673,9 @@ Verified against the running code, not recalled.
 | Dataset preparation without a MODELLER licence | `watcon prepare`, `superpose.kabsch` |
 | Structures by PDB id, **mmCIF included** | `watcon fetch`, `structure_io`, `fetch.py` |
 | A PyMOL session that opens | `watcon view` |
+| **Conservation pooled across a protein family**, with per-structure audit | `watcon family`, `family.build_family_conservation` |
+| **Structures of different proteins in one frame**, on shared alignment columns | `family_sites.superpose_family` |
+| **Water sites shared across a family**, per protein and per column | `family_sites.build_family_sites`, `family_scene` |
 | **Interactive use inside PyMOL**, with a site table | `watcon plugin --install`, `pymol_plugin/` |
 | The scene as data, so every front end draws the same picture | `scene.build_scene` -> `Scene` |
 
@@ -697,8 +701,8 @@ records and write its own. It imports PyMOL not at all.
 * **Conformational-state comparison.** WatCon already separates open/closed or
   apo/holo sets; conservation says which state's waters sit on conserved
   residues.
-* **Family-level conserved-water maps.** `conservation_by_msa_column` is built
-  and unit-tested; it needs one ConSurf run per family member.
+* ~~**Family-level conserved-water maps.**~~ **Built** -- `watcon family`,
+  `WatCon.family`, `WatCon.family_sites`, and the plugin's Family tab.
 * **Burial-matched analysis.** The sharpest open question from the benchmark --
   whether conservation separates sites beyond acting as a burial proxy.
 
@@ -709,8 +713,12 @@ records and write its own. It imports PyMOL not at all.
 | Barnase | 6 structures, 1 ConSurf run | 193 sites, 165 scored, 57 conserved. Asserted by the test suite, so a regression breaks a test rather than a paper. |
 | **PTP1B** | **253 structures, 1 ConSurf run, ~2 min** | 295 sites, 278 scored, 92 conserved. Finds the catalytic water positions -- the P-loop/Gln262 site occupied in 213/253 structures, and the WPD-loop sites at Asp181 -- with no knowledge of the chemistry. |
 
+| **PTP family** | **5 proteins, 10 structures, 5 ConSurf runs** | 337 alignment columns, 248 covered by all five, 64 unanimously conserved. One water position held by all five proteins, lined by the WPD-Asp, nucleophile and Q-loop-Gln columns. Sites lined by a unanimously conserved column are held by 3.43 proteins on average against 2.66 (p = 7.6e-8). |
+
 The PTP1B run needed **no code changes**, which is what the robustness, mmCIF and
-scene work was for. Its figures were first reported as 293 / 282 / 96; they moved
+scene work was for. The family run needed three: modified residues read as
+protein, alignment columns cross-checked between a protein's own structures, and
+cross-protein superposition. Its figures were first reported as 293 / 282 / 96; they moved
 to 295 / 278 / 92 when alternate conformers stopped being counted as duplicate
 atoms (Phase 19). The catalytic sites and their occupancies did not change.
 
