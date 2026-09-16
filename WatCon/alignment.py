@@ -53,6 +53,10 @@ __all__ = [
     "DEFAULT_MIN_IDENTITY",
 ]
 
+#: Fraction of a structure's residues that must align to its row. Guards against
+#: a short local match standing in for the whole chain.
+MIN_COVERAGE = 0.80
+
 #: Structure-to-row identity below which a mapping is refused. A structure and
 #: its own alignment row describe the same chain and should agree completely;
 #: measured on the ten PTP structures against the authors' rows: 1.000 for all.
@@ -139,17 +143,20 @@ class RowMapping:
     columns: Dict[PositionKey, int]
     identity: float
     n_aligned: int
+    #: Which pairwise alignment placed the structure: "global" for a full chain,
+    #: "local" for a fragment such as a trimmed active site.
+    mode: str = "global"
     #: Residues of the structure with no letter in the row.
     unmapped: List[PositionKey] = field(default_factory=list)
     #: (position, structure letter, row letter) where an aligned pair differs.
     mismatches: List[Tuple[PositionKey, str, str]] = field(default_factory=list)
 
 
-def _aligner():
+def _aligner(mode: str = "global"):
     from Bio.Align import PairwiseAligner
 
     aligner = PairwiseAligner()
-    aligner.mode = "global"
+    aligner.mode = mode
     aligner.match_score = 2
     aligner.mismatch_score = -1
     aligner.open_gap_score = -5
@@ -180,32 +187,62 @@ def map_structure_to_row(
     row_letters = "".join(row[c - 1] for c in row_columns)
     structure_letters = "".join(r.one_letter for r in residues)
 
-    alignment = _aligner().align(structure_letters, row_letters)[0]
+    # Global first, then local, choosing whichever places MORE residues
+    # correctly -- the count of identical pairs, not the ratio. Ratio alone
+    # rewards a short local match: on one trimmed fixture local alignment
+    # matched a single 18-residue segment at 94% and beat a global alignment
+    # covering the whole chain. Coverage is then required outright below.
+    best = None
+    for mode in ("global", "local"):
+        alignment = _aligner(mode).align(structure_letters, row_letters)[0]
 
-    columns: Dict[PositionKey, int] = {}
-    mismatches = []
-    identical = aligned = 0
-    for (s_start, s_end), (r_start, r_end) in zip(*alignment.aligned):
-        for i, j in zip(range(s_start, s_end), range(r_start, r_end)):
-            residue = residues[i]
-            key = (residue.resid, residue.icode)
-            columns[key] = row_columns[j]
-            aligned += 1
-            if structure_letters[i] == row_letters[j]:
-                identical += 1
-            else:
-                mismatches.append((key, structure_letters[i], row_letters[j]))
+        columns: Dict[PositionKey, int] = {}
+        mismatches = []
+        identical = aligned = 0
+        for (s_start, s_end), (r_start, r_end) in zip(*alignment.aligned):
+            for i, j in zip(range(s_start, s_end), range(r_start, r_end)):
+                residue = residues[i]
+                key = (residue.resid, residue.icode)
+                columns[key] = row_columns[j]
+                aligned += 1
+                if structure_letters[i] == row_letters[j]:
+                    identical += 1
+                else:
+                    mismatches.append((key, structure_letters[i], row_letters[j]))
 
-    identity = identical / aligned if aligned else 0.0
+        identity = identical / aligned if aligned else 0.0
+        if best is None or identical > best[4]:
+            best = (identity, columns, mismatches, aligned, identical, mode)
+        if identity >= min_identity and aligned >= MIN_COVERAGE * len(residues):
+            break
+
+    identity, columns, mismatches, aligned, identical, mode = best
+    if aligned < MIN_COVERAGE * len(residues):
+        raise AlignmentError(
+            "%s could not be placed on alignment row %r: only %d of its %d residues "
+            "align to it (need %.0f%%). A structure trimmed to a pocket is several "
+            "disconnected segments, which no pairwise alignment can place against a "
+            "full-length row -- supply the whole chain."
+            % (label, row_name, aligned, len(residues), 100 * MIN_COVERAGE))
     if identity < min_identity:
+        # A structure much shorter than its row is usually a trimmed one, and a
+        # pocket is several disconnected segments: every residue aligns, but not
+        # where it belongs. Say that, rather than only "different sequence".
+        hint = ""
+        if len(residues) < MIN_COVERAGE * len(row_letters):
+            hint = (" %s has %d residues against the row's %d: if it was trimmed to a "
+                    "pocket or a domain, supply the whole chain -- disconnected "
+                    "segments cannot be placed by pairwise alignment."
+                    % (label, len(residues), len(row_letters)))
         raise AlignmentError(
             "%s does not match alignment row %r: %d of %d aligned residues agree "
-            "(%.1f%%, need %.0f%%). The row describes a different sequence."
-            % (label, row_name, identical, aligned, 100 * identity, 100 * min_identity))
+            "(%.1f%%, need %.0f%%), under both global and local alignment.%s"
+            % (label, row_name, identical, aligned, 100 * identity, 100 * min_identity,
+               hint or " The row describes a different sequence."))
 
     unmapped = [(r.resid, r.icode) for r in residues if (r.resid, r.icode) not in columns]
     return RowMapping(label=label, row_name=row_name, columns=columns,
-                      identity=identity, n_aligned=aligned,
+                      identity=identity, n_aligned=aligned, mode=mode,
                       unmapped=unmapped, mismatches=mismatches)
 
 

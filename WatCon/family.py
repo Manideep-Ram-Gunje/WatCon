@@ -31,6 +31,7 @@ Nothing here reads waters; site-level family analysis builds on this.
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Sequence, Tuple
 
@@ -56,6 +57,7 @@ from .residue_index import StructureResidue, residues_from_pdb_file
 
 __all__ = [
     "FamilyStructure",
+    "read_members",
     "FamilyProtein",
     "StructureReport",
     "FamilyConservation",
@@ -243,3 +245,65 @@ def build_family_conservation(
         columns=conservation_by_msa_column(members),
         reference_residues=reference_residues,
     )
+
+
+# ---------------------------------------------------------------------------
+# Describing a family in a file
+# ---------------------------------------------------------------------------
+
+def read_members(path: str) -> List[FamilyProtein]:
+    """Read a tab-separated members file into :class:`FamilyProtein` objects.
+
+    One line per protein::
+
+        # protein   structures directory   ConSurf grades file   [reference]
+        PTPN1       prepared/PTPN1         consurf/1AAX_A.grades.txt   2F71
+
+    Blank lines and lines starting with ``#`` are ignored. The reference is the
+    structure whose residues represent the protein when pooling; it defaults to
+    the first structure in sorted order.
+
+    Tab-separated rather than a ``name:dir:file`` string because Windows paths
+    contain colons, and a format that breaks on ``C:/structures`` is no format
+    at all.
+    """
+    from .residue_index import list_structure_files
+
+    if not os.path.isfile(path):
+        raise ValueError("no such members file: %s" % path)
+
+    proteins: List[FamilyProtein] = []
+    with open(path, "r", encoding="utf-8", errors="replace") as handle:
+        for number, raw in enumerate(handle, 1):
+            line = raw.strip()
+            if not line or line.startswith("#"):
+                continue
+            fields = [f.strip() for f in line.split("	") if f.strip()]
+            if len(fields) < 3:
+                raise ValueError(
+                    "%s line %d: expected at least three tab-separated fields "
+                    "(protein, structures directory, ConSurf file), found %d: %r"
+                    % (path, number, len(fields), line))
+            name, directory, consurf = fields[0], fields[1], fields[2]
+            reference = fields[3] if len(fields) > 3 else None
+
+            if not os.path.isdir(directory):
+                raise ValueError("%s line %d: no such directory: %s" % (path, number, directory))
+            if not os.path.isfile(consurf):
+                raise ValueError("%s line %d: no such ConSurf file: %s" % (path, number, consurf))
+
+            names, _skipped = list_structure_files(directory)
+            if not names:
+                raise ValueError("%s line %d: no structures in %s" % (path, number, directory))
+            structures = [FamilyStructure(os.path.splitext(f)[0], os.path.join(directory, f))
+                          for f in names]
+            ids = [s.pdb_id for s in structures]
+            if reference is not None and reference not in ids:
+                raise ValueError("%s line %d: reference %r is not among %s"
+                                 % (path, number, reference, ", ".join(ids)))
+            proteins.append(FamilyProtein(name=name, consurf_path=consurf,
+                                          structures=structures, reference=reference))
+
+    if not proteins:
+        raise ValueError("no members listed in %s" % path)
+    return proteins

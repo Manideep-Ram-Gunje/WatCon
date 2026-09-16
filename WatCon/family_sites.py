@@ -44,6 +44,7 @@ from .family import FamilyConservation, FamilyProtein, FamilyStructure
 from .superpose import ca_coordinates, kabsch, rmsd
 
 __all__ = [
+    "FAMILY_REPORT_COLUMNS",
     "FamilySiteError",
     "FrameFit",
     "FamilySite",
@@ -51,6 +52,7 @@ __all__ = [
     "superpose_family",
     "write_superposed",
     "build_family_sites",
+    "write_family_report",
 ]
 
 #: Columns deviating by more than this are dropped before refitting, so a mobile
@@ -407,3 +409,68 @@ def build_family_sites(
     return FamilySites(reference=reference, fits=fits, sites=sites,
                        n_clusters=len(centres), n_waters=len(coordinates),
                        superposed_dir=work)
+
+
+# ---------------------------------------------------------------------------
+# Reporting
+# ---------------------------------------------------------------------------
+
+FAMILY_REPORT_COLUMNS = [
+    "site_id", "x", "y", "z",
+    "occupancy", "n_structures_occupied", "n_structures_total",
+    "n_proteins_occupied", "proteins",
+    "per_protein_occupancy", "per_structure_occupancy", "per_state_occupancy",
+    "n_lining_columns", "n_unanimous_columns", "unanimous_columns",
+    "max_grade", "family_conserved", "grades_by_column", "residues_by_protein",
+    "n_unplaced_residues",
+]
+
+
+def _pairs(mapping):
+    """``a=1;b=2`` -- one CSV cell, sorted, readable in a spreadsheet."""
+    return ";".join("%s=%s" % (k, mapping[k]) for k in sorted(mapping))
+
+
+def write_family_report(sites: FamilySites, path: str) -> int:
+    """One row per site. Returns the number of rows written.
+
+    Structural occupancy and evolutionary grades sit in separate columns,
+    uncombined, and every grade is attributed to the protein that assigned it --
+    the same rule the single-protein report follows.
+    """
+    import csv
+
+    directory = os.path.dirname(str(path))
+    if directory:
+        os.makedirs(directory, exist_ok=True)
+
+    with open(path, "w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=FAMILY_REPORT_COLUMNS)
+        writer.writeheader()
+        for site in sorted(sites.sites, key=lambda s: (-s.n_proteins_occupied, -s.occupancy)):
+            grades = {column: _pairs(by_protein) for column, by_protein in site.columns.items()}
+            writer.writerow({
+                "site_id": site.site_id,
+                "x": round(site.centre[0], 3),
+                "y": round(site.centre[1], 3),
+                "z": round(site.centre[2], 3),
+                "occupancy": site.occupancy,
+                "n_structures_occupied": site.n_structures_occupied,
+                "n_structures_total": site.n_structures_total,
+                "n_proteins_occupied": site.n_proteins_occupied,
+                "proteins": ";".join(site.proteins_occupied),
+                "per_protein_occupancy": _pairs(site.per_protein_occupancy),
+                "per_structure_occupancy": _pairs(site.per_structure_occupancy),
+                "per_state_occupancy": _pairs(site.per_state_occupancy),
+                "n_lining_columns": len(site.columns),
+                "n_unanimous_columns": len(site.unanimous_columns),
+                "unanimous_columns": ";".join(str(c) for c in site.unanimous_columns),
+                "max_grade": "NA" if site.max_grade is None else site.max_grade,
+                "family_conserved": "yes" if site.is_family_conserved else "no",
+                "grades_by_column": _pairs(grades),
+                "residues_by_protein": _pairs({
+                    protein: "+".join(str(resid) for resid, _icode in residues)
+                    for protein, residues in site.residues.items()}),
+                "n_unplaced_residues": site.n_unplaced_residues,
+            })
+    return len(sites.sites)

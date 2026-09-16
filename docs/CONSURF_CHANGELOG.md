@@ -1697,3 +1697,53 @@ disentangled, so part of this may be a burial effect.
   result from repository data in seconds.
 - **Tests:** **690** passed, 2 skipped. New `tests/test_family_sites.py` (13).
 
+---
+
+## 2026-09-16 - Phase 22: `watcon family` on the command line
+
+- **What:** the family analysis is now a command. It reads a members file, checks
+  every structure against its own protein's ConSurf run, places them on the
+  alignment, pools conservation, superposes, finds water sites, and writes one
+  CSV row per site.
+
+```
+watcon family --members members.tsv --alignment alignment.pir --state 3OLR=open
+```
+
+### The members file is tab-separated, deliberately
+
+A `name:directory:file` argument would have been shorter and would break on the
+first Windows path, because `C:/structures` contains a colon. One line per
+protein: name, structures directory, ConSurf grades file, optional reference.
+
+### What it prints
+
+Every structure with its ConSurf identity, coverage and row identity, and **each
+residue that disagrees with the ConSurf query named individually** -- on the PTP
+family those are exactly the engineered mutations the PDB entries declare. Then
+the residues excluded because a protein's own structures disagreed about their
+alignment column, the conservation summary, the frame fits, and the site counts.
+Reproduced on the real ten-structure family: 337 columns, 248 covered by all
+five, 64 unanimously conserved, 309 clusters over 2,414 waters.
+
+### Two defects found by writing its tests
+
+1. **A missing members file raised `FileNotFoundError`** instead of the clean
+   error the command catches. It now says which file.
+2. **A structure trimmed to a pocket was mapped by global alignment and refused
+   at 90.8 percent identity, with a message blaming the sequence.** A pocket is
+   several disconnected segments, so no pairwise alignment can place it on a
+   full-length row. `map_structure_to_row` now tries global **and** local
+   alignment and keeps whichever places more residues correctly -- by count, not
+   by ratio, because a ratio rewards a short local match (one fixture matched a
+   single 18-residue segment at 94 percent and beat a full-chain alignment).
+   It also requires 80 percent coverage, and when a structure is much shorter
+   than its row the error says to supply the whole chain.
+
+Structures without waters (the CA-only fixtures) now report that, instead of
+failing inside the clustering.
+
+- **Tests:** **699** passed, 2 skipped. New `tests/test_cli_family.py` (10),
+  which spends more lines on the members file's failure modes than on the happy
+  path, because that file is where a first attempt goes wrong.
+

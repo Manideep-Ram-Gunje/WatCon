@@ -5,6 +5,7 @@
     watcon run      --input input.txt [--analysis analysis.txt]
     watcon validate --consurf FILE...
     watcon view     --prepared prepared/ --consurf grades.txt
+    watcon family   --members members.tsv --alignment alignment.pir
     watcon plugin   --install
     watcon demo
 
@@ -145,6 +146,110 @@ def cmd_plugin(args) -> int:
     print("The file is a three-line shim -- the plugin itself stays in the")
     print("installed package, so upgrading WatCon upgrades the plugin.")
     print("Remove it with:  watcon plugin --uninstall")
+    return 0
+
+
+# ---------------------------------------------------------------------------
+# family
+# ---------------------------------------------------------------------------
+
+def cmd_family(args) -> int:
+    from .alignment import AlignmentError
+    from .evolutionary import ConservationError
+    from .family import build_family_conservation, read_members
+    from .family_sites import FamilySiteError, build_family_sites, write_family_report
+    from .find_conserved_networks import NoWaterCoordinates
+
+    states = {}
+    for item in args.state or []:
+        if "=" not in item:
+            print("error: --state expects PDBID=LABEL, got %r" % item, file=sys.stderr)
+            return 1
+        pdb_id, label = item.split("=", 1)
+        states[pdb_id.strip().upper()] = label.strip()
+
+    try:
+        proteins = read_members(args.members)
+    except ValueError as error:
+        print("error: %s" % error, file=sys.stderr)
+        return 1
+
+    try:
+        family = build_family_conservation(proteins, args.alignment,
+                                           strict=not args.tolerant)
+    except (ConservationError, AlignmentError) as error:
+        print("error: %s" % error, file=sys.stderr)
+        return 1
+
+    print("Members and their structures")
+    for report in family.structures:
+        print("  %-10s %-6s %4d residues  ConSurf identity %s  coverage %3.0f%%  "
+              "row identity %.3f  unplaced %d"
+              % (report.protein, report.pdb_id, report.n_residues,
+                 "n/a" if report.identity is None else "%.3f" % report.identity,
+                 100 * report.coverage_fraction, report.row_identity,
+                 len(report.unplaced)))
+        for key, structure_residue, consurf_residue in report.identity_mismatches:
+            print("             differs from the ConSurf query at %s%s: "
+                  "structure %s, ConSurf %s"
+                  % (key[0], key[1], structure_residue, consurf_residue))
+
+    conflicts = family.conflicts()
+    if conflicts:
+        print()
+        print("Residues excluded because a protein's own structures disagreed "
+              "on their alignment column:")
+        for protein, positions in sorted(conflicts.items()):
+            print("  %-10s %s" % (protein, ", ".join(str(p[0]) for p in positions)))
+
+    summary = family.summary()
+    print()
+    print("Conservation: %d columns, %d covered by all %d proteins, %d of those "
+          "unanimously conserved (every run grade >= 8)"
+          % (summary["n_columns"], summary["n_columns_all_proteins"],
+             summary["n_proteins"], summary["n_unanimous_all_proteins"]))
+
+    os.makedirs(args.out_dir, exist_ok=True)
+    if args.sites:
+        reference = args.reference or (proteins[0].reference
+                                       or proteins[0].structures[0].pdb_id)
+        try:
+            sites = build_family_sites(
+                proteins, family, reference=reference,
+                out_dir=os.path.join(args.out_dir, "superposed"), states=states,
+                min_cluster_samples=args.min_cluster_samples,
+                site_radius=args.site_radius, max_distance=args.hbond_cutoff,
+                verbose=False)
+        except (FamilySiteError, NoWaterCoordinates) as error:
+            print("error: %s" % error, file=sys.stderr)
+            return 1
+
+        print()
+        print("Frame (reference %s)" % reference)
+        for fit in sites.fits:
+            print("  %-10s %-6s %3d columns  RMSD %.2f A"
+                  % (fit.protein, fit.pdb_id, fit.n_core_columns, fit.core_rmsd))
+
+        site_summary = sites.summary()
+        print()
+        print("Water sites: %d clusters over %d waters, %d occupied, %d in two or "
+              "more proteins, %d in every protein, %d lined by a unanimously "
+              "conserved column"
+              % (site_summary["n_clusters"], site_summary["n_waters"],
+                 site_summary["n_sites_occupied"],
+                 site_summary["n_sites_in_two_or_more_proteins"],
+                 site_summary["n_sites_in_every_protein"],
+                 site_summary["n_family_conserved_sites"]))
+
+        report_path = os.path.join(args.out_dir, "family_sites.csv")
+        write_family_report(sites, report_path)
+        print()
+        print("  %s   one row per site" % report_path)
+        print("  %s   structures in the family frame"
+              % os.path.join(args.out_dir, "superposed"))
+        print()
+        print("Occupancy and conservation are separate columns in that CSV, and")
+        print("every grade is attributed to the protein that assigned it.")
     return 0
 
 
@@ -301,6 +406,48 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", metavar="COMMAND")
 
     # -- prepare ------------------------------------------------------------
+    family = subparsers.add_parser(
+        "family",
+        help="pool conservation across a protein family and find shared water sites",
+        description=(
+            "One ConSurf run per protein, one or more structures each, and one "
+            "alignment. Every structure is checked against its own protein's run, "
+            "placed on the alignment by sequence, and cross-checked against the "
+            "other structures of that protein. Water sites are then found in a "
+            "shared frame and described per protein and per alignment column -- "
+            "never by residue number, which means different residues in different "
+            "proteins."
+        ),
+    )
+    family.add_argument("--members", required=True,
+                        help="tab-separated file: protein, structures directory, "
+                             "ConSurf grades file, optional reference PDB id")
+    family.add_argument("--alignment", required=True,
+                        help="alignment covering every structure (PIR or FASTA)")
+    family.add_argument("--out-dir", default="watcon_family",
+                        help="destination (default: watcon_family)")
+    family.add_argument("--reference", default=None,
+                        help="PDB id whose frame the family is placed in "
+                             "(default: the first member's reference)")
+    family.add_argument("--state", action="append", metavar="PDBID=LABEL",
+                        help="label a structure, e.g. 3OLR=open. Repeatable. "
+                             "Occupancy is reported per label, which matters when "
+                             "a loop moves between states")
+    family.add_argument("--site-radius", type=float, default=1.5,
+                        help="a water occupies a site within this distance, "
+                             "Angstrom (default: 1.5)")
+    family.add_argument("--min-cluster-samples", type=int, default=3,
+                        help="fewest waters forming a site (default: 3)")
+    family.add_argument("--hbond-cutoff", type=float, default=3.3,
+                        help="hydrogen-bond distance cutoff, Angstrom (default: 3.3)")
+    family.add_argument("--no-sites", dest="sites", action="store_false",
+                        help="pool conservation only, skip the water sites")
+    family.add_argument("--tolerant", action="store_true",
+                        help="warn instead of stopping when a structure disagrees "
+                             "with its ConSurf run")
+    family.set_defaults(func=cmd_family, sites=True)
+
+    # -- plugin -------------------------------------------------------------
     plugin = subparsers.add_parser(
         "plugin",
         help="install the WatCon + ConSurf plugin into PyMOL",
