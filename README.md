@@ -263,6 +263,8 @@ Stated plainly, because they matter more than the headline:
 
 ## Documentation
 
+- [Testing it by hand](docs/MANUAL_TESTING.md) — a ten-minute smoke test, a
+  full pass, and the guards that must fire
 - [The barnase study](experiments/barnase_waters/) — the evidence for the
   headline result, with the scripts that reproduce it
 - [The PTP1B and family benchmark](experiments/benchmark/) — findings, method
@@ -279,7 +281,7 @@ Stated plainly, because they matter more than the headline:
 
 ```bash
 pip install -e ".[test]"
-python -m pytest WatCon/tests -q      # 792 tests
+python -m pytest WatCon/tests -q      # 795 tests
 ```
 
 Run it from a **repository checkout**. The suite also ships inside the wheel, so
