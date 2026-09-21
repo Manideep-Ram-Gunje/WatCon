@@ -178,3 +178,50 @@ def test_summary_reports_columns_every_protein_covers(family):
     assert summary["n_columns_all_proteins"] == 248
     assert summary["n_unanimous_all_proteins"] == 64
     assert summary["median_spread_all_proteins"] == pytest.approx(0.365, abs=0.001)
+
+
+# ===========================================================================
+# A member whose ConSurf run matches nothing
+#
+# Found by walking the manual-test guide: giving one protein another's grades
+# file -- a plausible slip in a members file -- produced a complete,
+# plausible-looking family result with that protein contributing no
+# conservation at all, and said nothing. Coverage of zero passes
+# `enforce_identity` vacuously, because with no matched residues there is no
+# identity to check.
+#
+# The static and dynamic paths warn about this. Here it is an error: a member
+# is listed precisely so that its conservation is pooled.
+# ===========================================================================
+
+def test_a_member_whose_run_matches_nothing_is_refused():
+    """PTPN1's structures with PTPN13's run: no residue numbers in common."""
+    layout = dict(LAYOUT)
+    layout["PTPN1"] = ("1WCH",) + LAYOUT["PTPN1"][1:]
+
+    with pytest.raises(ConservationError, match="matched none of its residues"):
+        build_family_conservation(_proteins(layout), ALIGNMENT)
+
+
+def test_that_refusal_says_the_chains_are_not_the_problem():
+    """Both are chain A, so suggesting a chain map would misdirect."""
+    layout = dict(LAYOUT)
+    layout["PTPN1"] = ("1WCH",) + LAYOUT["PTPN1"][1:]
+
+    with pytest.raises(ConservationError) as raised:
+        build_family_conservation(_proteins(layout), ALIGNMENT)
+
+    message = str(raised.value)
+    assert "Those agree, so the cause is not chain labelling" in message
+    assert "members file pairs each protein with its own ConSurf run" in message
+    assert "consurf_chain_map" not in message
+
+
+def test_tolerant_mode_warns_instead_of_stopping(capsys):
+    """--tolerant is documented as warn-instead-of-stop; this is no exception."""
+    layout = dict(LAYOUT)
+    layout["PTPN1"] = ("1WCH",) + LAYOUT["PTPN1"][1:]
+
+    family = build_family_conservation(_proteins(layout), ALIGNMENT, strict=False)
+    assert "matched none of its residues" in capsys.readouterr().out
+    assert len(family.proteins) == 5

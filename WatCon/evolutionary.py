@@ -569,8 +569,11 @@ def describe_unmatched_coverage(
     user asked for conservation and received none, and until this was said out
     loud the run reported success with every residue unscored.
 
-    The usual cause is chain labelling, so the message names both sides of the
-    key and points at ``consurf_chain_map``.
+    Chain labelling is the usual cause, so the message names both sides of the
+    key -- but only offers ``consurf_chain_map`` when the chains actually
+    differ. Where they agree, suggesting a chain map sends the reader after the
+    wrong thing: the cause is then residue numbering, or a file describing a
+    different protein altogether.
     """
     if coverage.matched:
         return None
@@ -580,13 +583,22 @@ def describe_unmatched_coverage(
     )
     run_chains = sorted(("(blank)" if not c else c) for c in conservation.chains())
 
-    return (
+    message = (
         "ConSurf data was supplied for %s but matched none of its residues, so "
         "nothing is scored. The structure has chain(s) %s and the ConSurf run "
-        "describes chain(s) %s. If those differ, pass consurf_chain_map to say "
-        "which is which, for example {'A': ''} for a file that carries no chain."
+        "describes chain(s) %s."
         % (label, ", ".join(structure_chains) or "none",
            ", ".join(run_chains) or "none")
+    )
+
+    if set(structure_chains) != set(run_chains):
+        return message + (
+            " Those differ: pass consurf_chain_map to say which is which, for "
+            "example {'A': ''} for a file that carries no chain."
+        )
+    return message + (
+        " Those agree, so the cause is not chain labelling: either the residue "
+        "numbering disagrees, or this run describes a different protein."
     )
 
 def enforce_identity(

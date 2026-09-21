@@ -48,8 +48,10 @@ from .alignment import (
 from .consurf import parse_consurf
 from .evolutionary import (
     ColumnConservation,
+    ConservationError,
     ConservationMap,
     conservation_by_msa_column,
+    describe_unmatched_coverage,
     enforce_identity,
     family_summary,
 )
@@ -213,6 +215,27 @@ def build_family_conservation(
             residues_by_id[structure.pdb_id] = residues
 
             coverage = conservation.coverage(residues)
+
+            # A run that matches NOTHING passes enforce_identity vacuously:
+            # with no matched residues there is no identity to check. The
+            # static and dynamic paths warn about this; here it is an error,
+            # because a member is listed precisely so its conservation is
+            # pooled. Giving one protein another's grades file -- a plausible
+            # slip in a members file -- otherwise produced a complete,
+            # plausible-looking family result with that protein contributing
+            # nothing, and said not a word.
+            unmatched = describe_unmatched_coverage(
+                coverage, conservation,
+                label="%s (%s)" % (structure.pdb_id, protein.name),
+            )
+            if unmatched:
+                if strict:
+                    raise ConservationError(
+                        unmatched + " Check that the members file pairs each "
+                        "protein with its own ConSurf run."
+                    )
+                print("Warning: %s" % unmatched)
+
             identity = enforce_identity(coverage, label="%s (%s)" % (structure.pdb_id, protein.name),
                                         strict=strict)
 

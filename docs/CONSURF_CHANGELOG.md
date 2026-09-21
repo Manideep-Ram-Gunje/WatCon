@@ -2406,3 +2406,62 @@ them out per protein, and writes both members files, so the fifteen-protein
 result is reproducible from a clean clone. The members files generated during
 the work could not be committed as they stood -- they held absolute Windows
 paths with mixed separators, which would have been useless to anyone else.
+
+
+---
+
+## 2026-09-21 - Phase 33: a family member whose run matched nothing said nothing
+
+- **Change:** `build_family_conservation` refuses a member whose ConSurf run
+  matches none of its residues; the zero-coverage message stops offering
+  chain-map advice when the chains already agree.
+- **Files:** `WatCon/family.py`, `WatCon/evolutionary.py`,
+  `WatCon/tests/test_family.py`.
+- **Reason:** Found by walking the manual-test guide before writing it down.
+  The intended failure case did not fail.
+- **Tests:** 795 passed, 2 skipped (was 792).
+- **Limits:** Under `--tolerant` this warns rather than stops, as that flag
+  promises.
+- **Decision:** An error here, not a warning -- unlike the static and dynamic
+  paths.
+
+### What happened
+
+The guide was to include "give one protein another's grades file and watch it
+be refused". It was not refused. The run completed, reported 556 occupied sites
+and **114** unanimously conserved columns instead of 117, and said nothing.
+
+Coverage was **0 of 297** residues, and that is the hole: `enforce_identity`
+compares the amino acid at each *matched* residue, so with nothing matched
+there is nothing to disagree about and it passes vacuously, returning `None`.
+Phase 29 closed exactly this for the static and dynamic paths, which now warn.
+`family.py` never got the same treatment.
+
+It matters more here than there. A members file pairs each protein with its own
+run by hand, across fifteen lines -- mistaking one is easy. And the family
+result is the headline claim, so a member silently contributing nothing changes
+a published number while looking entirely normal.
+
+So in the family path it raises:
+
+```
+error: ConSurf data was supplied for 2F71 (PTPN1) but matched none of its
+residues, so nothing is scored. ... Check that the members file pairs each
+protein with its own ConSurf run.
+```
+
+Under `--tolerant` it warns instead, which is what that flag is for.
+
+### The message was misdirecting
+
+Written for the chain-mismatch case, it always ended "If those differ, pass
+consurf_chain_map". In this case both chains were `A`, so the advice sent the
+reader after the wrong thing entirely. It is now conditional: chains that
+differ get the chain-map suggestion; chains that agree get told so, and that
+the cause is numbering or a different protein.
+
+### Why this was worth the detour
+
+The guide claimed a behaviour the tool did not have. Walking it first is the
+only reason that was found -- 795 tests did not, because no test had ever paired
+a protein with another protein's run.
