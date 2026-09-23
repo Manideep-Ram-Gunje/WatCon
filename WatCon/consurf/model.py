@@ -105,21 +105,42 @@ class GradeLayer:
 
 
 class Dialect(str, Enum):
+    """Which ConSurf product wrote a grades file.
+
+    The two lay out the same information differently, so the parser detects
+    this before reading records rather than guessing per line.
+    """
+
     WEBSERVER = "webserver"
     CONSURFDB = "consurfdb"
 
 
 class Method(str, Enum):
+    """The calculation ConSurf used to produce the scores.
+
+    Recorded because it is part of what makes two runs comparable: pooling a
+    Bayesian run with a maximum-likelihood one compares different quantities.
+    """
+
     BAYESIAN = "bayesian"
     MAXIMUM_LIKELIHOOD = "maximum_likelihood"
 
 
 class Alphabet(str, Enum):
+    """Whether the run scored amino acids or nucleotides."""
+
     PROTEIN = "protein"
     NUCLEOTIDE = "nucleotide"
 
 
 class LineEnding(str, Enum):
+    """Line endings as found in the raw bytes.
+
+    Detected from bytes rather than text, so a file is read the same way on
+    every platform. ``MIXED`` is reported rather than silently normalised --
+    it usually means a file was edited by hand.
+    """
+
     LF = "lf"
     CRLF = "crlf"
     MIXED = "mixed"
@@ -181,6 +202,12 @@ class ConSurfRecord:
 
     @property
     def is_structurally_mapped(self) -> bool:
+        """True when ConSurf placed this record on a residue in the structure.
+
+        False means the query sequence had a residue here that the crystal did
+        not resolve -- ConSurf marks it ``-``. Such a record still carries a
+        valid score; there is simply nowhere to attach it.
+        """
         return self.pdb_residue is not None
 
     @property
@@ -199,6 +226,7 @@ class ConSurfRecord:
 
     @property
     def warning_codes(self) -> List[str]:
+        """Warning codes for this record, without the message text."""
         return [w.code for w in self.warnings]
 
     def to_dict(self) -> dict:
@@ -269,10 +297,12 @@ class ConSurfParseResult:
 
     @property
     def source(self) -> str:
+        """Where this result came from -- a path, or ``<stream>``."""
         return self.provenance.source
 
     @property
     def warning_codes(self) -> List[str]:
+        """File-level warning codes, without the message text."""
         return [w.code for w in self.warnings]
 
     def by_position(self) -> Dict[int, ConSurfRecord]:
@@ -292,6 +322,11 @@ class ConSurfParseResult:
         }
 
     def mapped_records(self) -> List[ConSurfRecord]:
+        """Records ConSurf could place on a residue in the structure.
+
+        These are the ones with somewhere to attach a score. The count differs
+        from ``len(records)`` by the residues the crystal did not resolve.
+        """
         return [r for r in self.records if r.pdb_residue is not None]
 
     def unmapped_records(self) -> List[ConSurfRecord]:

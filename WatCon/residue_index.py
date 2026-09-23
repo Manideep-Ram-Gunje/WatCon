@@ -505,6 +505,11 @@ class SequenceConsistencyReport:
     fasta_sequence: str = ""
 
     def describe(self) -> str:
+        """Say whether the structure and its FASTA agree, and how they differ.
+
+        Distinguishes a length mismatch from a same-length disagreement,
+        because those have different causes and different fixes.
+        """
         if self.matches:
             return f"consistent ({self.structure_length} residues)"
         if self.structure_length != self.fasta_length:
@@ -717,6 +722,13 @@ class ResidueIndex:
         return column
 
     def residue_at(self, ordinal: int) -> StructureResidue:
+        """The residue at a positional index, counting from zero.
+
+        Positional lookup exists only for callers that genuinely hold an
+        ordinal, such as walking an alignment row. Anything keyed on a residue
+        *number* must use the identity lookups instead -- confusing the two is
+        the original defect this package exists to fix.
+        """
         return self._residues[ordinal]
 
     def keys(self) -> List[ResidueKey]:
@@ -750,6 +762,12 @@ class LegacyIndexingReport:
         return self.wrong == 0 and self.out_of_range == 0
 
     def describe(self) -> str:
+        """One line comparing a positional mapping against the identity one.
+
+        Counts silent negative wrap-around separately: a negative residue
+        number indexes from the end of a Python list and returns a real value
+        for entirely the wrong residue.
+        """
         return (
             f"{self.correct}/{self.total} correct, {self.wrong} wrong, "
             f"{self.out_of_range} out of range, "

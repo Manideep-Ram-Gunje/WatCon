@@ -122,6 +122,12 @@ class PreparationReport:
         return sum(o.n_waters for o in self.prepared)
 
     def describe(self) -> str:
+        """The per-structure table ``watcon prepare`` prints.
+
+        One line per structure: chain, identity against the ConSurf run, water
+        count and superposition RMSD. Rejected structures appear too, with the
+        reason -- a silent omission would hide a bad dataset.
+        """
         lines = ["reference: %s chain %s" % (self.reference, self.reference_chain)]
         for outcome in self.outcomes:
             if outcome.ok:
@@ -143,6 +149,11 @@ class PreparationReport:
         return "\n".join(lines)
 
     def write_csv(self, path) -> int:
+        """Write the preparation outcome as CSV, one row per structure.
+
+        Includes rejected structures and why, so a run can be audited after the
+        fact. Returns the number of rows written.
+        """
         import csv
 
         columns = ["pdb_id", "chain", "identity", "n_protein_atoms", "n_waters",

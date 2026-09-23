@@ -1,3 +1,16 @@
+"""WatCon's original command-line entry point.
+
+Reads an input file, runs the analysis it describes, and optionally runs the
+post-analysis step over the results. Inherited from upstream, unchanged::
+
+    python WatCon/WatCon.py --input input.txt --analysis analysis.txt
+
+The newer ``watcon`` console script wraps this as ``watcon run``, alongside
+subcommands for steps that used to be manual -- fetching structures,
+preparing them, validating ConSurf files and building PyMOL sessions. Both
+reach the same code; see ``docs/CODE_MAP.md``.
+"""
+
 import os, sys
 import argparse
 import warnings
@@ -175,6 +188,18 @@ def parse_inputs(filename):
 #NOTE NEED TO MAKE IT SO THAT YOU CAN TELL IT TO MAKE THE FASTAS FROM THE PDBS
 
 def check_conditions(kwargs):
+    """Placeholder for validating an input file's options.
+
+    Prints a line and returns None -- no condition is actually checked. Kept
+    because the input-file path calls it, and because the intent is worth
+    recording: options that contradict each other should be caught here rather
+    than surfacing much later as a confusing failure.
+
+    Parameters
+    ----------
+    kwargs : dict
+        Parsed input-file options. Currently unused.
+    """
     print('Checking conditions from input file')
     #Consider making some text to check conditions
     pass

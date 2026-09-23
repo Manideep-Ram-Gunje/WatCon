@@ -1,6 +1,153 @@
 Getting Started
 ===============
 
+The fastest route from nothing to a result, then how to run it on your own
+data. If you want to know how the tool is built rather than how to drive it,
+read ``docs/ARCHITECTURE.md`` instead.
+
+
+Install it
+----------
+
+.. code-block:: bash
+
+   pip install "git+https://github.com/Manideep-Ram-Gunje/WatCon.git@consurf-integration"
+
+The ``@consurf-integration`` part is required — this fork's ``main`` is a clean
+mirror of upstream WatCon, which does not contain any of the ConSurf work. Full
+instructions, including PyMOL for the plugin, are in :doc:`installation`.
+
+
+See it work, in ten seconds
+---------------------------
+
+.. code-block:: bash
+
+   watcon demo
+
+This runs the whole pipeline on six real barnase crystal structures bundled with
+the package. No network, no setup, no data of your own:
+
+.. code-block:: text
+
+   STEP 1/5  Prepare: find the barnase chain, superpose, keep waters
+     1A2P     chain A  identity 1.00   148 waters  RMSD 0.00 A over 108 CA
+     1BRN     chain L  identity 1.00   120 waters  RMSD 0.45 A over 108 CA
+     ...
+   STEP 4/5  Cluster recurring water sites and join to conservation
+     193 cluster centres, 190 occupied, 165 carry conservation
+     30 site(s) occupied in ALL 6 structures
+     57 scored site(s) are lined by a highly conserved residue (ConSurf grade >= 8)
+
+
+Reading that output
+-------------------
+
+Worth understanding before you trust it on your own data.
+
+**1BRN is chain L.** The demo set is deliberately awkward — in one entry the
+barnase is not chain A, and another is half a complex. Finding the right chain
+is part of the job, not something you should have to do by hand.
+
+**identity 0.98 is fine; 0.02 is not.** That column is how much of the structure
+agrees with the ConSurf run, residue by residue. A point mutant genuinely
+differs at one position and scores 0.98. A numbering mismatch collapses to near
+zero, and the run **stops** rather than attaching every score to the wrong
+residue.
+
+**193 → 190 → 165 is not attrition.** 193 cluster centres, of which 190 have a
+water in at least one structure, of which 165 have a protein residue near enough
+to carry a conservation score.
+
+**One ConSurf run covers every structure.** Conservation is a property of the
+*sequence*, so six structures of barnase need one run, not six.
+
+
+Running it on your own data
+---------------------------
+
+Five steps. Only the second needs anything outside the tool.
+
+.. code-block:: bash
+
+   # 1. Get structures -- any PDB ids of the same protein
+   watcon fetch --ids 1AAX 7GSA --out-dir raw/
+
+   # 2. Get a ConSurf run for that sequence, from https://consurf.tau.ac.il/
+   #    There is no public API, so this step is manual. Keep the
+   #    *_consurf_grades.txt file. See :doc:`consurf_data` for the walkthrough.
+
+   # 3. Check the ConSurf file before relying on it
+   watcon validate --consurf my_run_consurf_grades.txt
+
+   # 4. Put the structures in one frame, keeping their waters
+   watcon prepare --input-dir raw/ --out-dir prepared/ --reference 1AAX
+
+   # 5. Analyse
+   watcon view --prepared prepared/ --consurf my_run_consurf_grades.txt
+
+You get ``conservation.csv`` — one row per recurring water site, with its
+structural occupancy beside the evolutionary conservation of the residues lining
+it, as **two separate columns**. Deciding how they relate is the science, so the
+tool does not blend them into a single number.
+
+
+Looking at the result
+---------------------
+
+.. code-block:: bash
+
+   pymol watcon_view/watcon_view.pml
+
+The protein is coloured on ConSurf's own 1–9 scale: maroon conserved, cyan
+variable, and **yellow where ConSurf has no score** — which is not the same as
+low conservation. Then, at the PyMOL prompt:
+
+.. code-block:: text
+
+   enable sites              every occupied site, sphere size = how many structures hold it
+   enable WatCon_contacts    the residues lining them, and their polar contacts
+
+For an interactive version with a sortable table of every site — click a row and
+the camera flies to it — install the plugin:
+
+.. code-block:: bash
+
+   watcon plugin --install
+
+Restart PyMOL, then **Plugin → WatCon + ConSurf**.
+
+
+Across a protein family
+-----------------------
+
+One ConSurf run per protein, several structures each, one shared alignment:
+
+.. code-block:: bash
+
+   watcon family --members members.tsv --alignment alignment.pir
+
+``members.tsv`` is tab-separated, one protein per line — protein name,
+structures directory, ConSurf grades file, and optionally a reference structure.
+See :doc:`faq/conservation_options` for every setting this adds.
+
+
+Where to go next
+----------------
+
+* :doc:`consurf_data` — getting ConSurf results, the one manual step
+* :doc:`faq/conservation_options` — every option the extension adds
+* :doc:`tutorials/consurf_conservation` — a worked study end to end
+* ``docs/MANUAL_TESTING.md`` — checking an installation actually works
+
+
+The original input-file workflow
+--------------------------------
+
+Everything below is WatCon's original interface, which still works unchanged.
+Use it when you want the full set of network metrics, trajectory analysis, or
+the post-analysis step — the commands above are a shorter path to the conserved
+water sites and their conservation, not a replacement for all of it.
 
 Preparing Structures
 --------------------

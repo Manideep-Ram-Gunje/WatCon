@@ -263,6 +263,13 @@ Stated plainly, because they matter more than the headline:
 
 ## Documentation
 
+- **[All documentation, indexed](docs/README.md)** — which page answers which
+  question, for using it, understanding it, or changing it
+- [Code map](docs/CODE_MAP.md) — which file owns which capability, and
+  "if you want to change X, touch Y"
+- [Architecture](docs/ARCHITECTURE.md) — how the pieces fit, and the four rules
+  behind the design
+- [Developer guide](docs/developer_guide.rst) — setup, tests, conventions
 - [Testing it by hand](docs/MANUAL_TESTING.md) — a ten-minute smoke test, a
   full pass, and the guards that must fire
 - [The barnase study](experiments/barnase_waters/) — the evidence for the

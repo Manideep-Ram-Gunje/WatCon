@@ -34,6 +34,104 @@ Every runtime dependency is installed automatically. Python >= 3.10.
    conda-only, and cannot be pip-installed; follow the conda instructions below.
 
 
+Installing PyMOL (needed only for the plugin)
+---------------------------------------------
+
+Everything except the interactive plugin works without PyMOL: the whole command
+line, every analysis, the CSV outputs, and the ``.pml`` session files. You only
+need PyMOL to *open* those sessions and to use the plugin.
+
+.. note::
+
+   Sessions written by ``watcon view`` and ``watcon family`` are plain text. You
+   can generate them on a machine with no PyMOL and open them on one that has
+   it.
+
+**Recommended: conda-forge.** This is the reliable route on all three operating
+systems, and the one CI uses.
+
+.. code-block:: bash
+
+   conda install -c conda-forge pymol-open-source
+
+**Windows.** Either the conda command above, or the installer from
+`pymol.org <https://pymol.org/>`_. If you use the installer, install WatCon into
+*PyMOL's own* Python so the plugin can import it — see the check below.
+
+**macOS and Linux.** The conda command above. On Linux your distribution may
+also package it (``apt install pymol``), but a distribution PyMOL often cannot
+see a pip-installed WatCon, which breaks the plugin.
+
+**Does it work?** Both of these must succeed *in the same Python*:
+
+.. code-block:: bash
+
+   python -c "import pymol; print(pymol.__file__)"
+   python -c "import WatCon; print(WatCon.__version__)"
+
+If the first works and the second does not, PyMOL has its own Python and WatCon
+is not in it. Install WatCon there:
+
+.. code-block:: bash
+
+   # substitute the interpreter PyMOL actually uses
+   /path/to/pymol/python -m pip install "git+https://github.com/Manideep-Ram-Gunje/WatCon.git@consurf-integration"
+
+Then install the plugin and restart PyMOL:
+
+.. code-block:: bash
+
+   watcon plugin --install
+
+It appears under **Plugin → WatCon + ConSurf**. ``watcon plugin --uninstall``
+removes it; ``--force`` overwrites an existing copy.
+
+
+Setting up a clean machine
+--------------------------
+
+The order to do things on a computer that has none of this, with a check after
+each step so you find problems where they happen.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 5 45 50
+
+   * - #
+     - Do
+     - Check
+   * - 1
+     - Install Python 3.10 or newer
+     - ``python --version``
+   * - 2
+     - Install the package (the quick install above)
+     - ``watcon --version`` prints ``watcon-consurf 0.9.0``
+   * - 3
+     - Run the bundled demo
+     - ``watcon demo`` ends with ``57 scored site(s) ...``
+   * - 4
+     - *Optional:* install PyMOL
+     - ``python -c "import pymol"`` is silent
+   * - 5
+     - *Optional:* install the plugin
+     - ``watcon plugin --install``, restart, the menu entry exists
+   * - 6
+     - *Optional:* MODELLER, for family MSA alignment
+     - only if you need it; see below
+
+Steps 1–3 need no network beyond the install itself and take about five minutes.
+If step 3 works you have a functioning installation, whatever happens later.
+
+.. warning::
+
+   ``watcon --version`` printing ``1+unknown`` means the package was built
+   without git metadata — usually from a downloaded zip rather than a clone. The
+   tool works, but install from the git URL above to get a real version number.
+
+``docs/MANUAL_TESTING.md`` walks the whole thing with expected output at every
+step, including what to do when something fails.
+
+
 Conda install (for MODELLER, or a fully pinned environment)
 -----------------------------------------------------------
 

@@ -209,6 +209,7 @@ class SuperpositionResult:
         return {"Rot": list(self.rotations), "Trans": list(self.translations)}
 
     def describe(self) -> str:
+        """Per-structure RMSD against the reference, one line each."""
         lines = ["reference: %s" % self.reference]
         for name in self.names:
             if name == self.reference:

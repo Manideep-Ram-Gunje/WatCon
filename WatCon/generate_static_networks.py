@@ -1233,6 +1233,22 @@ class WaterNetwork:
         return H
     
     def get_clustering_coefficient(self, selection='all'):
+        """Average clustering coefficient of the water network.
+
+        How often a node's neighbours are themselves connected. Higher values
+        mean more tightly knit local water structure.
+
+        Parameters
+        ----------
+        selection : {'all', 'active_region', 'not_active_region'}, optional
+            Which part of the network to measure. Anything but ``all`` takes
+            the edge subgraph carrying that ``active_region`` label.
+
+        Returns
+        -------
+        float
+            Average clustering coefficient over the selected subgraph.
+        """
 
         #Choose all subgraphs under particular criteria
         if selection=='all':

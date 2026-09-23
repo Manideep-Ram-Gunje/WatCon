@@ -179,6 +179,11 @@ class ResidueConservation:
 
     @classmethod
     def from_record(cls, record: ConSurfRecord, source: str) -> "ResidueConservation":
+        """Build one residue's conservation from a parsed ConSurf record.
+
+        ``source`` records which grades file the score came from, so a pooled
+        family result can always attribute a grade to the run that assigned it.
+        """
         confidence = record.confidence
         return cls(
             score=record.score,
@@ -197,6 +202,11 @@ class ResidueConservation:
         )
 
     def to_dict(self) -> dict:
+        """Flatten to CSV columns, every key prefixed ``evo_``.
+
+        The prefix keeps evolutionary conservation clearly separate from
+        WatCon's own structural water conservation, which shares the report.
+        """
         return {
             "evo_score": self.score,
             "evo_grade": self.grade,
@@ -239,6 +249,13 @@ class WaterConservation:
     n_unscored: int
 
     def to_dict(self) -> dict:
+        """Flatten a water's rolled-up conservation to CSV columns.
+
+        Reports minimum, mean and maximum over the residues lining the site
+        rather than one figure. Which you want depends on the question, and
+        the minimum is biased by how many residues line the site -- see the
+        permutation-null discussion in the barnase findings.
+        """
         return {
             "evo_min_score": self.min_score,
             "evo_mean_score": self.mean_score,
@@ -345,6 +362,12 @@ class CoverageReport:
         return self.identity_matched / checked if checked else None
 
     def describe_identity(self) -> str:
+        """Human-readable identity rate, for logs and error messages.
+
+        Says "not checked" rather than reporting 0% when no residue names were
+        available to compare. Those are different outcomes and only one is a
+        problem.
+        """
         rate = self.identity_rate
         if rate is None:
             return "identity not checked (no residue names available)"
@@ -362,6 +385,12 @@ class CoverageReport:
         return self.matched / self.total if self.total else 0.0
 
     def describe(self) -> str:
+        """One line of coverage, broken down per chain.
+
+        Per-chain figures matter because low overall coverage is legitimate
+        when a run describes one chain of several, and alarming when it does
+        not.
+        """
         chains = ", ".join(
             f"{c}: {m}/{m + miss}" for c, (m, miss) in sorted(self.per_chain.items())
         )

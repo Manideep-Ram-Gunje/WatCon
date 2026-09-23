@@ -79,7 +79,18 @@ class _Worker(QtCore.QThread):
         super().__init__(parent)
         self.options = options
 
-    def run(self):                          # noqa: D102 - QThread entry point
+    def run(self):
+        """Thread body: prepare the structures, then build the scene.
+
+        Emits ``progressed(fraction, message)`` as it goes, then exactly one of
+        ``completed(scene, session)`` or ``failed(message)``. Nothing here
+        touches Qt widgets or PyMOL directly -- both are only safe from the GUI
+        thread, so the dialog does the drawing when a signal arrives.
+
+        Every exception is caught and turned into ``failed``: an exception
+        escaping a QThread would take the plugin down with it and leave PyMOL
+        in an odd state.
+        """
         try:
             options = self.options
             structures = options["structures"]
@@ -136,7 +147,14 @@ class _FamilyWorker(QtCore.QThread):
         super().__init__(parent)
         self.options = options
 
-    def run(self):                          # noqa: D102 - QThread entry point
+    def run(self):
+        """Thread body: pool conservation across the family, then find its sites.
+
+        Emits ``progressed(fraction, message)``, then exactly one of
+        ``completed(family, sites, session)`` or ``failed(message)``. Same
+        thread discipline as :meth:`_Worker.run` -- no Qt or PyMOL calls from
+        here, and no exception allowed to escape.
+        """
         try:
             from WatCon.family import build_family_conservation
             from WatCon.family_scene import write_family_session

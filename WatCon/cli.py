@@ -94,6 +94,16 @@ def plugin_directory():
 
 
 def cmd_plugin(args) -> int:
+    """Install or remove the PyMOL plugin (``watcon plugin``).
+
+    Writes a small shim into PyMOL's startup directory; the plugin itself stays
+    in the installed package, so upgrading WatCon upgrades the plugin. Fails
+    here rather than at PyMOL startup if PyMOL cannot import WatCon, since a
+    plugin that loads and then cannot find its own package is harder to
+    diagnose than a refused install.
+
+    Returns a process exit code: 0 on success, 1 on failure.
+    """
     try:
         import pymol.plugins                     # noqa: F401
     except ImportError:
@@ -154,6 +164,18 @@ def cmd_plugin(args) -> int:
 # ---------------------------------------------------------------------------
 
 def cmd_family(args) -> int:
+    """Pool conservation across a protein family (``watcon family``).
+
+    One ConSurf run per protein, several structures each, one shared alignment.
+    Runs conservation first, then -- unless ``--no-sites`` -- superposes the
+    family and finds the water sites its members share.
+
+    Every structure is checked against its own protein's ConSurf run before
+    anything is pooled, so a members file pairing a protein with the wrong
+    grades file stops the run instead of silently contributing nothing.
+
+    Returns a process exit code: 0 on success, 1 on failure.
+    """
     from .alignment import AlignmentError
     from .evolutionary import ConservationError
     from .family import build_family_conservation, read_members
@@ -265,6 +287,15 @@ def cmd_family(args) -> int:
 # ---------------------------------------------------------------------------
 
 def cmd_fetch(args) -> int:
+    """Download structures from RCSB by PDB id (``watcon fetch``).
+
+    Ids may be given space- or comma-separated. Tries PDB format first and
+    falls back to mmCIF, because RCSB no longer issues PDB files for large or
+    recent entries -- 31 of the 287 PTP1B entries used to test this package
+    have no PDB file at all.
+
+    Returns a process exit code: 0 if every id was fetched, 1 otherwise.
+    """
     from .fetch import FetchError, fetch_structures
 
     ids = []
@@ -297,6 +328,14 @@ def cmd_fetch(args) -> int:
 # ---------------------------------------------------------------------------
 
 def cmd_prepare(args) -> int:
+    """Put a folder of structures into one frame (``watcon prepare``).
+
+    Converts anything that is not PDB, finds the chain that matches the
+    reference, superposes on it, and keeps the waters. Writes a CSV recording
+    what happened to each structure, including any that were rejected and why.
+
+    Returns a process exit code: 0 on success, 1 on failure.
+    """
     from .prepare import PreparationError, prepare_directory
 
     try:
@@ -333,6 +372,14 @@ def cmd_prepare(args) -> int:
 # ---------------------------------------------------------------------------
 
 def cmd_run(args) -> int:
+    """Run WatCon from an input file (``watcon run``).
+
+    The original input-file interface, unchanged. ``--input`` runs the
+    analysis, ``--analysis`` runs the post-analysis step, and both may be given
+    together. Results are pickled for further work.
+
+    Returns a process exit code: 0 on success, 1 on failure.
+    """
     import pickle
 
     from .WatCon import parse_analysis, parse_inputs, run_watcon, run_watcon_postanalysis
@@ -360,6 +407,15 @@ def cmd_run(args) -> int:
 # ---------------------------------------------------------------------------
 
 def cmd_validate(args) -> int:
+    """Check ConSurf grades files before relying on them (``watcon validate``).
+
+    Reports the dialect, method, MSA depth, how many residues were scored and
+    how many could be placed on a structure, plus any malformed lines. With
+    ``--pdb`` it also cross-checks every grade against the one ConSurf itself
+    wrote into the B-factor column of its annotated PDB.
+
+    Returns a process exit code: 0 if every file is usable, 1 otherwise.
+    """
     from .consurf.validate import main as validate_main
 
     argv: List[str] = list(args.consurf)
@@ -377,6 +433,15 @@ def cmd_validate(args) -> int:
 # ---------------------------------------------------------------------------
 
 def cmd_demo(args) -> int:
+    """Run the whole pipeline on the bundled example (``watcon demo``).
+
+    Six real barnase crystal structures that ship with the package, offline, in
+    about ten seconds. The strongest single check that an installation works:
+    it exercises preparation, the ConSurf join, clustering and the PyMOL
+    output, and it needs no data of the user's own.
+
+    Returns a process exit code: 0 on success, 1 on failure.
+    """
     from .demo import run_demo
     return run_demo(args.out_dir, keep=args.keep)
 
@@ -386,6 +451,13 @@ def cmd_demo(args) -> int:
 # ---------------------------------------------------------------------------
 
 def cmd_view(args) -> int:
+    """Build a PyMOL session from prepared structures (``watcon view``).
+
+    Writes the same ``.pml`` the plugin runs, so the two cannot disagree about
+    what a result looks like, plus the site PDBs and the CSV behind them.
+
+    Returns a process exit code: 0 on success, 1 on failure.
+    """
     from .view import build_session
 
     try:
@@ -401,6 +473,14 @@ def cmd_view(args) -> int:
 # ---------------------------------------------------------------------------
 
 def build_parser() -> argparse.ArgumentParser:
+    """Build the ``watcon`` argument parser, with one subparser per command.
+
+    Each subparser sets ``func`` to its handler, so :func:`main` dispatches by
+    calling ``args.func(args)``. A subcommand added without that default is
+    unreachable; ``tests/test_cli.py`` checks every one has it.
+
+    Returns the configured :class:`argparse.ArgumentParser`.
+    """
     parser = argparse.ArgumentParser(
         prog="watcon",
         description=(
@@ -592,6 +672,14 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Optional[List[str]] = None) -> int:
+    """Entry point for the ``watcon`` console script.
+
+    Parses arguments and dispatches to the subcommand's handler. With no
+    subcommand, prints help and exits non-zero, which is what a shell expects
+    from a command invoked with nothing to do.
+
+    Returns the handler's exit code.
+    """
     parser = build_parser()
     args = parser.parse_args(argv)
     if getattr(args, "func", None) is None:

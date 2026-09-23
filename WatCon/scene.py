@@ -119,6 +119,12 @@ class Scene:
         return sum(1 for s in self.sites if s.has_conservation)
 
     def summary(self) -> str:
+        """One line of counts, as the command line prints it.
+
+        Clusters, occupied sites, sites carrying conservation and conserved
+        sites are reported separately: the drop between them is meaningful
+        rather than attrition.
+        """
         return ("%d clusters / %d occupied / %d with conservation / %d conserved "
                 "(grade >= %d)"
                 % (self.n_clusters, len(self.sites), self.n_with_conservation,

@@ -264,6 +264,12 @@ class ConsensusColumns:
     labels: List[str]
 
     def column(self, resid: int, icode: Optional[str] = None) -> Optional[int]:
+        """Alignment column for one residue, or None if it has none.
+
+        None is returned rather than guessed: a residue the structures of this
+        protein disagree about is excluded, and so is one whose alignment row
+        omits it entirely.
+        """
         return self.columns.get((resid, icode))
 
 

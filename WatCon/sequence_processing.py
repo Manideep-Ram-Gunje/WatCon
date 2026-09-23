@@ -171,13 +171,27 @@ def perform_structure_alignment(pdb_dir, same_chain='A',out_dir='aligned_pdbs', 
 
 
 class ChainAndNonProteinSelect(Select):
+    """Bio.PDB selector: one protein chain, plus every non-protein residue.
+
+    Used when writing an aligned copy of a structure. Keeping the
+    non-protein residues is the point -- they include the waters, which are
+    what the whole analysis is about, and they belong to no chain the protein
+    filter would keep.
+    """
+
     def __init__(self, chain_id='A'):
         self.chain_id = chain_id
 
     def accept_chain(self, chain):
+        """Accept only the chain this selector was built for."""
         return chain.id == self.chain_id
     
     def accept_residue(self, residue):
+        """Accept residues of the chosen chain, and any non-amino-acid residue.
+
+        The second clause is what carries waters, ions and ligands through to
+        the written file.
+        """
         # Accept residue if it belongs to chain A or if it's a non-protein residue
         if residue.parent.id == self.chain_id or not is_aa(residue):
             return True

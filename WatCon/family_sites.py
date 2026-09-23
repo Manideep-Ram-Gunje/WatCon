@@ -84,6 +84,10 @@ class FrameFit:
     translation: np.ndarray = field(repr=False)
 
     def apply(self, coordinates: np.ndarray) -> np.ndarray:
+        """Put coordinates into the family frame: rotate, then translate.
+
+        The order matters -- the translation is defined in the rotated frame.
+        """
         return np.asarray(coordinates, dtype=float) @ self.rotation.T + self.translation
 
 
@@ -115,14 +119,21 @@ class FamilySite:
 
     @property
     def proteins_occupied(self) -> Tuple[str, ...]:
+        """Names of the proteins holding a water here, sorted for stable output."""
         return tuple(sorted(p for p, n in self.per_protein_occupancy.items() if n))
 
     @property
     def n_proteins_occupied(self) -> int:
+        """How many proteins hold a water here -- the headline per-site number."""
         return len(self.proteins_occupied)
 
     @property
     def max_grade(self) -> Optional[int]:
+        """Highest conservation grade among the residues lining this site.
+
+        Taken over every protein and every lining column. None when no lining
+        residue carries a score at all, which is not the same as a low grade.
+        """
         grades = [g for by_protein in self.columns.values() for g in by_protein.values()]
         return max(grades) if grades else None
 
@@ -149,6 +160,7 @@ class FamilySites:
         return [s for s in self.sites if s.n_proteins_occupied > 1]
 
     def summary(self) -> dict:
+        """Headline counts for the whole family result, as a plain dict."""
         return {
             "n_clusters": self.n_clusters,
             "n_sites_occupied": len(self.sites),

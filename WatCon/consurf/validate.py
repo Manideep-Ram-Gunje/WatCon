@@ -91,6 +91,12 @@ def _print_report(summary: dict) -> None:
 
 
 def main(argv: Optional[List[str]] = None) -> int:
+    """Command-line entry point behind ``watcon validate``.
+
+    Summarises each grades file and, given ``--pdb``, cross-checks every grade
+    against the one ConSurf wrote into its annotated PDB. Returns 0 when every
+    file is usable and 1 otherwise, so it can gate a pipeline.
+    """
     cli = argparse.ArgumentParser(
         prog="python -m WatCon.consurf.validate",
         description="Validate and summarise ConSurf grades files.",

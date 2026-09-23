@@ -47,6 +47,7 @@ class CrossCheckResult:
         return not self.mismatches and not self.missing_from_pdb
 
     def summary(self) -> str:
+        """One line of counts, for logs and test failure messages."""
         return (
             f"checked={self.checked} agree={self.agreements} "
             f"mismatch={len(self.mismatches)} "
